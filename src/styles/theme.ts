@@ -15,6 +15,7 @@ const fontSizes = {
   xlg: "18px",
   large: "16px",
 };
+
 const deviceSizes = {
   mobile: "375px",
   tablet: "768px",

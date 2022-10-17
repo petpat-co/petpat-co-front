@@ -1,12 +1,11 @@
 import React from "react";
 import { ThemeProvider } from "styled-components";
-import { Route, Routes, BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { useDispatch } from "react-redux";
 //css
 import GlobalStyle from "./styles/GlobalStyles";
 import theme from "./styles/theme";
-import ReHoming from "./pages/ReHoming";
-import MainHome from "./pages/MainHome";
+import Root from "./Root";
 function App() {
   const dispatch = useDispatch();
 
@@ -15,10 +14,7 @@ function App() {
       <BrowserRouter>
         <GlobalStyle />
         <ThemeProvider theme={theme}>
-          <Routes>
-            <Route path="/" element={<MainHome />} />
-            <Route path="/rehome" element={<ReHoming />} />
-          </Routes>
+          <Root />
         </ThemeProvider>
       </BrowserRouter>
     </>

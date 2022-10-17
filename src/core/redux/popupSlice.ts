@@ -7,6 +7,7 @@ export interface PopupState {
 //slice 안에 들어갈 내용은 name, init, reducers
 
 //리덕스는 root reducer 객체를 가지고 있는데 이 객체의 key/ value쌍을 slice 라고 한다  요걸 업데이트 하는 reducer 함수가 slice reducer
+
 //immer
 export const popupSlice = createSlice({
   name: "popup",

@@ -1,7 +1,12 @@
-import React from "react";
+import { ReactElement } from "react";
+import RehomingTemplate from "../component/rehoming/RehomingTemplate";
 
-const ReHoming = () => {
-  return <div>분양글</div>;
+const ReHoming = (): ReactElement => {
+  return (
+    <div>
+      <RehomingTemplate />
+    </div>
+  );
 };
 
 export default ReHoming;

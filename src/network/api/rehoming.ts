@@ -20,6 +20,7 @@ export const addReHoming: ApiHandler = (options) =>
     url: addPrefix(""),
     ...options,
   });
+
 //분양글 상세 조회
 export const getOneReHoming: ApiHandler = (options) =>
   instance({
@@ -27,6 +28,7 @@ export const getOneReHoming: ApiHandler = (options) =>
     url: addPrefix(`/detail/${options.parameter.postId}`),
     ...options,
   });
+
 //분양글 수정
 export const editReHoming: ApiHandler = (options) =>
   instance({
@@ -34,6 +36,7 @@ export const editReHoming: ApiHandler = (options) =>
     url: `/api/rehoming/${options.parameter.postId}`,
     ...options,
   });
+
 //분양글 삭제
 export const deleteReHoming: ApiHandler = (options) =>
   instance({

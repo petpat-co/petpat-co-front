@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as S from "./styled.Header";
 import { ReactComponent as Search } from "../../asset/searchIcon.svg";
 const Header = () => {
   const navigate = useNavigate();
-  const [pathname, setPathname] = useState("/");
+  const location = useLocation();
+  const [pathname, setPathname] = useState(location.pathname);
+
   const onClickMenu = (path: string) => {
     navigate(path);
     setPathname(path);

@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import RehomingTemplate from "../component/rehoming/RehomingTemplate";
+import RehomingTemplate from "../components/rehoming/RehomingTemplate";
 
 const ReHoming = (): ReactElement => {
   return (

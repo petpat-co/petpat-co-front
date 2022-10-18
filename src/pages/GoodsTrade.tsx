@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import GoodsTradeTemplate from "../component/trade/GoodsTradeTemplate";
+import GoodsTradeTemplate from "../components/trade/GoodsTradeTemplate";
 
 const GoodsTrade = (): ReactElement => {
   return (

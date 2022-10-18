@@ -7,6 +7,7 @@ const colors = {
   borderColor: "#e1e1e1",
   hoverMain: "#00a18d",
   buttonText: "#fff",
+  grayText: "#333",
 };
 
 const fontSizes = {

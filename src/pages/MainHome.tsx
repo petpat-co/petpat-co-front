@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import MainTemplate from "../component/mainhome/MainTemplate";
+import MainTemplate from "../components/mainhome/MainTemplate";
 
 const MainHome = (): ReactElement => {
   return (

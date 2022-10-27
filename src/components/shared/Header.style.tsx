@@ -29,6 +29,13 @@ export const MenuItems = styled.li<{ isSelected: boolean }>`
   color: ${({ isSelected }) => (isSelected ? "#FBBC05" : "#2b2b2b")};
   cursor: pointer;
 `;
+export const WriteLoginSearchBox = styled.div`
+  width: 323px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
 export const LoginSearchBox = styled.div`
   width: 143px;
   height: 42px;

@@ -1,34 +1,46 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import * as S from "./styled.Header";
+import { useLocation, useNavigate } from "react-router-dom";
+import * as Styled from "./Header.style";
 import { ReactComponent as Search } from "../../asset/searchIcon.svg";
 const Header = () => {
   const navigate = useNavigate();
-  const [pathname, setPathname] = useState("/");
+  const location = useLocation();
+  const [pathname, setPathname] = useState(location.pathname);
+
+  const isWriteButton =
+    location.pathname.includes("/rehome") ||
+    location.pathname.includes("/trade");
   const onClickMenu = (path: string) => {
     navigate(path);
     setPathname(path);
   };
   return (
     <>
-      <S.HeaderWrap>
-        <S.LogoBox>로고</S.LogoBox>
-        <S.MenuBox>
+      <Styled.HeaderWrap>
+        <Styled.LogoBox>로고</Styled.LogoBox>
+        <Styled.MenuBox>
           {menuList.map((item) => (
-            <S.MenuItems
+            <Styled.MenuItems
               key={item.text}
               onClick={() => onClickMenu(item.path)}
               isSelected={pathname === item.path}
             >
               {item.text}
-            </S.MenuItems>
+            </Styled.MenuItems>
           ))}
-        </S.MenuBox>
-        <S.LoginSearchBox>
-          <Search stroke="#333" />
-          <S.LoginButton>로그인</S.LoginButton>
-        </S.LoginSearchBox>
-      </S.HeaderWrap>
+        </Styled.MenuBox>
+        {isWriteButton ? (
+          <Styled.WriteLoginSearchBox>
+            <Search stroke="#333" />
+            <Styled.LoginButton>로그인</Styled.LoginButton>
+          </Styled.WriteLoginSearchBox>
+        ) : (
+          <Styled.LoginSearchBox>
+            <Search stroke="#333" />
+            <Styled.LoginButton>로그인</Styled.LoginButton>
+          </Styled.LoginSearchBox>
+        )}
+      </Styled.HeaderWrap>
     </>
   );
 };

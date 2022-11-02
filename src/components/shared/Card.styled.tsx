@@ -1,22 +1,15 @@
 import styled from "styled-components";
 
-interface CardType {
+interface TextType {
   width?: string;
-  height?: string;
   fontSize?: string;
   textAlign?: string;
-  display?: string;
+  color?: string;
 }
 
 export const CardWrap = styled.div`
   width: 285px;
   height: 420px;
-`;
-
-export const Container = styled.div<CardType>`
-  width: ${(props) => (props.width ? `${props.width}` : "285px")};
-  height: ${(props) => (props.height ? `${props.height}` : "420px")};
-  display: ${(props) => (props.display ? `${props.display}` : null)};
 `;
 
 export const Img = styled.img`
@@ -29,6 +22,12 @@ export const Img = styled.img`
   }
 `;
 
+export const TextBox = styled.div<{ width: string }>`
+  width: ${(props) => props.width};
+  height: 30px;
+  display: flex;
+`;
+
 export const Text = styled.p<{ fontWeight?: number }>`
   width: 100%;
   font-weight: ${(props) => (props.fontWeight ? `${props.fontWeight}` : "400")};
@@ -36,7 +35,7 @@ export const Text = styled.p<{ fontWeight?: number }>`
   margin: 14px 0;
 `;
 
-export const smallText = styled.p<CardType>`
+export const smallText = styled.p<TextType>`
   width: ${(props) => (props.width ? `${props.width}` : "38%")};
   font-size: ${(props) => (props.fontSize ? `${props.fontSize}` : "16px")};
   text-align: ${(props) => (props.textAlign ? `${props.textAlign}` : null)};

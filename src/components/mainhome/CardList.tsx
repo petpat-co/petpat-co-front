@@ -6,11 +6,11 @@ const CardList = () => {
   const test: number[] = [1, 2, 3, 4];
 
   return (
-    <S.Container display="flex" justifyContent="space-around">
+    <S.CardBox>
       {test.map((el, idx) => (
         <Card key={idx} />
       ))}
-    </S.Container>
+    </S.CardBox>
   );
 };
 

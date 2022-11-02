@@ -3,13 +3,15 @@ import styled from "styled-components";
 interface CardType {
   width?: string;
   height?: string;
-  margin?: string;
-  display?: string;
   fontSize?: string;
   textAlign?: string;
-  fontWeight?: number;
-  color?: string;
+  display?: string;
 }
+
+export const CardWrap = styled.div`
+  width: 285px;
+  height: 420px;
+`;
 
 export const Container = styled.div<CardType>`
   width: ${(props) => (props.width ? `${props.width}` : "285px")};
@@ -27,14 +29,16 @@ export const Img = styled.img`
   }
 `;
 
-export const Text = styled.p<CardType>`
-  width: ${(props) => (props.width ? `${props.width}` : "100%")};
-  color: ${(props) => (props.color ? `${props.color}` : "black")};
+export const Text = styled.p<{ fontWeight?: number }>`
+  width: 100%;
   font-weight: ${(props) => (props.fontWeight ? `${props.fontWeight}` : "400")};
-  font-size: ${(props) => (props.fontSize ? `${props.fontSize}` : "22px")};
-  margin: ${(props) => (props.margin ? `${props.margin}` : "14px 0")};
+  font-size: 22px;
+  margin: 14px 0;
+`;
+
+export const smallText = styled.p<CardType>`
+  width: ${(props) => (props.width ? `${props.width}` : "38%")};
+  font-size: ${(props) => (props.fontSize ? `${props.fontSize}` : "16px")};
   text-align: ${(props) => (props.textAlign ? `${props.textAlign}` : null)};
-  &:hover {
-    cursor: pointer;
-  }
+  color: ${(props) => (props.color ? `${props.color}` : "black")};
 `;

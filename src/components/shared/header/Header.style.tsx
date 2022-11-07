@@ -1,12 +1,16 @@
 import styled from "styled-components";
 
-export const HeaderWrap = styled.header`
-  width: 100%;
+export const HeaderWrap = styled.header<{ isBorder: boolean }>`
+  width: 1200px;
   height: 82px;
-  padding: 0 70px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  ${({ isBorder }) => isBorder && `border-bottom: 2px solid #D9D9D9;`}
+  @media ${({ theme }) => theme.device.web} {
+    width: 100%;
+  }
 `;
 export const LogoBox = styled.div`
   width: 155px;
@@ -25,7 +29,7 @@ export const MenuBox = styled.ul`
 `;
 export const MenuItems = styled.li<{ isSelected: boolean }>`
   font-weight: 700;
-  font-size: 22px;
+  font-size: ${({ theme }) => theme.fontSizes.xxxlg};
   color: ${({ isSelected }) => (isSelected ? "#FBBC05" : "#2b2b2b")};
   cursor: pointer;
 `;
@@ -35,6 +39,19 @@ export const WriteLoginSearchBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+`;
+export const WriteButton = styled.button`
+  width: auto;
+  padding: 0 20px;
+  height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  font-size: ${({ theme }) => theme.fontSizes.xlg};
+  border: 2px solid #2b2b2b;
+  border-radius: 120px;
+  color: #2b2b2b;
 `;
 export const LoginSearchBox = styled.div`
   width: 143px;
@@ -52,5 +69,7 @@ export const LoginButton = styled.button`
   height: 42px;
   background: #2b2b2b;
   border-radius: 120px;
+  font-weight: 700;
   color: #fff;
+  font-size: ${({ theme }) => theme.fontSizes.xlg};
 `;

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import * as Styled from "./Header.style";
-import { ReactComponent as Search } from "../../asset/searchIcon.svg";
+import * as S from "./Header.style";
+import { ReactComponent as Search } from "../../../asset/searchIcon.svg";
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -10,37 +10,50 @@ const Header = () => {
   const isWriteButton =
     location.pathname.includes("/rehome") ||
     location.pathname.includes("/trade");
+
   const onClickMenu = (path: string) => {
     navigate(path);
     setPathname(path);
   };
+  //글쓰기 버튼 설정
+  const buttonText = () => {
+    switch (pathname) {
+      case "/rehome":
+        return "분양 글쓰러가기";
+      case "/trade":
+        return "물품글 올리기";
+      default:
+        break;
+    }
+  };
   return (
     <>
-      <Styled.HeaderWrap>
-        <Styled.LogoBox>로고</Styled.LogoBox>
-        <Styled.MenuBox>
+      <S.HeaderWrap isBorder={isWriteButton}>
+        <S.LogoBox>로고</S.LogoBox>
+        <S.MenuBox>
           {menuList.map((item) => (
-            <Styled.MenuItems
+            <S.MenuItems
               key={item.text}
               onClick={() => onClickMenu(item.path)}
               isSelected={pathname === item.path}
             >
               {item.text}
-            </Styled.MenuItems>
+            </S.MenuItems>
           ))}
-        </Styled.MenuBox>
+        </S.MenuBox>
         {isWriteButton ? (
-          <Styled.WriteLoginSearchBox>
+          <S.WriteLoginSearchBox>
             <Search stroke="#333" />
-            <Styled.LoginButton>로그인</Styled.LoginButton>
-          </Styled.WriteLoginSearchBox>
+            <S.WriteButton>{buttonText()}</S.WriteButton>
+            <S.LoginButton>로그인</S.LoginButton>
+          </S.WriteLoginSearchBox>
         ) : (
-          <Styled.LoginSearchBox>
+          <S.LoginSearchBox>
             <Search stroke="#333" />
-            <Styled.LoginButton>로그인</Styled.LoginButton>
-          </Styled.LoginSearchBox>
+            <S.LoginButton>로그인</S.LoginButton>
+          </S.LoginSearchBox>
         )}
-      </Styled.HeaderWrap>
+      </S.HeaderWrap>
     </>
   );
 };

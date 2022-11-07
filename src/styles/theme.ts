@@ -12,6 +12,7 @@ const colors = {
 
 const fontSizes = {
   titleSize: "24px",
+  xxxlg: "22px",
   xxlg: "20px",
   xlg: "18px",
   large: "16px",
@@ -21,12 +22,14 @@ const deviceSizes = {
   mobile: "375px",
   tablet: "768px",
   laptop: "920px",
+  web: "1199px",
 };
 
 const device = {
   mobile: `screen and (max-width: ${deviceSizes.mobile})`,
   tablet: `screen and (max-width: ${deviceSizes.tablet})`,
   laptop: `screen and (max-width: ${deviceSizes.laptop})`,
+  web: `screen and (max-width: ${deviceSizes.web})`,
 };
 const theme = {
   colors,

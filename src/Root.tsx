@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import Header from "./components/shared/Header";
+import Header from "./components/shared/header/Header";
 import GoodsTrade from "./pages/GoodsTrade";
 import MainHome from "./pages/MainHome";
 import ReHoming from "./pages/ReHoming";

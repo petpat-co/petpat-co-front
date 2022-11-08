@@ -2,8 +2,13 @@ import { ReactElement } from "react";
 import * as S from "./RehomingTemplate.style";
 import Button from "../shared/element/Button";
 import TopSection from "../shared/layout/TopSection";
+import { useNavigate } from "react-router-dom";
 
 const RehomingTemplate = (): ReactElement => {
+  const navigate = useNavigate();
+  const onClickWrite = () => {
+    navigate("/rehome/write");
+  };
   return (
     <>
       <TopSection>
@@ -18,7 +23,7 @@ const RehomingTemplate = (): ReactElement => {
           padding="0 20px"
           radius="120px"
         >
-          <S.ButtonSpan> 분양 글쓰러가기</S.ButtonSpan>
+          <S.ButtonSpan onClick={onClickWrite}> 분양 글쓰러가기</S.ButtonSpan>
         </Button>
       </TopSection>
     </>

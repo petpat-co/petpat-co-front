@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
 export const HeaderWrap = styled.header<{ isBorder: boolean }>`
-  width: 1200px;
+  width: 100%;
   height: 82px;
-  margin: 0 auto;
+  padding: 0 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -18,6 +18,7 @@ export const LogoBox = styled.div`
   background: #d9d9d9;
   display: flex;
   align-items: center;
+  cursor: pointer;
   justify-content: center;
 `;
 export const MenuBox = styled.ul`

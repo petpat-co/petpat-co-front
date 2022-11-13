@@ -1,6 +1,6 @@
-import { ReactNode } from "react";
-import styled from "styled-components";
-import { ReactComponent as Arrow } from "../../../asset/arrowIcon.svg";
+import { ReactNode } from 'react';
+import styled from 'styled-components';
+import { ReactComponent as Arrow } from '../../../asset/arrowIcon.svg';
 
 interface ButtonPropsType {
   _disabled: boolean;
@@ -55,7 +55,7 @@ const Button = (props: ButtonPropsType) => {
       {children}
       {isArrowIcon ? (
         <span>
-          <Arrow stroke="#333" />
+          <Arrow stroke="#333" strokeWidth="2" />
         </span>
       ) : null}
     </StyledButton>
@@ -77,15 +77,15 @@ interface ButtonStyledProps {
 }
 const StyledButton = styled.button<ButtonStyledProps>`
   box-sizing: border-box;
-  width: ${({ width }) => (width ? width : "100%")};
-  height: ${({ height }) => (height ? height : "50px")};
-  padding: ${({ padding }) => (padding ? padding : "0")};
+  width: ${({ width }) => (width ? width : '100%')};
+  height: ${({ height }) => (height ? height : '50px')};
+  padding: ${({ padding }) => (padding ? padding : '0')};
   background: ${({ disabled, bg, activeBg }) => (disabled ? bg : activeBg)};
   color: ${({ disabled, color, activeColor }) =>
     disabled ? color : activeColor};
-  border-radius: ${({ radius }) => (radius ? radius : "0")};
+  border-radius: ${({ radius }) => (radius ? radius : '0')};
   transition: background-color 0.15s ease-out;
-  border: ${({ border }) => (border ? border : "none")};
+  border: ${({ border }) => (border ? border : 'none')};
 
   ${({ isArrowIcon }) =>
     isArrowIcon &&

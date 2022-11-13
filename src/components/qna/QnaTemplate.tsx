@@ -1,11 +1,14 @@
 import React from 'react';
 import BannerSection from '../shared/layout/BannerSection';
+import Select from '../shared/Select';
 import Tag from '../shared/Tag';
 import * as S from './QnaTemplate.styled';
 
 const QnaTemplate = () => {
   const mockTag = ['강아지', '고양이', '물고기', '동물병원'];
+  const mockSelect = ['최신순', '좋아요순', '댓글순'];
 
+  const [value, setValue] = React.useState<number>(-1);
   return (
     <>
       <BannerSection>
@@ -19,6 +22,12 @@ const QnaTemplate = () => {
           ))}
         </S.TagContainer>
       </BannerSection>
+      <Select
+        data={mockSelect}
+        value={value}
+        setValue={setValue}
+        placeholder="dsa"
+      />
     </>
   );
 };

@@ -22,12 +22,7 @@ const QnaTemplate = () => {
           ))}
         </S.TagContainer>
       </BannerSection>
-      <Select
-        data={mockSelect}
-        value={value}
-        setValue={setValue}
-        placeholder="dsa"
-      />
+      <Select data={mockSelect} value={value} setValue={setValue} />
     </>
   );
 };

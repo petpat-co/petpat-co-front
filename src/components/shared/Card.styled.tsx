@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 interface TextType {
   width?: string;
@@ -30,14 +30,14 @@ export const TextBox = styled.div<{ width: string }>`
 
 export const Text = styled.p<{ fontWeight?: number }>`
   width: 100%;
-  font-weight: ${(props) => (props.fontWeight ? `${props.fontWeight}` : "400")};
+  font-weight: ${(props) => (props.fontWeight ? `${props.fontWeight}` : '400')};
   font-size: 22px;
   margin: 14px 0;
 `;
 
 export const smallText = styled.p<TextType>`
-  width: ${(props) => (props.width ? `${props.width}` : "38%")};
-  font-size: ${(props) => (props.fontSize ? `${props.fontSize}` : "16px")};
+  width: ${(props) => (props.width ? `${props.width}` : '38%')};
+  font-size: ${(props) => (props.fontSize ? `${props.fontSize}` : '16px')};
   text-align: ${(props) => (props.textAlign ? `${props.textAlign}` : null)};
-  color: ${(props) => (props.color ? `${props.color}` : "black")};
+  color: ${(props) => (props.color ? `${props.color}` : 'black')};
 `;

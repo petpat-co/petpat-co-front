@@ -12,7 +12,9 @@ interface SelectProps {
   value: number;
   /** useState의 setter 함수 */
   setValue: Dispatch<SetStateAction<number>>;
-  /** 목록의 요소가 아닌 텍스트를 설정하고 싶은 경우 */
+  /** 목록의 요소가 아닌 텍스트를 설정하고 싶은 경우
+   *  value를 초기값을 -1로 설정하세요.
+   */
   placeholder?: string;
 }
 
@@ -31,6 +33,7 @@ export default function Select({
   }, [data]);
 
   const handleSelect = (idx: number) => {
+    console.log(idx);
     setValue(idx);
     setDropDown((prev) => !prev);
   };

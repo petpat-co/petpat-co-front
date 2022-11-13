@@ -32,6 +32,7 @@ export const DropDownList = styled.ul<{ select: number }>`
   padding: 4px;
   border: 1px solid #ececec;
   border-top: none;
+  background-color: white;
 
   ${({ select }) =>
     select &&

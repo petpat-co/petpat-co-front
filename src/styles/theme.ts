@@ -1,28 +1,28 @@
 const colors = {
   //font
-  main: "#00c7ae",
-  subTitle: "#666",
-  blueTitle: "#718AFF",
-  blueBanner: "#B9EAFF",
-  borderColor: "#e1e1e1",
-  hoverMain: "#00a18d",
-  buttonText: "#fff",
-  grayText: "#333",
+  main: '#00c7ae',
+  subTitle: '#666',
+  blueTitle: '#718AFF',
+  blueBanner: '#B9EAFF',
+  borderColor: '#e1e1e1',
+  hoverMain: '#00a18d',
+  buttonText: '#fff',
+  grayText: '#333',
 };
 
 const fontSizes = {
-  titleSize: "24px",
-  xxxlg: "22px",
-  xxlg: "20px",
-  xlg: "18px",
-  large: "16px",
+  titleSize: '24px',
+  xxxlg: '22px',
+  xxlg: '20px',
+  xlg: '18px',
+  large: '16px',
 };
 
 const deviceSizes = {
-  mobile: "375px",
-  tablet: "768px",
-  laptop: "920px",
-  web: "1199px",
+  mobile: '375px',
+  tablet: '768px',
+  laptop: '920px',
+  web: '1199px',
 };
 
 const device = {

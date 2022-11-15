@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const HeaderWrap = styled.header<{ isBorder: boolean }>`
   width: 100%;
@@ -31,7 +31,7 @@ export const MenuBox = styled.ul`
 export const MenuItems = styled.li<{ isSelected: boolean }>`
   font-weight: 700;
   font-size: ${({ theme }) => theme.fontSizes.xxxlg};
-  color: ${({ isSelected }) => (isSelected ? "#FBBC05" : "#2b2b2b")};
+  color: ${({ isSelected }) => (isSelected ? '#FBBC05' : '#2b2b2b')};
   cursor: pointer;
 `;
 export const WriteLoginSearchBox = styled.div`
@@ -73,4 +73,12 @@ export const LoginButton = styled.button`
   font-weight: 700;
   color: #fff;
   font-size: ${({ theme }) => theme.fontSizes.xlg};
+`;
+//로그인 이후 스타일
+export const HeaderRightInner = styled.div`
+  width: 180px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;

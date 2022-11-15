@@ -1,7 +1,12 @@
-import React from "react";
+import React from 'react';
+import WritingTemplate from '../../shared/layout/WritingTemplate';
 
 const RehomeWriteTemplate = () => {
-  return <div>글쓰기</div>;
+  return (
+    <>
+      <WritingTemplate title="분양 글쓰기" isBorder={true} />
+    </>
+  );
 };
 
 export default RehomeWriteTemplate;

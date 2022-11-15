@@ -8,10 +8,9 @@ export const ContentWrap = styled.section`
   gap: 12px;
   @media ${({ theme }) => theme.device.web} {
     width: 100%;
-  }
-  @media ${({ theme }) => theme.device.laptop} {
-    grid-template-columns: repeat(1, 1fr);
-    gap: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
   }
 `;
 export const ListWrap = styled.div`

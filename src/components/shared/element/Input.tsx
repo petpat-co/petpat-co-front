@@ -12,6 +12,7 @@ interface InputProps extends InputStyleType {
   onChange: React.ChangeEventHandler<HTMLInputElement>;
   defaultValue?: string;
   maxLength: number;
+  name: string;
 }
 const Input = forwardRef((props: InputProps, ref?: any) => {
   const {
@@ -22,6 +23,7 @@ const Input = forwardRef((props: InputProps, ref?: any) => {
     width,
     height,
     border,
+    name,
     borderRadius,
   } = props;
 
@@ -39,6 +41,7 @@ const Input = forwardRef((props: InputProps, ref?: any) => {
       onChange={onChange}
       defaultValue={defaultValue}
       ref={ref}
+      name={name}
       maxLength={maxLength}
     />
   );

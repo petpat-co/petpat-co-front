@@ -1,11 +1,22 @@
-import { useState } from 'react';
+import { ChangeEvent, useCallback, useState } from 'react';
 import * as S from './RehomeWriteTemplate.style';
 import { ImageUpload } from '../../shared/input/ImageUpload';
 import WritingTemplate from '../../shared/layout/WritingTemplate';
 import Input from '../../shared/element/Input';
+import useRehomingForm from '../../../hooks/useRehomingForm';
 
 const RehomeWriteTemplate = () => {
   const [file, setFile] = useState<File | null>(null);
+  const { form, setForm } = useRehomingForm();
+
+  const onChangeInput = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      setForm((s) => ({ ...s, [name]: value }));
+    },
+    [form],
+  );
+  console.log(form, 'form');
   return (
     <>
       <WritingTemplate title="분양 글쓰기" isBorder={true} />
@@ -58,13 +69,14 @@ const RehomeWriteTemplate = () => {
           <S.InputLengthBox>
             <S.InputWrap>
               <Input
-                onChange={() => {}}
+                onChange={onChangeInput}
                 placeholder="상품 제목을 입력하세요."
                 defaultValue=""
+                name="title"
                 maxLength={20}
               />
             </S.InputWrap>
-            <S.LengthWrap>0/20</S.LengthWrap>
+            <S.LengthWrap>{form.title.length}/20</S.LengthWrap>
           </S.InputLengthBox>
         </S.TitleInputWrap>
       </S.Wrap>

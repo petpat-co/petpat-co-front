@@ -4,6 +4,7 @@ import { ImageUpload } from '../../shared/input/ImageUpload';
 import WritingTemplate from '../../shared/layout/WritingTemplate';
 import Input from '../../shared/element/Input';
 import useRehomingForm from '../../../hooks/useRehomingForm';
+import Button from '../../shared/element/Button';
 
 const RehomeWriteTemplate = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -16,7 +17,13 @@ const RehomeWriteTemplate = () => {
     },
     [form],
   );
-  console.log(form, 'form');
+  const onChangeTextArea = useCallback(
+    (e: ChangeEvent<HTMLTextAreaElement>) => {
+      const { name, value } = e.target;
+      setForm((s) => ({ ...s, [name]: value }));
+    },
+    [form],
+  );
   return (
     <>
       <WritingTemplate title="분양 글쓰기" isBorder={true} />
@@ -64,8 +71,9 @@ const RehomeWriteTemplate = () => {
             </S.NoticeBox>
           </S.ImageNoticeBox>
         </S.ImageInputWrap>
+        {/* 제목 */}
         <S.TitleInputWrap>
-          <h2>제목</h2>
+          <S.H2>제목</S.H2>
           <S.InputLengthBox>
             <S.InputWrap>
               <Input
@@ -79,7 +87,117 @@ const RehomeWriteTemplate = () => {
             <S.LengthWrap>{form.title.length}/20</S.LengthWrap>
           </S.InputLengthBox>
         </S.TitleInputWrap>
+        {/* 카테고리 */}
+        <S.GrayWrap>
+          <S.H2>카테고리</S.H2>
+          <S.GrayBox></S.GrayBox>
+        </S.GrayWrap>
+        <S.GrayWrap>
+          <S.H2>상세설명</S.H2>
+          <S.GrayBox></S.GrayBox>
+        </S.GrayWrap>
+        {/* 거래지역 */}
+        <S.GrayWrap>
+          <S.H2>거래지역</S.H2>
+          <S.InputButtonWrap>
+            <div>
+              <Button
+                width="auto"
+                isArrowIcon={false}
+                height="46px"
+                border="1px solid #000"
+                _onClick={() => {}}
+                _disabled={false}
+                activeBg="#fff"
+                padding="0 10px"
+                activeColor="#000"
+                radius="8px"
+              >
+                주소검색
+              </Button>
+              <Button
+                width="auto"
+                isArrowIcon={false}
+                height="46px"
+                border="1px solid #000"
+                _onClick={() => {}}
+                _disabled={false}
+                activeBg="#fff"
+                padding="0 10px"
+                activeColor="#000"
+                radius="8px"
+              >
+                기본주소지
+              </Button>
+            </div>
+            <Input
+              onChange={() => {}}
+              placeholder="지역을 설정해주세요."
+              defaultValue=""
+              name="rehomingPrice"
+              maxLength={100}
+            />
+          </S.InputButtonWrap>
+        </S.GrayWrap>
+        {/* 책임비 */}
+        <S.GrayWrap>
+          <S.H2>책임비</S.H2>
+          <S.InputBox>
+            <Input
+              width="355px"
+              onChange={() => {}}
+              placeholder="숫자만 입력해주세요."
+              defaultValue=""
+              name="price"
+              maxLength={100}
+            />
+            <span>원</span>
+          </S.InputBox>
+        </S.GrayWrap>
+        {/* 설명 */}
+        <S.GrayWrap>
+          <S.H2>설명</S.H2>
+          <S.TextAreaBox>
+            <S.TextArea
+              name="description"
+              placeholder="설명을 입력해주세요."
+              onChange={onChangeTextArea}
+              maxLength={2000}
+            ></S.TextArea>
+            <S.LengthWrap>{form.description.length}/2000</S.LengthWrap>
+          </S.TextAreaBox>
+        </S.GrayWrap>
+        {/* 연관태그 */}
+        <S.GrayWrap isNoBorder={true}>
+          <S.H2>연관태그</S.H2>
+          <S.InputBox>
+            <Input
+              onChange={() => {}}
+              placeholder="연관 태그를 입력해주세요."
+              defaultValue=""
+              name="tag"
+              maxLength={100}
+            />
+          </S.InputBox>
+        </S.GrayWrap>
       </S.Wrap>
+      <S.ButtonWrap>
+        <S.ButtonInner>
+          <Button
+            width="auto"
+            isArrowIcon={false}
+            height="66px"
+            _onClick={() => {}}
+            _disabled={false}
+            activeBg="#0B0B0B"
+            padding="0 20px"
+            activeColor="#fff"
+            radius="14px"
+          >
+            <span>등록하기</span>
+          </Button>
+        </S.ButtonInner>
+      </S.ButtonWrap>
     </>
   );
 };

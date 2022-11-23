@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
     *,
@@ -118,6 +118,22 @@ export const GlobalStyle = createGlobalStyle`
         text-decoration: none;
         cursor: pointer;
         
+    }
+    textarea{
+    resize: none; 
+    ::placeholder {
+    color: #cdcdcd;
+    }
+     ::-webkit-input-placeholder {
+    color: #cdcdcd;
+    }
+    :-ms-input-placeholder {
+    color: #cdcdcd;
+    }
+    :focus {
+    border: 1.4px solid #fbbc05;
+    outline: none;
+    }
     }
 `;
 

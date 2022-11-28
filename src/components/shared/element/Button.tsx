@@ -55,7 +55,7 @@ const Button = (props: ButtonPropsType) => {
       {children}
       {isArrowIcon ? (
         <span>
-          <Arrow stroke="#333" strokeWidth="2" />
+          <Arrow stroke="#333" strokeWidth="2" width="30" height="30" />
         </span>
       ) : null}
     </StyledButton>

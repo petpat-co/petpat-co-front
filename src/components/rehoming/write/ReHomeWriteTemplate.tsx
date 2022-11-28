@@ -1,5 +1,5 @@
 import { ChangeEvent, useCallback, useState } from 'react';
-import * as S from './RehomeWriteTemplate.style';
+import * as S from './ReHomeWriteTemplate.style';
 import { ImageUpload } from '../../shared/input/ImageUpload';
 import WritingTemplate from '../../shared/layout/WritingTemplate';
 import Input from '../../shared/element/Input';

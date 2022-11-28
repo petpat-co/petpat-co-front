@@ -1,5 +1,5 @@
 import { ReactElement, useState } from 'react';
-import * as S from './RehomingTemplate.style';
+import * as S from './ReHomingTemplate.style';
 import Button from '../shared/element/Button';
 import TopSection from '../shared/layout/TopSection';
 import { useNavigate } from 'react-router-dom';
@@ -37,7 +37,7 @@ const RehomingTemplate = (): ReactElement => {
           <S.FirstBox>
             <S.HomeBox>
               <span> 홈 </span>
-              <Arrow stroke="#333" strokeWidth="1" />
+              <Arrow stroke="#333" strokeWidth="1" width="30" height="30" />
             </S.HomeBox>
             {firstData.map((el, idx) => {
               return (
@@ -47,7 +47,14 @@ const RehomingTemplate = (): ReactElement => {
                     value={idx ? category : dogCategory}
                     setValue={idx ? setCategory : setDogCategory}
                   />
-                  {idx ? null : <Arrow stroke="#333" strokeWidth="1" />}
+                  {idx ? null : (
+                    <Arrow
+                      stroke="#333"
+                      strokeWidth="1"
+                      width="30"
+                      height="30"
+                    />
+                  )}
                 </S.SelectWrap>
               );
             })}
@@ -57,7 +64,7 @@ const RehomingTemplate = (): ReactElement => {
               return (
                 <S.CategoryBox key={idx}>
                   <span>{el.text}</span>
-                  <Arrow stroke="#333" strokeWidth="1" />
+                  <Arrow stroke="#333" strokeWidth="1" width="30" height="30" />
                 </S.CategoryBox>
               );
             })}

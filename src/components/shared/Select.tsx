@@ -56,6 +56,8 @@ export default function Select({
       <S.SelectZone width={selectComponentWidth}>
         {placeholder && value === -1 ? placeholder : data[value]}
         <S.StyledArrow
+          width="30"
+          height="30"
           stroke="black"
           strokeWidth="1"
           transform="rotate(90)"

@@ -1,4 +1,4 @@
-import RehomeWriteTemplate from "../../components/rehoming/write/RehomeWriteTemplate";
+import RehomeWriteTemplate from '../../components/rehoming/write/ReHomeWriteTemplate';
 
 const ReHomingWrite = () => {
   return <RehomeWriteTemplate />;

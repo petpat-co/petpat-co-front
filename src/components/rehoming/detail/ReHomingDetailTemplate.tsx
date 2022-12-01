@@ -3,9 +3,10 @@ import Select from '../../shared/Select';
 import * as S from './ReHomingDetailTemplate.style';
 import * as MainS from '../ReHomingTemplate.style';
 import { ReactComponent as Arrow } from '../../../asset/arrowIcon.svg';
-import { DisplayGrid } from '../../shared/element';
+import { Button, DisplayGrid } from '../../shared/element';
 import { ReactComponent as View } from '../../../asset/viewIcon.svg';
 import { ReactComponent as Comment } from '../../../asset/commentIcon.svg';
+import { ReactComponent as Heart } from '../../../asset/heartIcon.svg';
 
 const ReHomingDetailTemplate = () => {
   const [dogCategory, setDogCategory] = useState<number>(0);
@@ -126,6 +127,33 @@ const ReHomingDetailTemplate = () => {
             <span>#</span> {item}
           </S.HashTag>
         ))}
+      </DisplayGrid>
+      <DisplayGrid height="auto" margin="70px 0 0">
+        <Button
+          width="49%"
+          height="58px"
+          border="none"
+          _onClick={() => {}}
+          _disabled={false}
+          activeBg="#B4B4B4"
+          radius="14px"
+          isFlex={true}
+        >
+          <S.ButtonSpan>+000</S.ButtonSpan>
+          <Heart width="38" height="38" strokeWidth="3" stroke="#838383" />
+        </Button>
+        <Button
+          width="49%"
+          height="58px"
+          border="none"
+          _onClick={() => {}}
+          _disabled={false}
+          activeBg="#9D9D9D"
+          radius="14px"
+          isFlex={true}
+        >
+          <S.ButtonSpan>예약중</S.ButtonSpan>
+        </Button>
       </DisplayGrid>
     </S.Wrap>
   );

@@ -2,22 +2,26 @@ import { ReactNode } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as Arrow } from '../../../asset/arrowIcon.svg';
 
-interface ButtonPropsType {
-  _disabled: boolean;
+interface ButtonStyledProps {
+  disabled?: boolean;
   color?: string;
-  width?: string;
-  height?: string;
   activeColor?: string;
   bg?: string;
   activeBg?: string;
   border?: string;
+  width?: string;
+  height?: string;
   padding?: string;
-  children: ReactNode;
   radius?: string;
-  _onClick: () => void;
   isArrowIcon?: boolean;
+  isFlex?: boolean;
 }
-const Button = (props: ButtonPropsType) => {
+interface PropsType extends ButtonStyledProps {
+  children: ReactNode;
+  _onClick: () => void;
+  _disabled: boolean;
+}
+const Button = (props: PropsType) => {
   const {
     bg,
     color,
@@ -32,6 +36,7 @@ const Button = (props: ButtonPropsType) => {
     padding,
     radius,
     isArrowIcon,
+    isFlex,
   } = props;
 
   const styles = {
@@ -44,6 +49,7 @@ const Button = (props: ButtonPropsType) => {
     height,
     padding,
     radius,
+    isFlex,
   };
   return (
     <StyledButton
@@ -62,19 +68,6 @@ const Button = (props: ButtonPropsType) => {
   );
 };
 
-interface ButtonStyledProps {
-  disabled: boolean;
-  color?: string;
-  activeColor?: string;
-  bg?: string;
-  activeBg?: string;
-  border?: string;
-  width?: string;
-  height?: string;
-  padding?: string;
-  radius?: string;
-  isArrowIcon?: boolean;
-}
 const StyledButton = styled.button<ButtonStyledProps>`
   box-sizing: border-box;
   width: ${({ width }) => (width ? width : '100%')};
@@ -86,7 +79,13 @@ const StyledButton = styled.button<ButtonStyledProps>`
   border-radius: ${({ radius }) => (radius ? radius : '0')};
   transition: background-color 0.15s ease-out;
   border: ${({ border }) => (border ? border : 'none')};
-
+  ${({ isFlex }) =>
+    isFlex &&
+    `
+    display:flex;
+  justify-content: center;
+  align-items: center;
+  `}
   ${({ isArrowIcon }) =>
     isArrowIcon &&
     `

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Wrap = styled.div`
-  width: 1200px;
+  width: 994px;
   margin: 70px auto 186px;
   height: auto;
 
@@ -206,4 +206,13 @@ export const HashTag = styled.div`
     font-weight: 700;
     color: #989898;
   }
+`;
+export const ButtonSpan = styled.span`
+  color: #838383;
+  height: 38px;
+  font-weight: 700;
+  font-size: 26px;
+  padding-right: 10px;
+  display: flex;
+  align-items: center;
 `;

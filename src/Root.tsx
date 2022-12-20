@@ -16,7 +16,7 @@ const Root = () => {
         <Route path="/" element={<MainHome />} />
         <Route path="/rehome" element={<ReHoming />} />
         <Route path="/rehome/write" element={<ReHomingWrite />} />
-        <Route path="/rehome/detail/:id" element={<ReHomingDetail />} />
+        <Route path="/rehome/detail/:postId" element={<ReHomingDetail />} />
         <Route path="/trade" element={<GoodsTrade />} />
         <Route path="/qna" element={<QnA />} />
       </Routes>

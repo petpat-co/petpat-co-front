@@ -20,7 +20,7 @@ export interface RehomingType {
   tag: string[];
 }
 type TransferFormData = {
-  (data: RehomingType): FormData;
+  (data: any, exceptKeyList: Array<string>): FormData;
 };
 type Submit = (action: string, id?: string) => void;
 
@@ -75,28 +75,30 @@ const useRehomingForm = () => {
    * @return {FormData}
    * @author 2022.11.18 Edel
    **/
-  const transferFormData: TransferFormData = (data) => {
-    const form = new FormData();
-    for (let [key, value] of Object.entries(data)) {
-      if (typeof value === 'number') {
-        value = String(value);
-      }
 
-      form.append(key, value);
+  const makeFormData: TransferFormData = (data, exceptKeyList) => {
+    const form = new FormData();
+    for (let key in data) {
+      if (exceptKeyList.find((el) => el === key)) {
+        continue;
+      }
+      form.append(key, data[key]);
     }
     return form;
   };
   /**
-   * @param {"add"||"edit"} 동행글 추가 || 동행글 수정
+   * @param {"add"||"edit"} 분양글 추가 || 분양글 수정
    * @param {editDataType} 수정할 때 필요한 옵셔널 인자 - 필수 값은 accompanyId
    *
    * @author 2022.11.18 Edel
    **/
   const submit: Submit = async (action, id) => {
-    const submitData = transferFormData(form);
+    const exceptKeyList = ['rehomingImgFile'];
+    const submitData = makeFormData(form, exceptKeyList);
 
     try {
       const result = await switchAPI(action, submitData, id);
+      console.log(result);
 
       navigate(`/community/accompany/detail/${id}`);
     } catch (err: any) {

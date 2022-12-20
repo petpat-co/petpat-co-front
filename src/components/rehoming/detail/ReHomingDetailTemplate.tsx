@@ -2,15 +2,24 @@ import { useState } from 'react';
 import Select from '../../shared/Select';
 import * as S from './ReHomingDetailTemplate.style';
 import * as MainS from '../ReHomingTemplate.style';
+import { useQuery } from 'react-query';
 import { ReactComponent as Arrow } from '../../../asset/arrowIcon.svg';
 import { Button, DisplayGrid } from '../../shared/element';
 import { ReactComponent as View } from '../../../asset/viewIcon.svg';
 import { ReactComponent as Comment } from '../../../asset/commentIcon.svg';
 import { ReactComponent as Heart } from '../../../asset/heartIcon.svg';
+import { rehomingAPI } from '../../../network/api';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const ReHomingDetailTemplate = () => {
+  const params = useParams();
+  const navigate = useNavigate();
   const [dogCategory, setDogCategory] = useState<number>(0);
   const [category, setCategory] = useState<number>(0);
+
+  // const { data, status } = useQuery('rehomeList', () =>
+  //   rehomingAPI.getReHomingList({ params }),
+  // );
   return (
     <S.Wrap>
       <MainS.LeftBox>

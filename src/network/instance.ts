@@ -4,7 +4,7 @@ import { config } from './config';
 const instance = axios.create({
   baseURL: config.server.host,
   timeout: 20000,
-  withCredentials: true,
+  withCredentials: false,
   headers: {
     'content-type': 'application/json; charset=UTF-8',
     accept: 'application/json',

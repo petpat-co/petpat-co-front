@@ -6,12 +6,29 @@ import { useNavigate } from 'react-router-dom';
 import Select from '../shared/Select';
 import { ReactComponent as Arrow } from '../../asset/arrowIcon.svg';
 import FrameList from '../shared/list/FrameList';
+import { useInfiniteQuery, useQuery } from 'react-query';
+import { rehomingAPI } from '../../network/api';
 
 const RehomingTemplate = (): ReactElement => {
   const navigate = useNavigate();
   const [allValue, setAllValue] = useState<number>(0);
   const [dogCategory, setDogCategory] = useState<number>(0);
   const [category, setCategory] = useState<number>(0);
+  const [pageno, setPageNo] = useState<number>(0);
+
+  const { data, status } = useInfiniteQuery(
+    ['rehomeList'],
+    ({ pageParam = 1 }) =>
+      rehomingAPI.getReHomingList({ params: { pageno: pageParam } }),
+    {
+      getNextPageParam: (lastPage) => {
+        return lastPage.data.pageno + 1; // 다음 페이지를 호출할 때 사용 될 pageParam
+      },
+    },
+  );
+  // const { data, status } = useQuery('rehomeList', () =>
+  //   rehomingAPI.getReHomingList({ params }),
+  // );
   const onClickWrite = () => {
     navigate('/rehome/write');
   };
@@ -74,7 +91,7 @@ const RehomingTemplate = (): ReactElement => {
           <Select data={mock1} value={allValue} setValue={setAllValue} />
         </S.RightBox>
       </S.SelectSection>
-      <FrameList list={data} />
+      <FrameList list={mockData} />
     </>
   );
 };
@@ -97,7 +114,7 @@ const secendData = [
   { text: '강아지 리빙' },
   { text: '강아지 리빙' },
 ];
-const data = [
+const mockData = [
   {
     img: null,
     status: '모집중',

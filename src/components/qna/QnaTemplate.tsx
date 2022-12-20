@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import React from 'react';
 
 import BannerSection from '../shared/layout/BannerSection';
-import Select from '../shared/Select';
+import Select from '../shared/select/Select';
 import Tag from '../shared/Tag';
 import { ReactComponent as View } from '../../asset/viewIcon.svg';
 import { ReactComponent as Comment } from '../../asset/commentIcon.svg';

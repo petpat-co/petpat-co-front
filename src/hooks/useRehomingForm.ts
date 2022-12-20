@@ -24,7 +24,7 @@ type TransferFormData = {
 };
 type Submit = (action: string, id?: string) => void;
 
-const initialAccompany = {
+const initial = {
   rehomingImgFile: {},
   rehomingImgUrl: '',
   postType: '',
@@ -46,11 +46,11 @@ const initialAccompany = {
  * @author 2022.11.21 Edel
  **/
 const useRehomingForm = () => {
-  const [form, setForm] = useState(initialAccompany);
+  const [form, setForm] = useState(initial);
   const navigate = useNavigate();
   const initForm = (data: RehomingType) => {
     if (!data) {
-      setForm(initialAccompany);
+      setForm(initial);
       return;
     }
     setForm({

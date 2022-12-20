@@ -1,5 +1,4 @@
-import React from 'react';
-import { TagItem } from './Tag.styled';
+import styled from 'styled-components';
 
 interface TagProps {
   children: React.ReactNode;
@@ -14,3 +13,16 @@ export default function Tag({ children }: TagProps) {
     </TagItem>
   );
 }
+
+const TagItem = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 12px;
+  gap: 7px;
+  margin-right: 7px;
+  background: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 120px;
+  cursor: pointer;
+`;

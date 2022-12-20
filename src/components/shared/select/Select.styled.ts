@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ReactComponent as Arrow } from '../../asset/arrowIcon.svg';
+import { ReactComponent as Arrow } from '../../../asset/arrowIcon.svg';
 
 export const SelectContainer = styled.div`
   position: relative;

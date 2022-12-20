@@ -6,6 +6,7 @@ type InputStyleType = {
   height?: string; //기본 50px
   border?: string; //기본  1.4px solid #aaaaaa;
   borderRadius?: string; //기본 0px
+  isBorderBottom?: boolean;
 };
 interface InputProps extends InputStyleType {
   placeholder: string;
@@ -25,6 +26,7 @@ const Input = forwardRef((props: InputProps, ref?: any) => {
     border,
     name,
     borderRadius,
+    isBorderBottom,
   } = props;
 
   const styles = {
@@ -32,6 +34,7 @@ const Input = forwardRef((props: InputProps, ref?: any) => {
     height,
     border,
     borderRadius,
+    isBorderBottom,
   };
 
   return (
@@ -67,5 +70,11 @@ const StyledInput = styled.input<InputStyleType>`
     border: 1.4px solid #fbbc05;
     outline: none;
   }
+
+  ${({ isBorderBottom }) =>
+    isBorderBottom &&
+    `
+    border-bottom:1.4px solid #aaaaaa;
+  `}
 `;
 export default Input;

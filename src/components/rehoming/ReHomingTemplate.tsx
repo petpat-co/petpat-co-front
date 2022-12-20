@@ -3,7 +3,7 @@ import * as S from './ReHomingTemplate.style';
 import Button from '../shared/element/Button';
 import TopSection from '../shared/layout/TopSection';
 import { useNavigate } from 'react-router-dom';
-import Select from '../shared/Select';
+import Select from '../shared/select/Select';
 import { ReactComponent as Arrow } from '../../asset/arrowIcon.svg';
 import FrameList from '../shared/list/FrameList';
 import { useInfiniteQuery, useQuery } from 'react-query';

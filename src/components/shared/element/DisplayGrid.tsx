@@ -10,6 +10,8 @@ interface StyledProps {
   padding?: string;
   margin?: string;
   flexWrap?: string;
+  bg?: string;
+  borderRadius?: string;
 }
 interface PropsType extends StyledProps {
   children?: ReactNode;
@@ -25,6 +27,8 @@ const DisplayGrid = (props: PropsType) => {
     padding,
     flexWrap,
     margin,
+    bg,
+    borderRadius,
   } = props;
   const styles = {
     width,
@@ -35,6 +39,8 @@ const DisplayGrid = (props: PropsType) => {
     padding,
     flexWrap,
     margin,
+    bg,
+    borderRadius,
   };
   return <DisplayBox {...styles}>{children}</DisplayBox>;
 };
@@ -50,5 +56,7 @@ const DisplayBox = styled.div<StyledProps>`
   align-items: ${({ align }) => (align ? align : 'center')};
   flex-direction: ${({ flexDirection }) =>
     flexDirection ? flexDirection : 'row'};
+  background-color: ${({ bg }) => (bg ? bg : null)};
+  border-radius: ${({ borderRadius }) => (borderRadius ? borderRadius : null)};
 `;
 export default DisplayGrid;

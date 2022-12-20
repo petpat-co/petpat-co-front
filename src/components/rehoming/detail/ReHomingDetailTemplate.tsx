@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Select from '../../shared/Select';
+import Select from '../../shared/select/Select';
 import * as S from './ReHomingDetailTemplate.style';
 import * as MainS from '../ReHomingTemplate.style';
 import { useQuery } from 'react-query';

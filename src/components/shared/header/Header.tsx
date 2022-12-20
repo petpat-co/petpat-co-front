@@ -32,9 +32,9 @@ const Header = () => {
       case '/rehome':
         return navigate('/rehome/write');
       case '/trade':
-        return navigate('/');
+        return navigate('/trade/write');
       case '/qna':
-        return navigate('/');
+        return navigate('/qna/write');
       default:
         break;
     }

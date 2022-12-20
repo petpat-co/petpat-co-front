@@ -1,24 +1,18 @@
 import { Route, Routes } from 'react-router-dom';
 import Footer from './components/shared/footer/Footer';
 import Header from './components/shared/header/Header';
-import GoodsTrade from './pages/GoodsTrade';
-import MainHome from './pages/MainHome';
-import QnA from './pages/qna/QnA';
-import ReHomingDetail from './pages/rehome/detail/ReHomingDetail';
-import ReHoming from './pages/rehome/ReHoming';
-import ReHomingWrite from './pages/rehome/ReHomingWrite';
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import routeList from './rootRouters';
 const Root = () => {
   return (
     <>
       <Header />
       <Routes>
-        <Route path="/" element={<MainHome />} />
-        <Route path="/rehome" element={<ReHoming />} />
-        <Route path="/rehome/write" element={<ReHomingWrite />} />
-        <Route path="/rehome/detail/:postId" element={<ReHomingDetail />} />
-        <Route path="/trade" element={<GoodsTrade />} />
-        <Route path="/qna" element={<QnA />} />
+        {routeList.map((item, idx) => {
+          return (
+            <Route key={idx} path={item.path} element={<item.element />} />
+          );
+        })}
       </Routes>
       <Footer />
     </>

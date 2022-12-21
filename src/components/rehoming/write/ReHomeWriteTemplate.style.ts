@@ -144,12 +144,7 @@ export const TextAreaBox = styled.div`
   flex-direction: column;
   align-items: flex-end;
 `;
-export const TextArea = styled.textarea`
-  width: 100%;
-  height: 200px;
-  padding: 10px;
-  font-size: 20px;
-`;
+
 export const ButtonWrap = styled.div`
   width: 100%;
   height: 110px;

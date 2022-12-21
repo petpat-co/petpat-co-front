@@ -11,10 +11,13 @@ interface ButtonStyledProps {
   border?: string;
   width?: string;
   height?: string;
+  margin?: string;
   padding?: string;
   radius?: string;
   isArrowIcon?: boolean;
   isFlex?: boolean;
+  fontSize?: string;
+  fontWeight?: string;
 }
 interface PropsType extends ButtonStyledProps {
   children: ReactNode;
@@ -33,10 +36,13 @@ const Button = (props: PropsType) => {
     border,
     width,
     height,
+    margin,
     padding,
     radius,
     isArrowIcon,
     isFlex,
+    fontSize,
+    fontWeight,
   } = props;
 
   const styles = {
@@ -47,9 +53,12 @@ const Button = (props: PropsType) => {
     border,
     width,
     height,
+    margin,
     padding,
     radius,
     isFlex,
+    fontSize,
+    fontWeight,
   };
   return (
     <StyledButton
@@ -72,6 +81,7 @@ const StyledButton = styled.button<ButtonStyledProps>`
   box-sizing: border-box;
   width: ${({ width }) => (width ? width : '100%')};
   height: ${({ height }) => (height ? height : '50px')};
+  margin: ${({ margin }) => (margin ? margin : '0')};
   padding: ${({ padding }) => (padding ? padding : '0')};
   background: ${({ disabled, bg, activeBg }) => (disabled ? bg : activeBg)};
   color: ${({ disabled, color, activeColor }) =>
@@ -79,6 +89,8 @@ const StyledButton = styled.button<ButtonStyledProps>`
   border-radius: ${({ radius }) => (radius ? radius : '0')};
   transition: background-color 0.15s ease-out;
   border: ${({ border }) => (border ? border : 'none')};
+  font-size: ${({ fontSize }) => (fontSize ? fontSize : '26px')};
+  font-weight: ${({ fontWeight }) => (fontWeight ? fontWeight : '700')};
   ${({ isFlex }) =>
     isFlex &&
     `

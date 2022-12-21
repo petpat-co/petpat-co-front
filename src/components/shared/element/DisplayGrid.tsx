@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import styled from 'styled-components';
 
 interface StyledProps {
@@ -12,6 +12,7 @@ interface StyledProps {
   flexWrap?: string;
   bg?: string;
   borderRadius?: string;
+  position?: string;
 }
 interface PropsType extends StyledProps {
   children?: ReactNode;
@@ -29,6 +30,7 @@ const DisplayGrid = (props: PropsType) => {
     margin,
     bg,
     borderRadius,
+    position,
   } = props;
   const styles = {
     width,
@@ -41,6 +43,7 @@ const DisplayGrid = (props: PropsType) => {
     margin,
     bg,
     borderRadius,
+    position,
   };
   return <DisplayBox {...styles}>{children}</DisplayBox>;
 };
@@ -58,5 +61,6 @@ const DisplayBox = styled.div<StyledProps>`
     flexDirection ? flexDirection : 'row'};
   background-color: ${({ bg }) => (bg ? bg : null)};
   border-radius: ${({ borderRadius }) => (borderRadius ? borderRadius : null)};
+  position: ${({ position }) => (position ? position : null)};
 `;
 export default DisplayGrid;

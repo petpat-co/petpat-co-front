@@ -1,10 +1,11 @@
 import { ChangeEvent, useCallback, useState } from 'react';
-import * as S from './ReHomeWriteTemplate.style';
+import useRehomingForm from '../../../hooks/useRehomingForm';
+import { TextArea } from '../../shared/element';
+import Button from '../../shared/element/Button';
+import Input from '../../shared/element/Input';
 import { ImageUpload } from '../../shared/input/ImageUpload';
 import WritingTemplate from '../../shared/layout/WritingTemplate';
-import Input from '../../shared/element/Input';
-import useRehomingForm from '../../../hooks/useRehomingForm';
-import Button from '../../shared/element/Button';
+import * as S from './ReHomeWriteTemplate.style';
 
 const RehomeWriteTemplate = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -158,12 +159,13 @@ const RehomeWriteTemplate = () => {
         <S.GrayWrap>
           <S.H2>설명</S.H2>
           <S.TextAreaBox>
-            <S.TextArea
+            <TextArea
               name="description"
               placeholder="설명을 입력해주세요."
               onChange={onChangeTextArea}
               maxLength={2000}
-            ></S.TextArea>
+              height="200px"
+            />
             <S.LengthWrap>{form.description.length}/2000</S.LengthWrap>
           </S.TextAreaBox>
         </S.GrayWrap>

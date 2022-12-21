@@ -1,21 +1,20 @@
-import { forwardRef } from 'react';
+import { ChangeEvent, forwardRef } from 'react';
 import styled from 'styled-components';
 
-type InputStyleType = {
+type TextAreaStyleType = {
   width?: string; //기본 100%
-  height?: string; //기본 50px
+  height: string;
   border?: string; //기본  1.4px solid #aaaaaa;
   borderRadius?: string; //기본 0px
-  isBorderBottom?: boolean;
 };
-interface InputProps extends InputStyleType {
+interface TextAreaProps extends TextAreaStyleType {
   placeholder: string;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   defaultValue?: string;
   maxLength: number;
   name: string;
 }
-const Input = forwardRef((props: InputProps, ref?: any) => {
+const TextArea = forwardRef((props: TextAreaProps, ref?: any) => {
   const {
     placeholder,
     onChange,
@@ -26,7 +25,6 @@ const Input = forwardRef((props: InputProps, ref?: any) => {
     border,
     name,
     borderRadius,
-    isBorderBottom,
   } = props;
 
   const styles = {
@@ -34,11 +32,10 @@ const Input = forwardRef((props: InputProps, ref?: any) => {
     height,
     border,
     borderRadius,
-    isBorderBottom,
   };
 
   return (
-    <StyledInput
+    <StyledTextArea
       {...styles}
       placeholder={placeholder}
       onChange={onChange}
@@ -50,9 +47,9 @@ const Input = forwardRef((props: InputProps, ref?: any) => {
   );
 });
 
-const StyledInput = styled.input<InputStyleType>`
+const StyledTextArea = styled.textarea<TextAreaStyleType>`
   width: ${({ width }) => (width ? width : '100%')};
-  height: ${({ height }) => (height ? height : '50px')};
+  height: ${({ height }) => height};
   border: ${({ border }) => (border ? border : '1.4px solid #aaaaaa')};
   border-radius: ${({ borderRadius }) => (borderRadius ? borderRadius : '0')};
   padding: 10px;
@@ -70,16 +67,5 @@ const StyledInput = styled.input<InputStyleType>`
     border: 1.4px solid #fbbc05;
     outline: none;
   }
-
-  ${({ isBorderBottom }) =>
-    isBorderBottom &&
-    `
-    border-bottom:1.4px solid #aaaaaa;
-    :focus {
-    border:none;
-    border-bottom: 1.4px solid #fbbc05;
-    outline: none;
-  }
-  `}
 `;
-export default Input;
+export default TextArea;

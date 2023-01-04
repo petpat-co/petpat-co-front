@@ -1,7 +1,6 @@
-import React from 'react';
-import * as S from './FrameList.style';
-import { ReactComponent as View } from '../../../asset/viewIcon.svg';
 import { ReactComponent as Comment } from '../../../asset/commentIcon.svg';
+import { ReactComponent as View } from '../../../asset/viewIcon.svg';
+import * as S from './FrameList.style';
 
 type listType = {
   img: null | string;
@@ -11,10 +10,10 @@ type listType = {
   view: string;
   comment: string;
 };
-interface FrameListPropsType {
+interface PropsType {
   list: Array<listType>;
 }
-const FrameList = (props: FrameListPropsType) => {
+const FrameList = (props: PropsType) => {
   const { list } = props;
   // props로 data list 받아서 화면에 뿌려줌
   return (

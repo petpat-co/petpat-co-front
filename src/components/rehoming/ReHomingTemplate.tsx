@@ -1,13 +1,13 @@
 import { ReactElement, useState } from 'react';
-import * as S from './ReHomingTemplate.style';
+import { useInfiniteQuery } from 'react-query';
+import { useNavigate } from 'react-router-dom';
+import { ReactComponent as Arrow } from 'src/asset/arrowIcon.svg';
+import { rehomingAPI } from 'src/network/api';
 import Button from '../shared/element/Button';
 import TopSection from '../shared/layout/TopSection';
-import { useNavigate } from 'react-router-dom';
-import Select from '../shared/select/Select';
-import { ReactComponent as Arrow } from '../../asset/arrowIcon.svg';
 import FrameList from '../shared/list/FrameList';
-import { useInfiniteQuery, useQuery } from 'react-query';
-import { rehomingAPI } from '../../network/api';
+import Select from '../shared/select/Select';
+import * as S from './ReHomingTemplate.style';
 
 const RehomingTemplate = (): ReactElement => {
   const navigate = useNavigate();

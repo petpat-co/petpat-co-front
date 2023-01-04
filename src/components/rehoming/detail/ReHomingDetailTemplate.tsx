@@ -1,15 +1,13 @@
 import { useState } from 'react';
-import Select from '../../shared/select/Select';
-import * as S from './ReHomingDetailTemplate.style';
-import * as MainS from '../ReHomingTemplate.style';
-import { useQuery } from 'react-query';
-import { ReactComponent as Arrow } from '../../../asset/arrowIcon.svg';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ReactComponent as Arrow } from 'src/asset/arrowIcon.svg';
+import { ReactComponent as Comment } from 'src/asset/commentIcon.svg';
+import { ReactComponent as Heart } from 'src/asset/heartIcon.svg';
+import { ReactComponent as View } from 'src/asset/viewIcon.svg';
 import { Button, DisplayGrid } from '../../shared/element';
-import { ReactComponent as View } from '../../../asset/viewIcon.svg';
-import { ReactComponent as Comment } from '../../../asset/commentIcon.svg';
-import { ReactComponent as Heart } from '../../../asset/heartIcon.svg';
-import { rehomingAPI } from '../../../network/api';
-import { useParams, useNavigate } from 'react-router-dom';
+import Select from '../../shared/select/Select';
+import * as MainS from '../ReHomingTemplate.style';
+import * as S from './ReHomingDetailTemplate.style';
 
 const ReHomingDetailTemplate = () => {
   const params = useParams();

@@ -1,5 +1,5 @@
-import React, { ReactElement } from "react";
-import QnaTemplate from "../../components/qna/QnaTemplate";
+import { ReactElement } from 'react';
+import QnaTemplate from 'src/components/qna/QnaTemplate';
 
 const QnA = (): ReactElement => {
   return <QnaTemplate />;

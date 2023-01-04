@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import * as S from './Header.style';
-import { ReactComponent as Search } from '../../../asset/searchIcon.svg';
-import { ReactComponent as Bell } from '../../../asset/bellIcon.svg';
-import { ReactComponent as BookMark } from '../../../asset/bookmarkIcon.svg';
-import { ReactComponent as UserIcon } from '../../../asset/userCircleIcon.svg';
+import { ReactComponent as Bell } from 'src/asset/bellIcon.svg';
+import { ReactComponent as BookMark } from 'src/asset/bookmarkIcon.svg';
+import { ReactComponent as Search } from 'src/asset/searchIcon.svg';
+import { ReactComponent as UserIcon } from 'src/asset/userCircleIcon.svg';
+import { HeaderStyle as S } from './Header.style';
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();

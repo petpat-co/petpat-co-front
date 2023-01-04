@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 
-interface WritingTemplatePropsType {
+interface PropsType {
   title: string;
   isBorder: boolean;
 }
-const WritingTemplate = (props: WritingTemplatePropsType) => {
+const WritingTemplate = (props: PropsType) => {
   const { title, isBorder } = props;
   return (
     <>

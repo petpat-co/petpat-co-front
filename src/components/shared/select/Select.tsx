@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction } from 'react';
 
 import * as S from './Select.styled';
 
-interface SelectProps {
+interface PropsType {
   /** 목록 배열을 넣어주세요. */
   data: string[];
   /** useState의 value값
@@ -18,12 +18,8 @@ interface SelectProps {
   placeholder?: string;
 }
 
-export default function Select({
-  data,
-  value,
-  setValue,
-  placeholder,
-}: SelectProps) {
+export default function Select(props: PropsType) {
+  const { data, value, setValue, placeholder } = props;
   const $dropDownList = React.useRef<HTMLUListElement>(null);
   const [dropDown, setDropDown] = React.useState<boolean>(false);
 

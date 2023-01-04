@@ -1,11 +1,12 @@
 import styled from 'styled-components';
 
-interface TagProps {
+interface PropsType {
   children: React.ReactNode;
   onClick?: () => void;
 }
 
-export default function Tag({ children }: TagProps) {
+export default function Tag(props: PropsType) {
+  const { children } = props;
   return (
     <TagItem>
       <span style={{ color: '#9a9a9a' }}>#</span>

@@ -1,12 +1,10 @@
 import { format } from 'date-fns';
 import React from 'react';
-
+import { ReactComponent as Comment } from 'src/asset/commentIcon.svg';
+import { ReactComponent as View } from 'src/asset/viewIcon.svg';
 import BannerSection from '../shared/layout/BannerSection';
 import Select from '../shared/select/Select';
 import Tag from '../shared/Tag';
-import { ReactComponent as View } from '../../asset/viewIcon.svg';
-import { ReactComponent as Comment } from '../../asset/commentIcon.svg';
-
 import * as S from './QnaTemplate.styled';
 
 const QnaTemplate = () => {

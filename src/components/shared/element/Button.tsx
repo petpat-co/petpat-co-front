@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
+import { ReactComponent as Arrow } from 'src/asset/arrowIcon.svg';
 import styled from 'styled-components';
-import { ReactComponent as Arrow } from '../../../asset/arrowIcon.svg';
 
 interface ButtonStyledProps {
   disabled?: boolean;

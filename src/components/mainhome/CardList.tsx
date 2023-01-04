@@ -1,6 +1,6 @@
+import { ReactComponent as Arrow } from 'src/asset/arrowIcon.svg';
 import Card from '../shared/Card';
 import * as S from './CardList.styled';
-import { ReactComponent as Arrow } from '../../asset/arrowIcon.svg';
 
 const CardList = () => {
   const test: number[] = [1, 2, 3, 4];

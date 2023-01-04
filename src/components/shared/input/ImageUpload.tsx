@@ -1,4 +1,4 @@
-import React, {
+import {
   ChangeEvent,
   Dispatch,
   MouseEvent,
@@ -7,8 +7,8 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { allowExt, preventDrag } from 'src/utils/util';
 import styled from 'styled-components';
-import { allowExt, preventDrag } from '../../../utils/util';
 //스타일 관련 타입
 type ImageWrapStyleProps = {
   height?: string; // 높이 기본값 282px

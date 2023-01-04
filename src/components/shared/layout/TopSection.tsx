@@ -1,6 +1,11 @@
+import { ReactNode } from 'react';
 import styled from 'styled-components';
 
-const TopSection = ({ children }: { children: React.ReactNode }) => {
+interface PropsType {
+  children: ReactNode;
+}
+const TopSection = (props: PropsType) => {
+  const { children } = props;
   return <TopSectionWrap>{children}</TopSectionWrap>;
 };
 

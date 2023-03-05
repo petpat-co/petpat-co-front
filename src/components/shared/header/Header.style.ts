@@ -2,38 +2,59 @@ import styled from 'styled-components';
 
 export namespace HeaderStyle {
   export const HeaderWrap = styled.header<{ isBorder: boolean }>`
-    width: 100%;
-    height: 82px;
-    padding: 0 70px;
+    width: 1200px;
+    height: 150px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     ${({ isBorder }) => isBorder && `border-bottom: 2px solid #D9D9D9;`}
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+    z-index: 2;
     @media ${({ theme }) => theme.device.web} {
       width: 100%;
+      padding: 0 18px;
     }
   `;
   export const LogoBox = styled.div`
-    width: 155px;
-    height: 59px;
-    background: #d9d9d9;
+    width: 182px;
+    height: 50px;
     display: flex;
     align-items: center;
     cursor: pointer;
     justify-content: center;
+
+    & img {
+      width: 182px;
+    }
   `;
-  export const MenuBox = styled.ul`
-    width: 219px;
+  export const GridBox = styled.div`
+    display: flex;
+    width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  `;
+  export const MenuBox = styled.div`
+    width: 470px;
     height: 32px;
     display: flex;
     align-items: center;
     justify-content: space-between;
   `;
-  export const MenuItems = styled.li<{ isSelected: boolean }>`
+  export const MenuItems = styled.div<{ isSelected: boolean }>`
     font-weight: 700;
-    font-size: ${({ theme }) => theme.fontSizes.xxxlg};
-    color: ${({ isSelected }) => (isSelected ? '#FBBC05' : '#2b2b2b')};
+    font-size: ${({ theme }) => theme.fontSizes.xlg};
+    color: #fff;
+    border: 1px solid
+      ${({ isSelected, theme }) => (isSelected ? theme.colors.main : '#fff')};
+    background-color: ${({ isSelected, theme }) =>
+      isSelected ? theme.colors.main : 'none'};
+    border-radius: 30px;
     cursor: pointer;
+    padding: 8px 20px;
   `;
   export const WriteLoginSearchBox = styled.div`
     width: 323px;
@@ -61,6 +82,7 @@ export namespace HeaderStyle {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-left: 72px;
   `;
   export const LoginButton = styled.button`
     display: flex;
@@ -69,9 +91,9 @@ export namespace HeaderStyle {
     align-items: center;
     width: 91px;
     height: 42px;
-    background: #2b2b2b;
     border-radius: 120px;
     font-weight: 700;
+    border: 1px solid #fff;
     color: #fff;
     font-size: ${({ theme }) => theme.fontSizes.xlg};
   `;

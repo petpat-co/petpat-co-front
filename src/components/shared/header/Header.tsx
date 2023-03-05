@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Images } from 'src/asset';
 import { ReactComponent as Bell } from 'src/asset/bellIcon.svg';
 import { ReactComponent as BookMark } from 'src/asset/bookmarkIcon.svg';
 import { ReactComponent as Search } from 'src/asset/searchIcon.svg';
 import { ReactComponent as UserIcon } from 'src/asset/userCircleIcon.svg';
+import { v4 } from 'uuid';
 import { HeaderStyle as S } from './Header.style';
 const Header = () => {
   const navigate = useNavigate();
@@ -22,6 +24,7 @@ const Header = () => {
   useEffect(() => {
     setPathname(location.pathname);
   }, [location]);
+
   const onClickMenu = (path: string) => {
     navigate(path);
     setPathname(path);
@@ -59,45 +62,59 @@ const Header = () => {
     <>
       {isLogin ? (
         <S.HeaderWrap isBorder={isWriteButton}>
-          <S.LogoBox onClick={onClickMainHome}>로고</S.LogoBox>
-          <S.MenuBox>
-            {menuList.map((item) => (
-              <S.MenuItems
-                key={item.text}
-                onClick={() => onClickMenu(item.path)}
-                isSelected={pathname.includes(item.path)}
-              >
-                {item.text}
-              </S.MenuItems>
-            ))}
-          </S.MenuBox>
-          <S.HeaderRightInner>
-            <Search
-              stroke="#333"
-              onClick={() => {
-                console.log('??');
-              }}
-            />
-            <Bell stroke="#252525" strokeWidth="2" />
-            <BookMark stroke="#252525" strokeWidth="2" />
-            <UserIcon />
-          </S.HeaderRightInner>
+          <S.LogoBox onClick={onClickMainHome}>
+            <img src={Images.Global.Logo} alt="logo" />
+          </S.LogoBox>
+          <S.GridBox>
+            <S.MenuBox>
+              {menuList.map((item) => (
+                <S.MenuItems
+                  key={item.text}
+                  onClick={() => onClickMenu(item.path)}
+                  isSelected={pathname.includes(item.path)}
+                >
+                  {item.text}
+                </S.MenuItems>
+              ))}
+            </S.MenuBox>
+            <S.HeaderRightInner>
+              <Search
+                stroke="#333"
+                onClick={() => {
+                  console.log('??');
+                }}
+              />
+              <Bell stroke="#252525" strokeWidth="2" />
+              <BookMark stroke="#252525" strokeWidth="2" />
+              <UserIcon />
+            </S.HeaderRightInner>
+          </S.GridBox>
         </S.HeaderWrap>
       ) : (
         <S.HeaderWrap isBorder={isWriteButton}>
-          <S.LogoBox onClick={onClickMainHome}>로고</S.LogoBox>
-          <S.MenuBox>
-            {menuList.map((item) => (
-              <S.MenuItems
-                key={item.text}
-                onClick={() => onClickMenu(item.path)}
-                isSelected={pathname === item.path}
-              >
-                {item.text}
-              </S.MenuItems>
-            ))}
-          </S.MenuBox>
-          {isWriteButton ? (
+          <S.LogoBox onClick={onClickMainHome}>
+            <img src={Images.Global.Logo} alt="logo" />
+          </S.LogoBox>
+          <S.GridBox>
+            <S.MenuBox>
+              {menuList.map((item) => (
+                <S.MenuItems
+                  key={v4()}
+                  onClick={() => onClickMenu(item.path)}
+                  // isSelected={false}
+                  isSelected={pathname.includes(item.path)}
+                >
+                  {item.text}
+                </S.MenuItems>
+              ))}
+            </S.MenuBox>
+            <S.LoginSearchBox>
+              <Search stroke="#fff" />
+              <S.LoginButton>로그인</S.LoginButton>
+            </S.LoginSearchBox>
+          </S.GridBox>
+
+          {/* {isWriteButton ? (
             <S.WriteLoginSearchBox>
               <Search stroke="#333" />
               <S.WriteButton onClick={onClickWriteButton}>
@@ -105,12 +122,7 @@ const Header = () => {
               </S.WriteButton>
               <S.LoginButton>로그인</S.LoginButton>
             </S.WriteLoginSearchBox>
-          ) : (
-            <S.LoginSearchBox>
-              <Search stroke="#333" />
-              <S.LoginButton>로그인</S.LoginButton>
-            </S.LoginSearchBox>
-          )}
+          ):null} */}
         </S.HeaderWrap>
       )}
     </>
@@ -129,7 +141,11 @@ const menuList = [
     path: '/rehome',
   },
   {
-    text: 'QnA',
-    path: '/qna',
+    text: 'main',
+    path: '/',
+  },
+  {
+    text: 'main',
+    path: '/',
   },
 ];

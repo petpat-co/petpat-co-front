@@ -1,11 +1,12 @@
-import { ReactElement } from 'react';
-import MainTemplate from 'src/components/mainhome/MainTemplate';
+import { lazy, ReactElement, Suspense } from 'react';
+
+const MainTemplate = lazy(() => import('src/components/main/MainTemplate'));
 
 const MainHome = (): ReactElement => {
   return (
-    <div>
+    <Suspense fallback={<p> 로딩중...</p>}>
       <MainTemplate />
-    </div>
+    </Suspense>
   );
 };
 

@@ -1,6 +1,7 @@
 const colors = {
   //font
-  main: '#00c7ae',
+  main: '#F35F4C',
+  second: '#0047FF',
   subTitle: '#666',
   blueTitle: '#718AFF',
   blueBanner: '#B9EAFF',

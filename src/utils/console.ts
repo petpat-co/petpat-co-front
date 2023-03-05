@@ -6,12 +6,11 @@ interface ErrorRes extends Error {
     };
   };
 }
-
 export const errorMessage = (err: ErrorRes) => {
   if (err.response) {
     console.error(err.response.data);
     return err.response.data.message;
   }
-  console.error(err);
+  console.warn(err);
   return '알 수 없는 에러가 발생했습니다.';
 };

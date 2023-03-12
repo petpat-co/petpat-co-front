@@ -1,12 +1,13 @@
 import { memo } from 'react';
-import { MainImages } from 'src/asset/main';
+import { Banner } from './Banner';
+
 import { MainTemplateStyle as S } from './MainTemplate.style';
 
 const MainTemplate = () => {
   return (
     <S.Wrap>
       <S.TopImgBox>
-        <img src={MainImages.mainTop} alt={'강아지 이미지'} />
+        <Banner />
 
         <S.SubIntro>
           예비, 현역 댕댕냥냥 집사님들 어서오세요. 펫팻과 어떻게 친해져야 할 지

@@ -45,10 +45,10 @@ export const Banner = () => {
 const BannerWrap = styled.div`
   width: 100%;
   height: 1107px;
-
+  ${({ theme }) => theme.dragStyles.prventDrag};
   & .swiper-wrapper {
     width: 100%;
-    height: 1107px;
+    height: 980px;
   }
   & .swiper-pagination-bullets {
     box-sizing: border-box;

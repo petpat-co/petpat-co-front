@@ -13,6 +13,7 @@ export namespace HeaderStyle {
     transform: translateX(-50%);
     top: 0;
     z-index: 2;
+    ${({ theme }) => theme.dragStyles.prventDrag};
     @media ${({ theme }) => theme.device.web} {
       width: 100%;
       padding: 0 18px;

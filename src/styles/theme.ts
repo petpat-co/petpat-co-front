@@ -26,6 +26,15 @@ const deviceSizes = {
   web: '1199px',
 };
 
+const dragStyles = {
+  preventDrag: `-ms-user-select: none;
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+  -webkit-user-drag: none;`,
+};
+
 const device = {
   mobile: `screen and (max-width: ${deviceSizes.mobile})`,
   tablet: `screen and (max-width: ${deviceSizes.tablet})`,
@@ -36,6 +45,7 @@ const theme = {
   colors,
   fontSizes,
   device,
+  dragStyles,
 };
 
 export default theme;

@@ -61,4 +61,22 @@ export namespace MainTemplateStyle {
     align-items: center;
     justify-content: space-between;
   `;
+  export const MbtiBox = styled.div<{ url: string }>`
+    width: 848px;
+    height: 100%;
+    border-radius: 30px;
+    border: 1px solid #000;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-image: url(${({ url }) => url});
+    background-size: 725px 616px;
+    background-repeat: no-repeat;
+    background-position: bottom 10px right 0px;
+  `;
+  export const TipWrap = styled.div`
+    width: calc(100% - 872px);
+    height: 100%;
+  `;
 }

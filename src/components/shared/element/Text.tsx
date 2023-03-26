@@ -35,6 +35,7 @@ const TextWrap = styled.p<StyledProps>`
   word-break: break-all;
   white-space: pre-wrap;
   -moz-white-space: pre-wrap;
+  ${({ theme }) => theme.dragStyles.preventDrag};
   ${({ isFlex }) =>
     isFlex &&
     `

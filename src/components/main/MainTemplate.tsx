@@ -84,7 +84,102 @@ const MainTemplate = () => {
                 </Button>
               </DisplayGrid>
             </S.MbtiBox>
-            <S.TipWrap></S.TipWrap>
+            <S.TipWrap>
+              <DisplayGrid height="376px">
+                <S.Beginner>
+                  <DisplayGrid height="146px">
+                    <Text
+                      textStyle={{
+                        padding: '20px 0 0',
+                        fontSize: '32px',
+                        fontWeight: '700',
+                        lineHeight: '130%',
+                        color: '#fff',
+                      }}
+                    >
+                      {'반려동물과\n함께 하기 전\n알아둬야 할 사항'}
+                    </Text>
+                    <ArrowIcon.North
+                      iconStyles={{ size: '32', color: '#000' }}
+                    />
+                  </DisplayGrid>
+                  <Button
+                    isFlex={true}
+                    width="177px"
+                    border="1px solid #000"
+                    _onClick={() => {}}
+                    _disabled={false}
+                    activeBg="#F35F4C"
+                    padding="8px 20px"
+                    radius="30px"
+                  >
+                    <Text textStyle={{ fontSize: '18px' }}>
+                      현직 집사들의 꿀팁
+                    </Text>
+                  </Button>
+                </S.Beginner>
+                <S.PictureBox url={MainImages.feedPic}>
+                  <Text
+                    textStyle={{
+                      padding: '20px 0 0',
+                      fontSize: '32px',
+                      fontWeight: '700',
+                      lineHeight: '130%',
+                      color: '#fff',
+                    }}
+                  >
+                    {'반려동물에 따라\n꼭 필요한 물품들'}
+                  </Text>
+                  <ArrowIcon.North iconStyles={{ size: '32', color: '#000' }} />
+                </S.PictureBox>
+              </DisplayGrid>
+              <S.MousePicBox url={MainImages.mousePic}>
+                <DisplayGrid height="106px">
+                  <Text
+                    textStyle={{
+                      padding: '20px 0 0',
+                      fontSize: '32px',
+                      fontWeight: '700',
+                      lineHeight: '130%',
+                      color: '#000',
+                    }}
+                  >
+                    {'펫팻에서\n필요한 물품 찾아봐요!'}
+                  </Text>
+                  <ArrowIcon.North iconStyles={{ size: '32', color: '#000' }} />
+                </DisplayGrid>
+                <DisplayGrid width="376px" height="42px">
+                  <Button
+                    isFlex={true}
+                    width="auto"
+                    border="1px solid #000"
+                    _onClick={() => {}}
+                    _disabled={false}
+                    activeBg="#F35F4C"
+                    padding="8px 20px"
+                    radius="30px"
+                  >
+                    <Text textStyle={{ fontSize: '18px', fontWeight: '700' }}>
+                      와 정말 새것같다!
+                    </Text>
+                  </Button>
+                  <Button
+                    isFlex={true}
+                    width="auto"
+                    border="1px solid #000"
+                    _onClick={() => {}}
+                    _disabled={false}
+                    activeBg="#0047FF"
+                    padding="8px 20px"
+                    radius="30px"
+                  >
+                    <Text textStyle={{ fontSize: '18px', fontWeight: '700' }}>
+                      무료나눔도 있어요
+                    </Text>
+                  </Button>
+                </DisplayGrid>
+              </S.MousePicBox>
+            </S.TipWrap>
           </S.SectionContentsWrap>
         </S.SectionInner>
       </S.SectionWrap>

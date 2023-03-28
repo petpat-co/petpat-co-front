@@ -106,4 +106,7 @@ export namespace HeaderStyle {
     align-items: center;
     justify-content: space-between;
   `;
+  export const CursorBox = styled.div`
+    cursor: pointer;
+  `;
 }

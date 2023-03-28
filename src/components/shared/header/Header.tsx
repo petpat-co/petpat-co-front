@@ -5,11 +5,13 @@ import { ReactComponent as Bell } from 'src/asset/bellIcon.svg';
 import { ReactComponent as BookMark } from 'src/asset/bookmarkIcon.svg';
 import { ReactComponent as Search } from 'src/asset/searchIcon.svg';
 import { ReactComponent as UserIcon } from 'src/asset/userCircleIcon.svg';
+import { useModal } from 'src/hooks/modal/useModal';
 import { v4 } from 'uuid';
 import { HeaderStyle as S } from './Header.style';
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const modal = useModal();
   const [pathname, setPathname] = useState(location.pathname);
 
   const isWriteButton =
@@ -57,6 +59,10 @@ const Header = () => {
       default:
         break;
     }
+  };
+
+  const onClickSearch = () => {
+    modal.search();
   };
   return (
     <>
@@ -109,7 +115,9 @@ const Header = () => {
               ))}
             </S.MenuBox>
             <S.LoginSearchBox>
-              <Search stroke="#fff" />
+              <S.CursorBox onClick={onClickSearch}>
+                <Search stroke="#fff" />
+              </S.CursorBox>
               <S.LoginButton>로그인</S.LoginButton>
             </S.LoginSearchBox>
           </S.GridBox>

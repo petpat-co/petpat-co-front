@@ -2,6 +2,9 @@ const colors = {
   //font
   main: '#F35F4C',
   second: '#0047FF',
+  grayScale: {
+    gray100: '#F3F4F6',
+  },
   subTitle: '#666',
   blueTitle: '#718AFF',
   blueBanner: '#B9EAFF',
@@ -26,6 +29,15 @@ const deviceSizes = {
   web: '1199px',
 };
 
+const dragStyles = {
+  preventDrag: `-ms-user-select: none;
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+  -webkit-user-drag: none;`,
+};
+
 const device = {
   mobile: `screen and (max-width: ${deviceSizes.mobile})`,
   tablet: `screen and (max-width: ${deviceSizes.tablet})`,
@@ -36,6 +48,7 @@ const theme = {
   colors,
   fontSizes,
   device,
+  dragStyles,
 };
 
 export default theme;

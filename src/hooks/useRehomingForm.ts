@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { errorMessage } from '../utils/console';
-import { rehomingAPI } from '../network/api';
 import { useNavigate } from 'react-router-dom';
+import { rehomingAPI } from '../network/api';
+import Utils from '../utils';
 
 export interface RehomingType {
   rehomingImgFile: object;
@@ -102,7 +102,7 @@ const useRehomingForm = () => {
 
       navigate(`/community/accompany/detail/${id}`);
     } catch (err: any) {
-      throw errorMessage(err);
+      throw Utils.console.errorMessage(err);
     }
   };
 

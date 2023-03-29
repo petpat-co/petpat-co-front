@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Images } from 'src/asset';
 import { ReactComponent as Bell } from 'src/asset/bellIcon.svg';
 import { ReactComponent as BookMark } from 'src/asset/bookmarkIcon.svg';
-import { ReactComponent as Search } from 'src/asset/searchIcon.svg';
+import { Icon } from 'src/asset/icon/Index';
+import { Images } from 'src/asset/images';
+
 import { ReactComponent as UserIcon } from 'src/asset/userCircleIcon.svg';
 import { useModal } from 'src/hooks/modal/useModal';
 import { v4 } from 'uuid';
 import { HeaderStyle as S } from './Header.style';
+
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -84,8 +86,9 @@ const Header = () => {
               ))}
             </S.MenuBox>
             <S.HeaderRightInner>
-              <Search
-                stroke="#333"
+              <Icon.Search
+                size="30"
+                color="#333"
                 onClick={() => {
                   console.log('??');
                 }}
@@ -116,7 +119,13 @@ const Header = () => {
             </S.MenuBox>
             <S.LoginSearchBox>
               <S.CursorBox onClick={onClickSearch}>
-                <Search stroke="#fff" />
+                <Icon.Search
+                  size="30"
+                  color="#333"
+                  onClick={() => {
+                    console.log('??');
+                  }}
+                />
               </S.CursorBox>
               <S.LoginButton>로그인</S.LoginButton>
             </S.LoginSearchBox>

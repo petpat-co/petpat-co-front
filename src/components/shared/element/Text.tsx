@@ -5,6 +5,7 @@ interface StyledProps {
   fontSize?: string;
   fontWeight?: string;
   lineHeight?: string;
+  isPreventDrag?: boolean;
   width?: string;
   isFlex?: string;
   height?: string;
@@ -35,7 +36,9 @@ const TextWrap = styled.p<StyledProps>`
   word-break: break-all;
   white-space: pre-wrap;
   -moz-white-space: pre-wrap;
-  ${({ theme }) => theme.dragStyles.preventDrag};
+  ${({ isPreventDrag, theme }) =>
+    isPreventDrag && `${theme.dragStyles.preventDrag};`}
+
   ${({ isFlex }) =>
     isFlex &&
     `

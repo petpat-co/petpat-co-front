@@ -3,6 +3,7 @@ import MainHome from './pages/MainHome';
 import ReHomingDetail from './pages/rehome/detail/ReHomingDetail';
 import ReHoming from './pages/rehome/ReHoming';
 import ReHomingWrite from './pages/rehome/ReHomingWrite';
+import LogIn from './pages/user/LogIn';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default [
@@ -25,6 +26,10 @@ export default [
   {
     path: '/trade',
     element: GoodsTrade,
+  },
+  {
+    path: '/login',
+    element: LogIn,
   },
   // {
   //   path: '/qna',

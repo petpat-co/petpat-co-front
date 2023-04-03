@@ -12,12 +12,8 @@ export const modalSlice = createSlice({
   initialState,
   reducers: {
     open: (state, { payload }: PayloadAction<Modal.Payload.On>) => {
-      const { zIndex, isProcessing } = state;
+      const { zIndex } = state;
       const { type, text, value } = payload;
-
-      if (isProcessing) {
-        return state;
-      }
 
       const object: Modal.ModalState[] = [
         {
@@ -32,7 +28,6 @@ export const modalSlice = createSlice({
       return {
         ...state,
         modalList: state.modalList.concat(object),
-        isProcessing: true,
       };
     },
     close: (state, { payload }: PayloadAction<Modal.Payload.Off>) => {
@@ -44,7 +39,7 @@ export const modalSlice = createSlice({
           resultList = [];
         }
       }
-      return { ...state, modalList: resultList, isProcessing: false };
+      return { ...state, modalList: resultList };
     },
   },
 });

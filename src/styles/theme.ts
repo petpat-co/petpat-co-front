@@ -26,7 +26,7 @@ const deviceSizes = {
   mobile: '375px',
   tablet: '768px',
   laptop: '920px',
-  web: '1199px',
+  web: '1920px',
 };
 
 const dragStyles = {

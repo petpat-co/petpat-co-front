@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { preventDrag } from '../../../utils/util';
 
 export const Wrap = styled.section`
   width: 1200px;
@@ -23,7 +22,7 @@ export const ImageTextBox = styled.div`
   padding: 10px;
   width: 163px;
   height: 63px;
-  ${preventDrag}
+  ${({ theme }) => theme.dragStyles.preventDrag};
   & > span {
     font-size: 20px;
     color: #848484;

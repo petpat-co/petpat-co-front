@@ -9,6 +9,7 @@ type InputStyleType = {
   isBorderBottom?: boolean;
 };
 interface InputProps extends InputStyleType {
+  type?:string;
   placeholder: string;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
   defaultValue?: string;
@@ -17,6 +18,7 @@ interface InputProps extends InputStyleType {
 }
 const Input = forwardRef((props: InputProps, ref?: any) => {
   const {
+    type,
     placeholder,
     onChange,
     defaultValue,
@@ -40,6 +42,7 @@ const Input = forwardRef((props: InputProps, ref?: any) => {
   return (
     <StyledInput
       {...styles}
+      type={type}
       placeholder={placeholder}
       onChange={onChange}
       defaultValue={defaultValue}

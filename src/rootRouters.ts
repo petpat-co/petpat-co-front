@@ -4,6 +4,7 @@ import ReHomingDetail from './pages/rehome/detail/ReHomingDetail';
 import ReHoming from './pages/rehome/ReHoming';
 import ReHomingWrite from './pages/rehome/ReHomingWrite';
 import LogIn from './pages/user/LogIn';
+import SignUp from './pages/user/SignUp'
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default [
@@ -30,6 +31,10 @@ export default [
   {
     path: '/login',
     element: LogIn,
+  },
+  {
+    path: '/signup',
+    element: SignUp,
   },
   // {
   //   path: '/qna',

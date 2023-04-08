@@ -2,6 +2,9 @@ const colors = {
   //font
   main: '#F35F4C',
   second: '#0047FF',
+  grayScale: {
+    gray100: '#F3F4F6',
+  },
   subTitle: '#666',
   blueTitle: '#718AFF',
   blueBanner: '#B9EAFF',

@@ -1,7 +1,9 @@
-import { ReactElement } from "react"
+import React, { ReactElement } from "react"
 import { Button, Input } from "../shared/element";
 import { Text } from "../shared/element/Text";
 import { LogInTemplateStyle as S } from "./LogInTemplate.style";
+import { useAppDispatch } from "src/core/store";
+import { emailCheck, passwordCheck } from "../shared/RegEx";
 
 //icons
 import { ReactComponent as Kakao } from "src/asset/loginIcon/kakao.svg";
@@ -9,10 +11,35 @@ import { ReactComponent as Facebook } from "src/asset/loginIcon/facebook.svg";
 import { ReactComponent as Google } from "src/asset/loginIcon/google.svg";
 import { ReactComponent as Naver } from "src/asset/loginIcon/naver.svg";
 import { ReactComponent as Github } from "src/asset/loginIcon/github.svg";
+import { logInApi } from "src/core/redux/user/userSlice";
 
 const LogInTemplate = (): ReactElement => {
 
+  const appdispatch = useAppDispatch();
+
+  const [userEmail, setUserEmail] = React.useState("");
+  const [userPassword, setUserPassword] = React.useState("");
+
   const LogIn = () => {
+
+    if (!userEmail || !userPassword) {
+      window.alert("빈칸!!!!!!!!!!!!!!!!!!");
+      return;
+    } else if(!emailCheck(userEmail)) {
+      console.log("이메일이 이상해용");
+      return;
+    } else if(!passwordCheck(userPassword)) {
+      console.log("비밀번호가 이상해용");
+      return;
+    } 
+
+    const userdata = {
+      userEmail: userEmail,
+      userPassword: userPassword,
+    }
+
+    appdispatch(logInApi(userdata));
+
   };
 
   return (
@@ -46,7 +73,9 @@ const LogInTemplate = (): ReactElement => {
         </Text>
         <Input
           placeholder=''
-          onChange={LogIn}
+          onChange={(e) => {
+            setUserEmail(e.target.value);
+          }}
           maxLength={50}
           name=''
         />
@@ -61,7 +90,9 @@ const LogInTemplate = (): ReactElement => {
         </Text>
         <Input
           placeholder=''
-          onChange={LogIn}
+          onChange={(e) => {
+            setUserPassword(e.target.value);
+          }}
           maxLength={50}
           name=''
         />
@@ -75,6 +106,7 @@ const LogInTemplate = (): ReactElement => {
           로그인 상태 유지하기
         </Text>
       </S.CheckRememberMe>
+
       <Button
         _onClick={LogIn}
         _disabled={false}
@@ -84,6 +116,7 @@ const LogInTemplate = (): ReactElement => {
         radius='5px'
       >로그인
       </Button>
+
       <S.Section>
         <Text textStyle={{
           margin: '60px 0 0 0',

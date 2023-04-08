@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { allowExt, preventDrag } from 'src/utils/util';
+import Utils from 'src/utils';
 import styled from 'styled-components';
 //스타일 관련 타입
 type ImageWrapStyleProps = {
@@ -81,7 +81,7 @@ export const ImageUpload = (props: ImageUploadProps) => {
         style={{ display: `none`, margin: 0, padding: 0 }}
         type="file"
         name="file"
-        accept={allowExt}
+        accept={Utils.allowExt}
         onChange={handleFileChange}
       />
     </>
@@ -122,14 +122,4 @@ const DisplayBox = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-`;
-const PreventDragP = styled.p`
-  ${preventDrag};
-  font-size: 12px;
-  color: #6a6a6a;
-  padding-top: 4px;
-  box-sizing: border-box;
-  word-break: break-all;
-  white-space: pre-wrap;
-  -moz-white-space: pre-wrap;
 `;

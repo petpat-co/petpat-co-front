@@ -1,18 +1,12 @@
 import styled from 'styled-components';
 
 export namespace MainTemplateStyle {
-  export const Wrap = styled.div`
-    width: 100%;
-    height: auto;
-    position: relative;
-    background-color: ${({ theme }) => theme.colors.main};
-  `;
-
   export const TopImgBox = styled.div`
     width: 100%;
     height: 1107px;
-    position: absolute;
+    position: relative;
     top: 0px;
+    background-color: ${({ theme }) => theme.colors.main};
     ${({ theme }) => theme.dragStyles.prventDrag};
 
     & img {
@@ -34,14 +28,31 @@ export namespace MainTemplateStyle {
     top: 150px;
     left: 100px;
     position: absolute;
+    z-index: 8;
     ${({ theme }) => theme.dragStyles.prventDrag};
   `;
+  export const Wrap = styled.div`
+    width: 1920px;
+    height: auto;
+    background-color: ${({ theme }) => theme.colors.main};
+    position: absolute;
+    top: 900px;
+    left: 50%;
+    margin-left: -600px;
+    z-index: 2;
+    @media ${({ theme }) => theme.device.web} {
+      width: 100%;
+      left: 0;
+      margin-left: 0;
+    }
+  `;
+
   export const SectionWrap = styled.div`
     width: 100%;
     height: auto;
-    position: absolute;
-    top: 730px;
-    z-index: 9;
+    position: relative;
+    top: -90px;
+
     background-color: ${({ theme }) => theme.colors.main};
   `;
   export const SectionInner = styled.div`
@@ -119,5 +130,48 @@ export namespace MainTemplateStyle {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+  `;
+}
+export namespace GoodsTradeSectionStyled {
+  export const TradeWrap = styled.div`
+    width: 100%;
+    height: auto;
+    padding: 80px 0;
+    background: #ffffff;
+    border-radius: 50px;
+    position: relative;
+  `;
+  export const SlideBox = styled.div`
+    width: 100%;
+    height: 750px;
+    position: relative;
+    margin-top: 40px;
+    overflow: hidden;
+  `;
+  interface SlideStyledProps {
+    isSelected: boolean;
+    bg: string;
+    right: string;
+    selectedRight: string;
+    idx: number;
+    curIdx: number;
+  }
+  export const SlideInner = styled.div<SlideStyledProps>`
+    width: 80%;
+    height: 100%;
+    position: absolute;
+    border: ${({ isSelected }) => (isSelected ? 'none' : '1px solid #000')};
+    border-radius: 30px;
+    background-color: ${({ bg }) => bg};
+    right: 0;
+    transform: translateX(
+      ${({ right, curIdx, idx, selectedRight }) =>
+        curIdx >= idx ? selectedRight : right}
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 1s ease-out;
+    z-index: ${({ idx }) => idx};
   `;
 }

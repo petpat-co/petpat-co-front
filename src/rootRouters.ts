@@ -3,6 +3,8 @@ import MainHome from './pages/MainHome';
 import ReHomingDetail from './pages/rehome/detail/ReHomingDetail';
 import ReHoming from './pages/rehome/ReHoming';
 import ReHomingWrite from './pages/rehome/ReHomingWrite';
+import Kakao from 'src/pages/user/Kakao';
+
 import LogIn from './pages/user/LogIn';
 import SignUp from './pages/user/SignUp'
 
@@ -36,6 +38,10 @@ export default [
     path: '/signup',
     element: SignUp,
   },
+  {
+    path: '/user/kakao/callback',
+    element: Kakao,
+  }
   // {
   //   path: '/qna',
   //   element: QnA,

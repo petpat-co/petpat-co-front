@@ -4,7 +4,7 @@ import { User } from 'src/types/user';
 
 export interface ParamType {
   userEmail?: string;
-  userNickName?: string;
+  userNickname?: string;
   userPassword?: string;
   userPasswordCheck?: string;
   userImg?: string;
@@ -20,7 +20,7 @@ export interface UserType {
 export const initialState: UserType = {
   user: {
     userEmail: 'email@email.com',
-    userNickName: 'nickname',
+    userNickname: 'nickname',
     userPassword: 'password',
     userPasswordCheck: 'password',
     userImg:
@@ -33,14 +33,27 @@ export const initialState: UserType = {
 
 // 회원가입
 export const signUpApi = createAsyncThunk(
-  'USER_SIGNUP',
+  'user/signup',
   async (user: ParamType, thunkAPI) => {
     try {
-      const response = await userAPI.signUp(user);
-      console.log('signUpApi : userdata', user);
-      console.log('signUpApi : response', response.data);
-    } catch (err: any) {
-      console.log('signUpApi : error response', err.response.data);
+      
+      const response = {
+        status: 80200,
+      };
+      // const response = await userAPI.signUp(user);
+      if (response.status === 80200) {
+        // console.log('signUpApi : '+ response.status);
+        // console.log('response : ' + response.data);
+        // window.location.replace('/login');
+        //바로 로그인 할 경우
+        thunkAPI.dispatch(logInApi({userEmail: user.userEmail, userNickname: user.userNickname}))
+      } else if (response.status === 80400) {
+        // console.log('signUpApi : '+ response.status);
+        // console.log('response : ' + response.data);
+        return;
+      };
+    } catch (error: any) {
+      console.log('signUpApi : error response', error.response.data);
     }
   },
 );
@@ -60,35 +73,54 @@ export const emailCheckApi = createAsyncThunk(
         window.alert("중복된 이메일");
       }
       console.log('emailCheckApi : response', response);
-    } catch (err: any) {
-      console.log('emailCheckApi : error response', err.response);
+    } catch (error: any) {
+      console.log('emailCheckApi : error response', error.response);
     }
   },
 );
 
 // 로그인
 export const logInApi = createAsyncThunk(
-  'USER_LOGIN',
+  'user/login',
   async (user: ParamType, thunkAPI) => {
     try {
       const response = {
         userEmail: user.userEmail,
-        userNickname: user.userNickName,
+        userNickname: user.userNickname,
       };
       const token = ['BEARER ', 'token1234'];
-
       // const response = await userAPI.logIn(user);
-      // const token = response.headers.authorization.split('BEARER ');
+      // const token = response.headers.authorization?.split('BEARER ');
       // window.location.replace('/');
       console.log('logInApi : response', response);
 
       localStorage.setItem('token', token[1]);
       thunkAPI.dispatch(userSlice.actions.setUser(response));
-    } catch (err: any) {
-      console.log('logInApi : error response', err.response.data);
+    } catch (error: any) {
+      console.log('logInApi : error response', error.response.data);
     }
   },
 );
+
+// 카카오 로그인
+export const kakaoLogInApi = createAsyncThunk(
+  'user/login/kakao',
+  async (code: string, thunkAPI) => {
+    try {
+      // const response = await userAPI.KakaoLogIn(code);
+      // const token = response.headers.authorization?.split('BEARER ');
+      // localStorage.setItem('token', token[1]);
+      window.location.replace('/');
+    } catch(error: any) {
+      console.log('kakaoLogInApi : error response', error.response.data);
+    };
+  }
+)
+
+
+
+
+
 
 export const userSlice = createSlice({
   name: 'userReducer',

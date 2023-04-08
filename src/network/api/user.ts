@@ -28,3 +28,10 @@ export const logIn: ApiHandler = (options) =>
     url: addPrefix(`/login`),
     ...options,
   });
+
+  // 카카오 로그인
+  export const KakaoLogIn: ApiHandler = (code) => 
+  instance({
+    method: 'GET',
+    url:addPrefix(`/api/v1/user/kakao/callback?code=${code}`)
+  });

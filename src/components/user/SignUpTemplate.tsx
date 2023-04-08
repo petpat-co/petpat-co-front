@@ -15,7 +15,7 @@ const SignUpTemplate = (): ReactElement => {
   const [userEmail, setUserEmail] = React.useState("");
   const [userPassword, setUserPassword] = React.useState("");
   const [userPasswordChk, setUserPasswordChk] = React.useState("");
-  const [userNickName, setUserNickName] = React.useState("");
+  const [userNickname, setUserNickname] = React.useState("");
 
   const emailDpCheck = () => {
     if (!userEmail) {
@@ -32,7 +32,7 @@ const SignUpTemplate = (): ReactElement => {
 
   const SignUp = () => {
 
-    if (!userEmail || !userPassword || !userPasswordChk || !userNickName) {
+    if (!userEmail || !userPassword || !userPasswordChk || !userNickname) {
       window.alert("빈칸!!!!!!!!!!!!!!!!!!");
       return;
     } else if (!emailCheck(userEmail)) {
@@ -41,7 +41,7 @@ const SignUpTemplate = (): ReactElement => {
     } else if (!passwordCheck(userPassword)) {
       console.log("비밀번호가 이상해용");
       return;
-    } else if (!nickNameCheck(userNickName)) {
+    } else if (!nickNameCheck(userNickname)) {
       console.log("닉네임이 이상해용");
       return;
     } else if (userPassword !== userPasswordChk) {
@@ -54,7 +54,7 @@ const SignUpTemplate = (): ReactElement => {
 
     const userdata = {
       userEmail: userEmail,
-      userNickName: userNickName,
+      userNickname: userNickname,
       userPassword: userPassword,
       userPasswordCheck: userPasswordChk,
       userImg: '',
@@ -99,7 +99,7 @@ const SignUpTemplate = (): ReactElement => {
       <Input
         placeholder="nickname"
         onChange={(e) => {
-          setUserNickName(e.target.value);
+          setUserNickname(e.target.value);
         }}
         maxLength={24}
         name="nickname" />

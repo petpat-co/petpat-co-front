@@ -10,7 +10,7 @@ export namespace User {
 
     export interface UserInfo {
         userEmail?: string;
-        userNickName?: string;
+        userNickname?: string;
         userPassword?: string;
         userPasswordCheck?: string;
         userImg?: string;

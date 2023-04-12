@@ -2,7 +2,7 @@ import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
 
- @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@700&family=Noto+Sans+KR:wght@100;300;400;900&display=swap');
+ @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@700;900&family=Noto+Sans+KR:wght@100;300;400;900&display=swap');
 
     *,
     *::before,

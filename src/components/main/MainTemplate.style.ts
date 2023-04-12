@@ -171,7 +171,53 @@ export namespace GoodsTradeSectionStyled {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 1s ease-out;
+    transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
     z-index: ${({ idx }) => idx};
+  `;
+  export const NumberText = styled.p`
+    font-family: 'Archivo', sans-serif;
+    font-size: 100px;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    font-weight: 900;
+    z-index: 9;
+  `;
+  export const SlideContents = styled.div<{ url: string }>`
+    width: 100%;
+    position: relative;
+    height: 100%;
+    padding: 50px 100px;
+    background-image: url(${({ url }) => url});
+    background-size: 100% 750px;
+    background-repeat: no-repeat;
+  `;
+  export const IconBox = styled.div`
+    width: auto;
+    height: 42px;
+    position: absolute;
+    top: 50px;
+    right: 100px;
+    background: ${({ theme }) => theme.colors.main};
+    border: 1px solid #000000;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+
+    & p {
+      ${({ theme }) => theme.dragStyles.preventDrag};
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 22px;
+      margin: 0 12px 0 5px;
+    }
+  `;
+  export const InfoTextBox = styled.div`
+    width: 266px;
+    height: auto;
+    position: absolute;
+    top: 124px;
+    right: 100px;
   `;
 }

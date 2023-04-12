@@ -13,6 +13,7 @@ interface StyledProps {
   margin?: string;
   padding?: string;
   cursor?: string;
+  textAlign?: string;
 }
 interface PropsType {
   textStyle?: StyledProps;
@@ -33,6 +34,7 @@ const TextWrap = styled.p<StyledProps>`
   margin: ${({ margin }) => (margin ? margin : '')};
   cursor: ${({ cursor }) => (cursor ? cursor : '')};
   line-height: ${({ lineHeight }) => (lineHeight ? lineHeight : '')};
+  text-align: ${({ textAlign }) => (textAlign ? textAlign : '')};
   word-break: break-all;
   white-space: pre-wrap;
   -moz-white-space: pre-wrap;

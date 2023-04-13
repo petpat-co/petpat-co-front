@@ -15,6 +15,7 @@ interface InputProps extends InputStyleType {
   defaultValue?: string;
   maxLength: number;
   name: string;
+  autoComplete?: boolean,
 }
 const Input = forwardRef((props: InputProps, ref?: any) => {
   const {
@@ -29,6 +30,7 @@ const Input = forwardRef((props: InputProps, ref?: any) => {
     name,
     borderRadius,
     isBorderBottom,
+    autoComplete,
   } = props;
 
   const styles = {
@@ -49,6 +51,7 @@ const Input = forwardRef((props: InputProps, ref?: any) => {
       ref={ref}
       name={name}
       maxLength={maxLength}
+      autoComplete={autoComplete?'on':'off'}
     />
   );
 });

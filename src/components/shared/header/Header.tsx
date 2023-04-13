@@ -24,6 +24,11 @@ const Header = () => {
   //로그인 기능 추가되면 수정할 예정 -유림 2022.11.15
   const isLogin = location.pathname.includes('/rehome/write');
 
+  // 유나 2023.04.14
+  const onClickLogin = () => {
+    navigate('/login');
+  };
+
   //pathname 바뀔때마다 state 변경
   useEffect(() => {
     setPathname(location.pathname);
@@ -127,7 +132,7 @@ const Header = () => {
                   }}
                 />
               </S.CursorBox>
-              <S.LoginButton>로그인</S.LoginButton>
+              <S.LoginButton onClick={onClickLogin}>로그인</S.LoginButton>
             </S.LoginSearchBox>
           </S.GridBox>
 

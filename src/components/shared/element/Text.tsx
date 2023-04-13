@@ -13,6 +13,9 @@ interface StyledProps {
   margin?: string;
   padding?: string;
   cursor?: string;
+  size?: string;
+  weight?: string;
+  colors?: string;
 }
 interface PropsType {
   textStyle?: StyledProps;
@@ -24,21 +27,42 @@ export const Text = (props: PropsType) => {
 };
 
 const TextWrap = styled.p<StyledProps>`
+  margin: ${({ margin }) => (margin ? margin : '')};  
+  padding: ${({ padding }) => (padding ? padding : '')};
+  
   width: ${({ width }) => (width ? width : 'auto')};
   height: ${({ height }) => (height ? height : 'auto')};
-  font-weight: ${({ fontWeight }) => (fontWeight ? fontWeight : '400')};
-  font-size: ${({ fontSize }) => (fontSize ? fontSize : '14px')};
-  color: ${({ color, theme }) => (color ? color : '#000')};
-  padding: ${({ padding }) => (padding ? padding : '')};
-  margin: ${({ margin }) => (margin ? margin : '')};
-  cursor: ${({ cursor }) => (cursor ? cursor : '')};
+  
+  
+  color: ${({ theme, color, colors }) => (
+    // colors : theme color
+    // color : props color
+    colors?
+      theme.colors[colors]
+      : ( color? color : theme.colors.default ))};
+
+  font-size: ${({ theme, size, fontSize }) => (
+    // size : theme size
+    // fontSize : props size
+    size? 
+      theme.fontSizes[size] 
+      : ( fontSize? fontSize : theme.fontSizes.regular ))};
+
+  font-weight: ${({ theme, weight, fontWeight }) => (
+    // weight : theme weight
+    // fontWeight : props weight
+    weight? 
+      theme.fontWeights[weight] 
+      : ( fontWeight? fontWeight : theme.fontWeights.regular))};
+
   line-height: ${({ lineHeight }) => (lineHeight ? lineHeight : '')};
   word-break: break-all;
   white-space: pre-wrap;
   -moz-white-space: pre-wrap;
+  
+  cursor: ${({ cursor }) => (cursor ? cursor : '')};
   ${({ isPreventDrag, theme }) =>
-    isPreventDrag && `${theme.dragStyles.preventDrag};`}
-
+  isPreventDrag && `${theme.dragStyles.preventDrag};`}
   ${({ isFlex }) =>
     isFlex &&
     `
@@ -47,3 +71,5 @@ const TextWrap = styled.p<StyledProps>`
 	justify-content: center;
 	`}
 `;
+
+export default Text;

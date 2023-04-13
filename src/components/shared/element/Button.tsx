@@ -18,11 +18,15 @@ interface ButtonStyledProps {
   isFlex?: boolean;
   fontSize?: string;
   fontWeight?: string;
+  size?: string;
+  weight?: string;
+  colors?: string;
+  bgcolor?: string;
 }
 interface PropsType extends ButtonStyledProps {
   children: ReactNode;
   _onClick: () => void;
-  _disabled: boolean;
+  _disabled?: boolean;
 }
 const Button = (props: PropsType) => {
   const {
@@ -43,8 +47,12 @@ const Button = (props: PropsType) => {
     isFlex,
     fontSize,
     fontWeight,
+    size,
+    weight,
+    colors,
+    bgcolor,
   } = props;
-
+  
   const styles = {
     bg,
     color,
@@ -59,6 +67,10 @@ const Button = (props: PropsType) => {
     isFlex,
     fontSize,
     fontWeight,
+    size,
+    weight,
+    colors,
+    bgcolor,
   };
   return (
     <StyledButton
@@ -79,22 +91,41 @@ const Button = (props: PropsType) => {
 
 const StyledButton = styled.button<ButtonStyledProps>`
   box-sizing: border-box;
-  width: ${({ width }) => (width ? width : '100%')};
-  height: ${({ height }) => (height ? height : '50px')};
+  transition: background-color 0.15s ease-out;
+
   margin: ${({ margin }) => (margin ? margin : '0')};
   padding: ${({ padding }) => (padding ? padding : '0')};
-  background: ${({ disabled, bg, activeBg }) => (disabled ? bg : activeBg)};
-  color: ${({ disabled, color, activeColor }) =>
-    disabled ? color : activeColor};
-  border-radius: ${({ radius }) => (radius ? radius : '0')};
-  transition: background-color 0.15s ease-out;
+  
+  width: ${({ width }) => (width ? width : '100%')};
+  height: ${({ height }) => (height ? height : '50px')};
+  
+  font-size: ${({ theme, size, fontSize }) => (
+    size?
+      theme.fontSizes[size]
+      : ( fontSize? fontSize : theme.fontSizes.large ))};
+
+  font-weight: ${({ theme, weight, fontWeight }) => (
+    weight ? 
+      theme.fontWeights[weight] 
+      : ( fontWeight? fontWeight : theme.fontWeights.regular ))};
+  
+  color: ${({ theme, disabled, colors, color, activeColor }) => (
+    disabled?
+      (colors? theme.colors[colors] : (color? color : theme.colors.gray70))
+      : (activeColor? activeColor : (colors? theme.colors[colors] : theme.colors.default)))};
+
+  background: ${({ theme, bgcolor, disabled, bg, activeBg }) => (
+    disabled?
+      (bgcolor? theme.colors[bgcolor] : (bg? bg : theme.colors.gray40))
+      : (activeBg? activeBg : (bgcolor?  theme.colors[bgcolor] : theme.colors.white)))};
+  
   border: ${({ border }) => (border ? border : 'none')};
-  font-size: ${({ fontSize }) => (fontSize ? fontSize : '26px')};
-  font-weight: ${({ fontWeight }) => (fontWeight ? fontWeight : '700')};
+  border-radius: ${({ radius }) => (radius ? radius : '0')};
+  
   ${({ isFlex }) =>
     isFlex &&
     `
-    display:flex;
+  display:flex;
   justify-content: center;
   align-items: center;
   `}
@@ -104,6 +135,6 @@ const StyledButton = styled.button<ButtonStyledProps>`
     display:flex;
     justify-contents:space-between;
     align-items:center;
-  `}
-`;
+    `}
+    `;
 export default Button;

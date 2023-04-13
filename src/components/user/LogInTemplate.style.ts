@@ -48,18 +48,19 @@ export namespace LogInTemplateStyle {
   `;
 
   export const FindSection = styled.div<StyledProps>`
-    height: fit-content;
+    height: 14px;
     margin: auto 8px;
     border-right: ${({ border }) => (border ? '1px solid black' : 'none' )};
 
   `;
 
-  export const FindUser = styled.div`
+  export const FindUserGrid = styled.div`
     display: grid; 
-    grid-template-columns: repeat(3, auto);
+    grid-template-columns: repeat(5, auto);
     width: 300px;
     height: auto;
     margin: auto;
+    justify-content: center;
   `;
 
 }

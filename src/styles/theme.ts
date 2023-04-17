@@ -1,7 +1,7 @@
 const colors = {
   //font
   main: '#F35F4C',
-  primary: '#F35F4C', 
+  primary: '#F35F4C',
   default: '#1A202C', //font default color
   second: '#0047FF',
 
@@ -16,7 +16,7 @@ const colors = {
   hoverMain: '#00a18d',
   buttonText: '#fff',
   grayText: '#333',
-  
+
   grayScale: {
     gray100: '#F3F4F6',
   },
@@ -33,7 +33,7 @@ const colors = {
   gray30: '#D3D6D5',
   gray20: '#F8F8F8',
   gray10: '#FBFBFB',
-  
+
   coolgray900: '#111827',
   coolgray800: '#1f2937',
   coolgray700: '#4b5563',
@@ -43,7 +43,6 @@ const colors = {
   coolgray200: '#E5E7EB',
   coolgray100: '#F3F4F6',
   coolgray50: '#FAFAFA',
-
 };
 
 const fontSizes = {
@@ -82,6 +81,12 @@ const dragStyles = {
   -webkit-user-drag: none;`,
 };
 
+const flexStyles = {
+  center: `display: flex;
+  align-items: center;
+  justify-content: center;`,
+};
+
 const device = {
   mobile: `screen and (max-width: ${deviceSizes.mobile})`,
   tablet: `screen and (max-width: ${deviceSizes.tablet})`,
@@ -94,6 +99,7 @@ const theme = {
   device,
   dragStyles,
   fontWeights,
+  flexStyles,
 };
 
 export default theme;

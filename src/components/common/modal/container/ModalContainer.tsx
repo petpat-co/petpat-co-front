@@ -51,9 +51,12 @@ const ModalContainer = (props: PropsType) => {
     isActive,
   };
   return (
-    <Wrap {...styles} onClick={handleClickCloseButton}>
-      <div onClick={(e) => stopPropagation(e)}>{children}</div>
-    </Wrap>
+    <>
+      <OpacityDrop />
+      <Wrap {...styles} onClick={handleClickCloseButton}>
+        <div onClick={(e) => stopPropagation(e)}>{children}</div>
+      </Wrap>
+    </>
   );
 };
 
@@ -75,7 +78,6 @@ const Wrap = styled.div<WrapStyledProps>`
   justify-content: ${({ justify }) => (justify ? justify : 'center')};
   box-sizing: border-box;
   transition: opacity 0.6s;
-  background: rgba(25, 25, 25, 0.5);
   padding: ${({ padding }) => (padding ? padding : '0')};
 
   & > div {
@@ -92,10 +94,21 @@ const Wrap = styled.div<WrapStyledProps>`
   ${({ isActive }) =>
     isActive &&
     `
-  opacity: 1;
+opacity: 1;
   transition: opacity 0.6s;
   & > div {
     transform: translateY(0);
+  
   }
   `}
+`;
+const OpacityDrop = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  opacity: 0.67;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 9;
 `;

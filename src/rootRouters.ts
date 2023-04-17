@@ -7,6 +7,7 @@ import Kakao from 'src/pages/user/Kakao';
 
 import LogIn from './pages/user/LogIn';
 import SignUp from './pages/user/SignUp'
+import MyPage from './pages/user/MyPage';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default [
@@ -41,7 +42,11 @@ export default [
   {
     path: '/user/kakao/callback',
     element: Kakao,
-  }
+  },
+  {
+    path: '/mypage',
+    element: MyPage,
+  },
   // {
   //   path: '/qna',
   //   element: QnA,

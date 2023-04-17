@@ -1,25 +1,25 @@
-import React, { ReactElement } from "react"
-import { useAppDispatch } from "src/core/store";
-import { useNavigate } from "react-router-dom";
+import React, { ReactElement } from 'react'
+import { useAppDispatch } from 'src/core/store';
+import { useNavigate } from 'react-router-dom';
+import { LogInTemplateStyle as S } from './LogInTemplate.style';
 
 //api
-import { logInApi } from "src/core/redux/user/userSlice";
+import { logInApi } from 'src/core/redux/user/userSlice';
 
 //utills
-import { KAKAO_AUTH_URL } from "src/core/OAuth";
-import { emailCheck, passwordCheck } from "../shared/RegEx";
-import { LogInTemplateStyle as S } from "./LogInTemplate.style";
+import { KAKAO_AUTH_URL } from 'src/core/OAuth';
+import { emailCheck, passwordCheck } from '../shared/RegEx';
 
 // elements
-import { Text } from "../shared/element/Text";
-import { Button, Input } from "../shared/element";
+import { Text } from '../shared/element/Text';
+import { Button, Input } from '../shared/element';
 
 //icons
-import { ReactComponent as Kakao } from "src/asset/loginIcon/kakao.svg";
-import { ReactComponent as Naver } from "src/asset/loginIcon/naver.svg";
-import { ReactComponent as Google } from "src/asset/loginIcon/google.svg";
-import { ReactComponent as Github } from "src/asset/loginIcon/github.svg";
-import { ReactComponent as Facebook } from "src/asset/loginIcon/facebook.svg";
+import { ReactComponent as Kakao } from 'src/asset/loginIcon/kakao.svg';
+import { ReactComponent as Naver } from 'src/asset/loginIcon/naver.svg';
+import { ReactComponent as Google } from 'src/asset/loginIcon/google.svg';
+import { ReactComponent as Github } from 'src/asset/loginIcon/github.svg';
+import { ReactComponent as Facebook } from 'src/asset/loginIcon/facebook.svg';
 
 
 const LogInTemplate = (): ReactElement => {
@@ -27,34 +27,52 @@ const LogInTemplate = (): ReactElement => {
   const navigate = useNavigate();
 
   //user data
-  const [userEmail, setUserEmail] = React.useState("");
-  const [userPassword, setUserPassword] = React.useState("");
+  const [userEmail, setUserEmail] = React.useState('');
+  const [userPassword, setUserPassword] = React.useState('');
+
+  // remember email
+  const [rememberChecked, setRememberChecked] = React.useState(false);
+  const rememberMe = () => {
+    if (!rememberChecked) {
+      setRememberChecked(true);
+      return;
+    } else {
+      setRememberChecked(false);
+      return;
+    }
+  };
+
 
   //login
   const logIn = () => {
+    console.log(rememberChecked)
     //data validation
     if (!userEmail || !userPassword) {
-      window.alert("빈칸!!!!!!!!!!!!!!!!!!");
+      window.alert('빈칸이 있어용');
       return;
     } else if (!emailCheck(userEmail)) {
-      console.log("이메일이 이상해용");
+      console.log('이메일이 이상해용');
       return;
     } else if (!passwordCheck(userPassword)) {
-      console.log("비밀번호가 이상해용");
+      console.log('비밀번호가 이상해용');
       return;
-    }
+    };
     //fetching data
     const userdata = {
       userEmail: userEmail,
       userPassword: userPassword,
-    }
+      checked: rememberChecked
+    };
     //dispatching data
     appdispatch(logInApi(userdata));
   };
 
-  const goSignUp = () => {
+
+
+  const goToSignUp = () => {
     navigate('/signup');
-  }
+  };
+
 
 
   return (
@@ -91,12 +109,13 @@ const LogInTemplate = (): ReactElement => {
           아이디
         </Text>
         <Input
+          name='email'
           placeholder=''
+          maxLength={50}
+          borderRadius='5px'
           onChange={(e) => {
             setUserEmail(e.target.value);
           }}
-          maxLength={50}
-          name=''
         />
       </S.InputWrap>
 
@@ -109,18 +128,19 @@ const LogInTemplate = (): ReactElement => {
           비밀번호
         </Text>
         <Input
+          name='password'
           placeholder=''
+          maxLength={50}
+          borderRadius='5px'
           onChange={(e) => {
             setUserPassword(e.target.value);
           }}
-          maxLength={50}
-          name=''
         />
       </S.InputWrap>
 
       {/* 로그인 정보 기억 및 로그인 완료 버튼 */}
       <S.CheckRememberMe>
-        <input type="checkbox" />
+        <input type='checkbox' checked={rememberChecked} onChange={rememberMe} />
         <Text textStyle={{
           margin: '0 12px',
           fontSize: '14px',
@@ -170,40 +190,43 @@ const LogInTemplate = (): ReactElement => {
       </S.SnsLoginButtons>
 
       {/* 유저 정보 찾기 및 회원가입 */}
-      <S.FindUser>
-        <S.FindSection border>
-          <Text textStyle={{
-            fontSize: '14px',
-            fontWeight: '400',
-          }}>
-            비밀번호 찾기
-          </Text>
-        </S.FindSection>
-        <S.FindSection border>
-          <Text textStyle={{
-            fontSize: '14px',
-            fontWeight: '400',
-          }}>
-            아이디 찾기
-          </Text>
-        </S.FindSection>
-        <S.FindSection>
-          {/* <Text
-            textStyle={{
-              fontSize: '14px',
-              fontWeight: '400',
-            }}
-          >
-            회원가입
-          </Text> */}
-          <Button
-            _onClick={goSignUp}
-            _disabled={false}
-            fontSize="14px"
-            fontWeight="400"
-            >회원가입</Button>
-        </S.FindSection>
-      </S.FindUser>
+      <S.FindUserGrid>
+        <Button
+          _onClick={goToSignUp}
+          _disabled={false}
+          width='fit-content'
+          height='fit-content'
+          fontSize='14px'
+          fontWeight='400'
+        >비밀번호 찾기</Button>
+
+        {/* <Text textStyle={{
+          width: 'fit-content',
+          margin: '0 14px',
+        }}>|</Text>
+        <Button
+          _onClick={goToSignUp}
+          _disabled={false}
+          width='fit-content'
+          height='fit-content'
+          fontSize='14px'
+          fontWeight='400'
+        >아이디 찾기</Button> */}
+
+        <Text textStyle={{
+          width: 'fit-content',
+          margin: '0 14px',
+          size: 'small'
+        }}>|</Text>
+        <Button
+          _onClick={goToSignUp}
+          _disabled={false}
+          width='fit-content'
+          height='fit-content'
+          fontSize='14px'
+          fontWeight='400'
+        >회원가입</Button>
+      </S.FindUserGrid>
     </S.Wrap>
   );
 };

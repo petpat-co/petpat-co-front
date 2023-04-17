@@ -1,10 +1,14 @@
 const colors = {
   //font
   main: '#F35F4C',
+  primary: '#F35F4C', 
+  default: '#1A202C', //font default color
   second: '#0047FF',
-  grayScale: {
-    gray100: '#F3F4F6',
-  },
+
+  sub01: '#FEBFB7',
+  sub02: '#FFDFDB',
+  sub03: '#FFEAE8',
+
   subTitle: '#666',
   blueTitle: '#718AFF',
   blueBanner: '#B9EAFF',
@@ -12,6 +16,34 @@ const colors = {
   hoverMain: '#00a18d',
   buttonText: '#fff',
   grayText: '#333',
+  
+  grayScale: {
+    gray100: '#F3F4F6',
+  },
+
+  black: '#000000',
+  white: '#ffffff',
+
+  gray90: '#252525',
+  gray80: '#6A6A6A',
+  gray70: '#9A9A9A',
+  gray60: '#BCBCBC',
+  gray50: '#DBFBFB',
+  gray40: '#E9E9E9',
+  gray30: '#D3D6D5',
+  gray20: '#F8F8F8',
+  gray10: '#FBFBFB',
+  
+  coolgray900: '#111827',
+  coolgray800: '#1f2937',
+  coolgray700: '#4b5563',
+  coolgray500: '#6b7280',
+  coolgray400: '#9CA3AF',
+  coolgray300: '#D1D5DB',
+  coolgray200: '#E5E7EB',
+  coolgray100: '#F3F4F6',
+  coolgray50: '#FAFAFA',
+
 };
 
 const fontSizes = {
@@ -19,7 +51,19 @@ const fontSizes = {
   xxxlg: '22px',
   xxlg: '20px',
   xlg: '18px',
-  large: '16px',
+
+  title: '40px',
+  xxlarge: '32px',
+  xlarge: '24px',
+  large: '20px',
+  regular: '16px',
+  small: '12px',
+};
+
+const fontWeights = {
+  bold: '900',
+  regular: '500',
+  light: '400',
 };
 
 const deviceSizes = {
@@ -49,6 +93,7 @@ const theme = {
   fontSizes,
   device,
   dragStyles,
+  fontWeights,
 };
 
 export default theme;

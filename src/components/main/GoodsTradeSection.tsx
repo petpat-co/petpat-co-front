@@ -1,7 +1,9 @@
-import { memo, useMemo, useState } from 'react';
+import { lazy, memo, useMemo, useState } from 'react';
 import { v4 } from 'uuid';
 import { Text } from '../shared/element/Text';
 import { GoodsTradeSectionStyled as S } from './MainTemplate.style';
+
+const IntroduceTradeSection = lazy(() => import('./IntroduceTradeSection'));
 
 const GoodsTradeSection = () => {
   const [curSlide, setCurSlide] = useState(0);
@@ -53,6 +55,8 @@ const GoodsTradeSection = () => {
           </S.SlideInner>
         ))}
       </S.SlideBox>
+
+      <IntroduceTradeSection />
     </S.TradeWrap>
   );
 };

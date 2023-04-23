@@ -3,6 +3,7 @@ import { Banner } from './Banner';
 import { MainTemplateStyle as S } from './MainTemplate.style';
 
 const FirstSection = lazy(() => import('./FirstSection'));
+const SecondSection = lazy(() => import('./SecondSection'));
 const GoodsTradeSection = lazy(() => import('./GoodsTradeSection'));
 
 const MainTemplate = () => {
@@ -19,6 +20,11 @@ const MainTemplate = () => {
         <Suspense fallback={<p> 로딩중...</p>}>
           <FirstSection />
         </Suspense>
+
+        <Suspense fallback={<p> 로딩중...</p>}>
+          <SecondSection />
+        </Suspense>
+
         <Suspense fallback={<p> 로딩중...</p>}>
           <GoodsTradeSection />
         </Suspense>

@@ -4,18 +4,22 @@ import Header from './components/shared/header/Header';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { v4 } from 'uuid';
 import ModalController from './components/common/modal/controller';
+import Wrapper from './components/shared/element/Wrapper';
 import routeList from './rootRouters';
+
 const Root = () => {
   return (
     <>
       <Header />
-      <Routes>
-        {routeList.map((item, idx) => {
-          return (
-            <Route key={v4()} path={item.path} element={<item.element />} />
-          );
-        })}
-      </Routes>
+      <Wrapper>
+        <Routes>
+          {routeList.map((item, idx) => {
+            return (
+              <Route key={v4()} path={item.path} element={<item.element />} />
+            );
+          })}
+        </Routes>
+      </Wrapper>
       <Footer />
       <ModalController />
     </>

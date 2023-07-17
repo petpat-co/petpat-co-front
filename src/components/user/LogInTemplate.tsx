@@ -48,13 +48,13 @@ const LogInTemplate = (): ReactElement => {
     console.log(rememberChecked)
     //data validation
     if (!userEmail || !userPassword) {
-      window.alert('빈칸이 있어용');
+      console.log('빈 칸을 모두 채워주세요.');
       return;
     } else if (!emailCheck(userEmail)) {
-      console.log('이메일이 이상해용');
+      console.log('이메일 주소를 확인해주세요.');
       return;
     } else if (!passwordCheck(userPassword)) {
-      console.log('비밀번호가 이상해용');
+      console.log('비밀번호를 확인해주세요.');
       return;
     };
     //fetching data
@@ -72,6 +72,9 @@ const LogInTemplate = (): ReactElement => {
   const goToSignUp = () => {
     navigate('/signup');
   };
+  const goToFindPassword = () => {
+    navigate('/user/fpw');
+  };
 
 
 
@@ -82,8 +85,6 @@ const LogInTemplate = (): ReactElement => {
       <S.GreetingWrap>
         <Text
           textStyle={{
-            fontSize: '16px',
-            fontWeight: '500',
             color: '#6B7280',
           }}>
           펫팻에 어서오세요!
@@ -91,8 +92,8 @@ const LogInTemplate = (): ReactElement => {
         <Text
           textStyle={{
             margin: '-4px 0 0 0',
-            fontSize: '40px',
-            fontWeight: '800',
+            size: 'title',
+            weight: 'bold',
           }}
         >
           로그인
@@ -123,12 +124,12 @@ const LogInTemplate = (): ReactElement => {
         <Text
           textStyle={{
             margin: '12px 0',
-            fontSize: '16px',
           }}>
           비밀번호
         </Text>
         <Input
           name='password'
+          type='password'
           placeholder=''
           maxLength={50}
           borderRadius='5px'
@@ -143,7 +144,7 @@ const LogInTemplate = (): ReactElement => {
         <input type='checkbox' checked={rememberChecked} onChange={rememberMe} />
         <Text textStyle={{
           margin: '0 12px',
-          fontSize: '14px',
+          size: 'small',
         }}>
           로그인 상태 유지하기
         </Text>
@@ -154,7 +155,6 @@ const LogInTemplate = (): ReactElement => {
         _disabled={false}
         activeBg='#F35F4C'
         activeColor='#fff'
-        fontSize='16px'
         radius='5px'
       >로그인
       </Button>
@@ -163,7 +163,7 @@ const LogInTemplate = (): ReactElement => {
       <S.Section>
         <Text textStyle={{
           margin: '60px 0 0 0',
-          fontSize: '16px',
+          size: 'regular',
           fontWeight: '700',
         }}>
           SNS 계정으로 로그인하기
@@ -192,12 +192,12 @@ const LogInTemplate = (): ReactElement => {
       {/* 유저 정보 찾기 및 회원가입 */}
       <S.FindUserGrid>
         <Button
-          _onClick={goToSignUp}
+          _onClick={goToFindPassword}
           _disabled={false}
           width='fit-content'
           height='fit-content'
-          fontSize='14px'
-          fontWeight='400'
+          size='small'
+          weight='light'
         >비밀번호 찾기</Button>
 
         {/* <Text textStyle={{
@@ -223,8 +223,8 @@ const LogInTemplate = (): ReactElement => {
           _disabled={false}
           width='fit-content'
           height='fit-content'
-          fontSize='14px'
-          fontWeight='400'
+          size='small'
+          weight='light'
         >회원가입</Button>
       </S.FindUserGrid>
     </S.Wrap>

@@ -3,11 +3,12 @@ import MainHome from './pages/MainHome';
 import ReHomingDetail from './pages/rehome/detail/ReHomingDetail';
 import ReHoming from './pages/rehome/ReHoming';
 import ReHomingWrite from './pages/rehome/ReHomingWrite';
-import Kakao from 'src/pages/user/Kakao';
 
 import LogIn from './pages/user/LogIn';
 import SignUp from './pages/user/SignUp'
 import MyPage from './pages/user/MyPage';
+import FindPassword from './components/user/FindPassword';
+import Kakao from './components/user/Kakao';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default [
@@ -40,19 +41,23 @@ export default [
     element: SignUp,
   },
   {
-    path: '/user/kakao/callback',
-    element: Kakao,
-  },
-  {
     path: '/mypage',
     element: MyPage,
   },
-  // {
-  //   path: '/qna',
-  //   element: QnA,
-  // },
-  // {
-  //   path: '/qna/write',
-  //   element: QnaWrite,
-  // },
+  {
+    path: '/mypage/modify',
+    element: MyPage,
+  },
+  {
+    path: '/mypage/post',
+    element: MyPage,
+  },
+  {
+    path: '/user/fpw',
+    element: FindPassword,
+  },
+  {
+    path: 'user/kakao/callback',
+    element: Kakao,
+  },
 ];

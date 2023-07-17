@@ -29,6 +29,7 @@ const SignUpTemplate = (): ReactElement => {
   const [userPasswordChk, setUserPasswordChk] = React.useState("");
   const [userNickname, setUserNickname] = React.useState("");
 
+
   const emailDpCheck = () => {
     if (!userEmail) {
       window.alert("빈칸!!!!!!!!!!!");
@@ -68,14 +69,70 @@ const SignUpTemplate = (): ReactElement => {
       userEmail: userEmail,
       nickname: userNickname,
       password: userPassword,
-      profileImgPath: '',
-      loginType: 'normal',
-      location: '',
+      profileImgPath: 'https://pbs.twimg.com/profile_images/1116573617645424640/u5h2q3jv_400x400.png',
     }
 
     appdispatch(signUpApi(userdata));
 
   };
+
+  // 유효성 검사
+  // 다른 유효성 검사와 함께 나중에 따로 분리 필요.
+  const [nicknameMessage, setNicknameMessage] = React.useState('');
+  const [emailMessage, setEmailMessage] = React.useState('');
+  const [passwordMessage, setPasswordMessage] = React.useState('');
+  const [passwordCheckMessage, setPasswordCheckMessage] = React.useState('');
+
+
+  const handleChangeNickname = (nickname: string) => {
+    if (nickNameCheck(nickname)) {
+      setUserNickname(nickname);
+      setNicknameMessage('');
+    } else if (nickname === '') {
+      setNicknameMessage('');
+    } else {
+      setNicknameMessage('닉네임은 2자 이상 6자 이하의 한글, 영문만 사용 가능합니다. (자음, 모음, 특수문자 사용 불가)')
+    }
+  }
+  const handleChangeEmail = (email: string) => {
+    if (emailCheck(email)) {
+      setUserEmail(email);
+      setEmailMessage('');
+    } else {
+      setEmailMessage('이메일 형식이 올바르지 않습니다.')
+    }
+  }
+  const handleChangePassword = (password: string) => {
+    if (passwordCheck(password)) {
+      setUserPassword(password);
+      setPasswordMessage('');
+      return;
+    } else if (password === '') {
+      setPasswordMessage('');
+      return;
+    } else {
+      setPasswordMessage('비밀번호는 8자 이상 12자 이하의 영문, 숫자, 특수문자(!,@,#,$,%,^,&,*)만 사용 가능합니다.');
+      return;
+    }
+  }
+  const handleChangePasswordCheck = (password: string) => {
+    if (userPassword && userPassword === password) {
+      setUserPasswordChk(password);
+      setPasswordCheckMessage('');
+      return;
+    } else if (password === '') {
+      setPasswordCheckMessage('');
+      return;
+    } else {
+      setPasswordCheckMessage('비밀번호가 일치하지 않습니다.')
+    }
+  }
+
+
+
+
+
+
 
   return (
     <S.Wrap>
@@ -88,6 +145,8 @@ const SignUpTemplate = (): ReactElement => {
         }}
       >펫팻에 오신 것을 환영합니다!
       </Text>
+
+      {/* sns sign-up */}
 
       <Text
         textStyle={{
@@ -122,7 +181,10 @@ const SignUpTemplate = (): ReactElement => {
         margin="62px 0"
         height="2px"
         bg="#F35F4C"
-      />
+        />
+
+
+      {/* sign-up form */}
 
       <S.InputGrid>
         <S.InputWrap>
@@ -133,10 +195,18 @@ const SignUpTemplate = (): ReactElement => {
             maxLength={24}
             borderRadius="5px"
             onChange={(e) => {
-              setUserNickname(e.target.value);
+              handleChangeNickname(e.target.value);
             }}
           />
         </S.InputWrap>
+
+        {/* warning message - nickname */}
+        <Text textStyle={{
+          colors: 'error',
+          size: 'small',
+          weight: 'light'
+        }}>{nicknameMessage}</Text>
+
 
         <S.InputFlexWrap>
           <Input
@@ -145,7 +215,7 @@ const SignUpTemplate = (): ReactElement => {
             maxLength={40}
             borderRadius="5px"
             onChange={(e) => {
-              setUserEmail(e.target.value);
+              handleChangeEmail(e.target.value);
             }}
           />
           <Button
@@ -161,6 +231,13 @@ const SignUpTemplate = (): ReactElement => {
           </Button>
         </S.InputFlexWrap>
 
+        {/* warning message - email */}
+        <Text textStyle={{
+          colors: 'error',
+          size: 'small',
+          weight: 'light',
+        }}>{emailMessage}</Text>
+
         <S.InputWrap>
           <S.Text>8 ~ 12자, 영문자 숫자, 특수문자(‘!, @, #, $, %, ^, &, *’) 사용 가능</S.Text>
           <Input
@@ -170,10 +247,17 @@ const SignUpTemplate = (): ReactElement => {
             maxLength={24}
             borderRadius="5px"
             onChange={(e) => {
-              setUserPassword(e.target.value);
+              handleChangePassword(e.target.value);
             }}
           />
         </S.InputWrap>
+
+        {/* warning message - password */}
+        <Text textStyle={{
+          colors: 'error',
+          size: 'small',
+          weight: 'light'
+        }}>{passwordMessage}</Text>
 
         <S.InputWrap>
           <Input
@@ -183,18 +267,25 @@ const SignUpTemplate = (): ReactElement => {
             maxLength={24}
             borderRadius="5px"
             onChange={(e) => {
-              setUserPasswordChk(e.target.value);
+              handleChangePasswordCheck(e.target.value);
             }}
-          />
+            />
         </S.InputWrap>
+
+        {/* warning message - password check */}
+        <Text textStyle={{
+          colors: 'error',
+          size: 'small',
+          weight: 'light'
+        }}>{passwordCheckMessage}</Text>
 
 
         <Button
           margin="16px 0"
           radius="5px"
-          fontSize="16px"
-          activeBg="#F35F4C"
-          activeColor="#fff"
+          size='regular'
+          bgcolor='primary'
+          colors='white'
           _onClick={SignUp}
           _disabled={false}
         >가입하기

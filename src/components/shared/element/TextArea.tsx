@@ -53,7 +53,7 @@ const StyledTextArea = styled.textarea<TextAreaStyleType>`
   border: ${({ border }) => (border ? border : '1.4px solid #aaaaaa')};
   border-radius: ${({ borderRadius }) => (borderRadius ? borderRadius : '0')};
   padding: 10px;
-  font-size: 20px;
+  font-size: ${({ theme }) => ( theme.fontSizes.large )};
   ::placeholder {
     color: #cdcdcd;
   }

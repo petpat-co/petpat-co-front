@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+
+
 export namespace SignUpTemplateStyle {
   export const Wrap = styled.div`
     margin: 200px auto;
@@ -11,8 +13,8 @@ export namespace SignUpTemplateStyle {
 
   export const InputGrid = styled.div`
     display: grid;
-    height:500px;
-    grid-template-rows: repeat(4, auto);
+    height:460px;
+    grid-template-rows: repeat(4, 1fr 0.3fr);
     align-items: center;
   `;
 

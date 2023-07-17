@@ -34,7 +34,6 @@ const TextWrap = styled.p<StyledProps>`
   width: ${({ width }) => (width ? width : 'auto')};
   height: ${({ height }) => (height ? height : 'auto')};
   
-  
   color: ${({ theme, color, colors }) => (
     // colors : theme color
     // color : props color
@@ -53,7 +52,7 @@ const TextWrap = styled.p<StyledProps>`
     // weight : theme weight
     // fontWeight : props weight
     weight? 
-      theme.fontWeights[weight] 
+      theme.fontWeights[weight]
       : ( fontWeight? fontWeight : theme.fontWeights.regular))};
 
   line-height: ${({ lineHeight }) => (lineHeight ? lineHeight : '')};

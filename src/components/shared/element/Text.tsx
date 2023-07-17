@@ -13,6 +13,7 @@ interface StyledProps {
   margin?: string;
   padding?: string;
   cursor?: string;
+  textAlign?: string;
   size?: string;
   weight?: string;
   colors?: string;
@@ -56,6 +57,7 @@ const TextWrap = styled.p<StyledProps>`
       : ( fontWeight? fontWeight : theme.fontWeights.regular))};
 
   line-height: ${({ lineHeight }) => (lineHeight ? lineHeight : '')};
+  text-align: ${({ textAlign }) => (textAlign ? textAlign : '')};
   word-break: break-all;
   white-space: pre-wrap;
   -moz-white-space: pre-wrap;

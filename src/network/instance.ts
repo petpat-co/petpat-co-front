@@ -27,7 +27,7 @@ instance.interceptors.request.use(
     config.headers = {
       'content-type': 'application/json;charset=UTF-8',
       accept: 'application/json',
-      // Authorization: `Bearer ${Token}`,
+      Authorization: `Bearer ${Token}`,
     };
     return config;
   },

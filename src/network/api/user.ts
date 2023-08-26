@@ -9,7 +9,7 @@ const addPrefix: AddPrefix = (path) => {
 export const signUp: ApiHandler = (options) =>
   instance({
     method: 'POST',
-    url: 'http://121.141.138.164:8082/api/v1/user/signup',
+    url: 'http://121.141.140.90:8082/api/v1/user/signup',
     ...options,
   });
 
@@ -17,7 +17,7 @@ export const signUp: ApiHandler = (options) =>
 export const emailCheck: ApiHandler = (options) =>
   instance({
     method: 'POST',
-    url: `http://121.141.138.164:8082/api/v1/user/${options}`,
+    url: `http://121.141.140.90:8082/api/v1/user/${options}`,
     ...options,
   });
 
@@ -25,7 +25,7 @@ export const emailCheck: ApiHandler = (options) =>
 export const logIn: ApiHandler = (options) =>
   instance({
     method: 'POST',
-    url: 'http://121.141.138.164:8082/api/v1/user/login',
+    url: 'http://121.141.140.90:8082/api/v1/user/login',
     ...options,
   });
 
@@ -33,5 +33,5 @@ export const logIn: ApiHandler = (options) =>
 export const KakaoLogIn: ApiHandler = (options) =>
   instance({
     method: 'GET',
-    url: `http://121.141.138.164:8082/api/v1/user/kakao/callback?code=${options}`
+    url: `http://121.141.140.90:8082/api/v1/user/kakao/callback?code=${options}`
   });

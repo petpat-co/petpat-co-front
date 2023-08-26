@@ -3,10 +3,12 @@ import { useDispatch } from 'react-redux';
 import logger from 'redux-logger';
 import { modalSlice } from '../redux/modal/modalSlice';
 import { userSlice } from '../redux/user/userSlice';
+import { myPage } from '../redux/user/myPage';
 
 const rootReducer = combineReducers({
   modal: modalSlice.reducer,
   user: userSlice.reducer,
+  mypage: myPage.reducer,
 });
 
 export const store = configureStore({

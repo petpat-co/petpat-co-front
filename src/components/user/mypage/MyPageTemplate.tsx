@@ -1,15 +1,26 @@
 import React, { ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/core/store';
-// component
-import ModifyUserProfile from './ModifyUserProfile';
+import { useLocation, useNavigate } from 'react-router-dom';
 // style, elements
 import { MyPageTemplateStyle as S } from './MyPageTemplate.style';
 import { Button, Text } from '../../shared/element';
-import SignOut from '../SignOut';
+// component
 import MyPost from './MyPost';
+import ModifyUserProfile from './ModifyUserProfile';
+import ChangePassword from './ChangePassword';
+import DeleteAccount from '../DeleteAccount';
+import MyRehomingList from './listmenu/MyRehomingList';
+import MyCommentList from './listmenu/MyCommentList';
+import MyQnaList from './listmenu/MyQnaList';
+import MyLikeList from './listmenu/MyLikeList';
+import MyBookmarkList from './listmenu/MyBookmarkList';
+import MyTradeList from './listmenu/MyTradeList';
 
 const MyPageTemplate = (): ReactElement => {
+  const navigate = useNavigate();
+  const location = useLocation().pathname.split('/')[2];
+
   const defaultProfile = useSelector((state: RootState) => state.user.user);
   const [tapName, setTapName] = React.useState('main');
 
@@ -19,14 +30,17 @@ const MyPageTemplate = (): ReactElement => {
   const onClickRecentPost = () => {};
 
   const tapList: { [key: string]: any } = {
-    modify: <ModifyUserProfile />,
-    mypost: <MyPost></MyPost>,
-    trade: <></>,
-    qna: <></>,
-    like: <></>,
-    signout: <></>,
+    main: <MyPost setTapName={setTapName}/>,
+    update: <ModifyUserProfile />,
+    cpw: <ChangePassword />,
+    rehoming: <MyRehomingList />,
+    trade: <MyTradeList />,
+    qna: <MyQnaList />,
+    comment: <MyCommentList />,
+    like: <MyLikeList />,
+    bookmark: <MyBookmarkList />,
+    delete: <DeleteAccount></DeleteAccount>,
   };
-
 
   // styles
   const ButtonStyle = {
@@ -50,6 +64,43 @@ const MyPageTemplate = (): ReactElement => {
     width: 'fit-content',
     height: 'fit-content',
   };
+
+  React.useEffect(() => {
+    switch (location) {
+      case undefined:
+        break;
+      case 'update':
+        setTapName('update');
+        break;
+      case 'cpw':
+        setTapName('cpw');
+        break;
+      case 'rehoming':
+        setTapName('rehoming');
+        break;
+      case 'trade':
+        setTapName('trade');
+        break;
+      case 'qna':
+        setTapName('qna');
+        break;
+      case 'comment':
+        setTapName('comment');
+        break;
+      case 'like':
+        setTapName('like');
+        break;
+      case 'bookmark':
+        setTapName('bookmark');
+        break;
+      case 'delete':
+        setTapName('delete');
+        break;
+      // default:
+      //   window.alert('문제가 발생했습니다.');
+      //   navigate('/mypage');
+    }
+  }, [location, navigate]);
 
   return (
     <S.Wrap>
@@ -105,7 +156,8 @@ const MyPageTemplate = (): ReactElement => {
               {...MenuStyle}
               _disabled={false}
               _onClick={() => {
-                setTapName('modify');
+                navigate('/mypage/account/update');
+                setTapName('update');
               }}
             >
               프로필 수정
@@ -114,7 +166,8 @@ const MyPageTemplate = (): ReactElement => {
               {...MenuStyle}
               _disabled={false}
               _onClick={() => {
-                setTapName('rehoming');
+                navigate('/mypage/account/cpw');
+                setTapName('cpw');
               }}
             >
               비밀번호 변경
@@ -132,16 +185,38 @@ const MyPageTemplate = (): ReactElement => {
               {...MenuStyle}
               _disabled={false}
               _onClick={() => {
-                setTapName('mypost');
+                navigate('/mypage/post/rehoming');
+                setTapName('rehoming');
               }}
             >
-              내가 작성한 게시글
+              내가 작성한 분양 게시글
             </Button>
             <Button
               {...MenuStyle}
               _disabled={false}
               _onClick={() => {
-                setTapName('mypost');
+                navigate('/mypage/post/trade');
+                setTapName('trade');
+              }}
+            >
+              내가 작성한 판매 게시글
+            </Button>
+            <Button
+              {...MenuStyle}
+              _disabled={false}
+              _onClick={() => {
+                navigate('/mypage/post/qna');
+                setTapName('qna');
+              }}
+            >
+              내가 남긴 질문 게시글
+            </Button>
+            <Button
+              {...MenuStyle}
+              _disabled={false}
+              _onClick={() => {
+                navigate('/mypage/post/comment');
+                setTapName('comment');
               }}
             >
               내가 남긴 댓글
@@ -150,6 +225,7 @@ const MyPageTemplate = (): ReactElement => {
               {...MenuStyle}
               _disabled={false}
               _onClick={() => {
+                navigate('/mypage/post/like');
                 setTapName('like');
               }}
             >
@@ -159,20 +235,28 @@ const MyPageTemplate = (): ReactElement => {
               {...MenuStyle}
               _disabled={false}
               _onClick={() => {
-                setTapName('signout');
+                navigate('/mypage/post/bookmark');
+                setTapName('bookmark');
               }}
             >
               내가 북마크 한 글
+            </Button>
+            <Button
+              {...MenuStyle}
+              _disabled={false}
+              _onClick={() => {
+                navigate('/mypage/account/delete');
+                setTapName('delete');
+              }}
+            >
+              회원 탈퇴
             </Button>
           </S.ButtonAlign>
         </S.MenuSection>
 
         {/* selected tap section */}
 
-        <S.SelectedMenuSection>
-          <Text>선택된 탭</Text>
-          {tapList[tapName]}
-        </S.SelectedMenuSection>
+        <S.SelectedMenuSection>{tapList[tapName]}</S.SelectedMenuSection>
       </S.BottomSection>
     </S.Wrap>
   );

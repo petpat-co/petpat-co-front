@@ -1,29 +1,29 @@
 import React, { ReactElement } from "react";
 import { Button, Text } from "../shared/element";
 
-const SignOut = (): ReactElement => {
+const DeleteAccount = (): ReactElement => {
 
 
-  const onClickSignOut = () => {
+  const onClickDeleteAccount = () => {
 
   };
 
   return (
     <React.Fragment>
-      <Text>sign-out tap</Text>
+      <Text>delete account tap</Text>
       <Text textStyle={{
         weight: 'bold',
       }}>
         회원 탈퇴 시 작성하셨던 게시물, 정보는 삭제되지 않습니다.
       </Text>
       <Button
-      _onClick={ onClickSignOut }
+      _onClick={ onClickDeleteAccount }
       >
-        sign-out
+        탈퇴하기
       </Button>
     </React.Fragment>
   );
 };
 
-export default SignOut;
+export default DeleteAccount;
 

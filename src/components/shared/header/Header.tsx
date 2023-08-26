@@ -9,9 +9,12 @@ import { ReactComponent as UserIcon } from 'src/asset/userCircleIcon.svg';
 import { useModal } from 'src/hooks/modal/useModal';
 import { v4 } from 'uuid';
 import { HeaderStyle as S } from './Header.style';
+import { useAppDispatch } from 'src/core/store';
+import { logOutApi } from 'src/core/redux/user/userSlice';
 
 const Header = () => {
   const navigate = useNavigate();
+  const appdispatch = useAppDispatch();
   const location = useLocation();
   const modal = useModal();
   const [pathname, setPathname] = useState(location.pathname);
@@ -34,6 +37,9 @@ const Header = () => {
   const onClickMyPage = () => {
     navigate('/mypage');
   };
+  const logOut = () => {
+    appdispatch(logOutApi(""));
+  }
 
 
   //pathname 바뀔때마다 state 변경
@@ -141,7 +147,10 @@ const Header = () => {
               </S.CursorBox>
               
               {token? 
+              <>
               <S.LoginButton onClick={onClickMyPage}>마이페이지</S.LoginButton> 
+              <S.LoginButton onClick={logOut}>로그아웃</S.LoginButton>
+              </>
               : <S.LoginButton onClick={onClickLogin}>로그인</S.LoginButton>}
             
             </S.LoginSearchBox>

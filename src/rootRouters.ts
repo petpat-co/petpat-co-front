@@ -9,6 +9,7 @@ import SignUp from './pages/user/SignUp'
 import MyPage from './pages/user/MyPage';
 import FindPassword from './components/user/FindPassword';
 import Kakao from './components/user/Kakao';
+import ChangePassword from './components/user/mypage/ChangePassword';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default [
@@ -45,19 +46,47 @@ export default [
     element: MyPage,
   },
   {
-    path: '/mypage/modify',
+    path: '/mypage/account/update',
     element: MyPage,
   },
   {
-    path: '/mypage/post',
+    path: '/mypage/post/rehoming',
     element: MyPage,
   },
   {
-    path: '/user/fpw',
+    path: '/mypage/post/trade',
+    element: MyPage,
+  },
+  {
+    path: '/mypage/post/qna',
+    element: MyPage,
+  },
+  {
+    path: '/mypage/post/comment',
+    element: MyPage,
+  },
+  {
+    path: '/mypage/post/like',
+    element: MyPage,
+  },
+  {
+    path: '/mypage/post/bookmark',
+    element: MyPage,
+  },
+  {
+    path: '/mypage/account/cpw',
+    element: MyPage,
+  },
+  {
+    path: '/mypage/account/delete',
+    element: MyPage,
+  },
+  {
+    path: '/user/account/fpw',
     element: FindPassword,
   },
   {
-    path: 'user/kakao/callback',
+    path: '/user/kakao/callback',
     element: Kakao,
   },
 ];

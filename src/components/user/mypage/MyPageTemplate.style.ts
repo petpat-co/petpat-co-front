@@ -69,6 +69,7 @@ export namespace MyPageTemplateStyle {
   `
 
   export const SelectedMenuSection = styled.div`
+  margin: -20px 0;
   width: 100%;
   height: auto;
   `

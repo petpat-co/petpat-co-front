@@ -1,6 +1,11 @@
 import styled from 'styled-components';
 
 export namespace MainTemplateStyle {
+  export const MainWrap = styled.div`
+    width: 100%;
+    height: auto;
+    position: relative;
+  `;
   export const TopImgBox = styled.div`
     width: 100%;
     height: 1107px;
@@ -31,14 +36,14 @@ export namespace MainTemplateStyle {
     z-index: 8;
     ${({ theme }) => theme.dragStyles.prventDrag};
   `;
-  export const Wrap = styled.div`
+  export const MainInner = styled.div`
     width: 1920px;
     height: auto;
     background-color: ${({ theme }) => theme.colors.main};
     position: absolute;
     top: 900px;
     left: 50%;
-    margin-left: -600px;
+    margin-left: -960px;
     z-index: 2;
     @media ${({ theme }) => theme.device.web} {
       width: 100%;
@@ -136,7 +141,7 @@ export namespace GoodsTradeSectionStyled {
   export const TradeWrap = styled.div`
     width: 100%;
     height: auto;
-    padding: 80px 0;
+    padding: 80px 0 0;
     background: #ffffff;
     border-radius: 50px;
     position: relative;

@@ -1,4 +1,4 @@
-import { ChangeEventHandler, KeyboardEventHandler } from 'react';
+import { ChangeEventHandler, forwardRef, KeyboardEventHandler } from 'react';
 import { Icon } from 'src/asset/icon/Index';
 import styled from 'styled-components';
 
@@ -22,7 +22,7 @@ interface PropsType {
   inputStyles?: StyledProps;
   wrapStyles?: StyledProps;
 }
-export const SearchInput = (props: PropsType) => {
+export const SearchInput = forwardRef((props: PropsType, ref?: any) => {
   const {
     placeholder,
     defaultValue,
@@ -37,6 +37,7 @@ export const SearchInput = (props: PropsType) => {
   return (
     <Wrap {...wrapStyles}>
       <Input
+        ref={ref}
         {...inputStyles}
         name={name}
         maxLength={maxLength}
@@ -50,7 +51,7 @@ export const SearchInput = (props: PropsType) => {
       </IconBox>
     </Wrap>
   );
-};
+});
 
 const Wrap = styled.div<StyledProps>`
   width: ${({ width }) => (width ? width : 'auto')};

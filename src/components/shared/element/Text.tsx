@@ -28,42 +28,43 @@ export const Text = (props: PropsType) => {
 };
 
 const TextWrap = styled.p<StyledProps>`
-  margin: ${({ margin }) => (margin ? margin : '')};  
+  margin: ${({ margin }) => (margin ? margin : '')};
   padding: ${({ padding }) => (padding ? padding : '')};
-  
+
   width: ${({ width }) => (width ? width : 'auto')};
   height: ${({ height }) => (height ? height : 'auto')};
-  
-  color: ${({ theme, color, colors }) => 
+
+  color: ${({ theme, color, colors }) =>
+
     // colors : theme color
     // color : props color
-    colors?
-      theme.colors[colors]
-      : ( color? color : theme.colors.default )};
+    colors ? theme.colors[colors] : color ? color : theme.colors.default};
 
-  font-size: ${({ theme, size, fontSize }) => (
+  font-size: ${({ theme, size, fontSize }) =>
     // size : theme size
     // fontSize : props size
-    size? 
-      theme.fontSizes[size] 
-      : ( fontSize? fontSize : theme.fontSizes.regular ))};
+    size
+      ? theme.fontSizes[size]
+      : fontSize
+      ? fontSize
+      : theme.fontSizes.regular};
 
-  font-weight: ${({ theme, weight, fontWeight }) => (
+  font-weight: ${({ theme, weight, fontWeight }) =>
     // weight : theme weight
     // fontWeight : props weight
     weight? 
       theme.fontWeights[weight]
-      : ( fontWeight? fontWeight : theme.fontWeights.regular))};
+      : ( fontWeight? fontWeight : theme.fontWeights.regular)};
 
   line-height: ${({ lineHeight }) => (lineHeight ? lineHeight : '')};
   text-align: ${({ textAlign }) => (textAlign ? textAlign : '')};
   word-break: break-all;
   white-space: pre-wrap;
   -moz-white-space: pre-wrap;
-  
+
   cursor: ${({ cursor }) => (cursor ? cursor : '')};
   ${({ isPreventDrag, theme }) =>
-  isPreventDrag && `${theme.dragStyles.preventDrag};`}
+    isPreventDrag && `${theme.dragStyles.preventDrag};`}
   ${({ isFlex }) =>
     isFlex &&
     `

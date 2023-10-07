@@ -16,6 +16,7 @@ interface StyledProps {
 }
 interface PropsType extends StyledProps {
   children?: ReactNode;
+  onClick?: () => void;
 }
 const DisplayGrid = (props: PropsType) => {
   const {
@@ -31,6 +32,7 @@ const DisplayGrid = (props: PropsType) => {
     bg,
     borderRadius,
     position,
+    onClick,
   } = props;
   const styles = {
     width,
@@ -45,7 +47,11 @@ const DisplayGrid = (props: PropsType) => {
     borderRadius,
     position,
   };
-  return <DisplayBox {...styles}>{children}</DisplayBox>;
+  return (
+    <DisplayBox {...styles} onClick={onClick}>
+      {children}
+    </DisplayBox>
+  );
 };
 
 const DisplayBox = styled.div<StyledProps>`

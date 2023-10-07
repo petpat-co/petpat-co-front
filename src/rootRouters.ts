@@ -3,15 +3,14 @@ import MainHome from './pages/MainHome';
 import ReHomingDetail from './pages/rehome/detail/ReHomingDetail';
 import ReHoming from './pages/rehome/ReHoming';
 import ReHomingWrite from './pages/rehome/ReHomingWrite';
-
 import LogIn from './pages/user/LogIn';
-import SignUp from './pages/user/SignUp';
-import MyPage from './pages/user/MyPage';
-import FindPassword from './components/user/FindPassword';
-import Kakao from './components/user/Kakao';
 import QnA from './pages/qna/QnA';
 import QnaDetail from './components/qna/QnaDetail';
 import QnaWrite from './components/qna/QnaWrite';
+import MyPage from './pages/user/MyPage';
+import FindPassword from './components/user/FindPassword';
+import SignUp from './pages/user/SignUp';
+import Kakao from './components/user/Kakao';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default [

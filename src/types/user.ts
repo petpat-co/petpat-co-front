@@ -11,6 +11,8 @@ export namespace User {
     export interface UserInfo {
         userEmail?: string;
         userNickname?: string;
+        nickname?: string;
+        profileImgUrl?: string;
         userPassword?: string;
         userPasswordCheck?: string;
         userImg?: string;

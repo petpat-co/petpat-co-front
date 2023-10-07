@@ -22,7 +22,7 @@ const ModifyUserProfile = (): ReactElement => {
     defaultProfile.userNickname,
   );
   const useremail = 'qq@qq.com';
-  const [imgUrl, setImgUrl] = React.useState<string>('');
+  const [imgUrl, setImgUrl] = React.useState<any>(defaultProfile.profileImgUrl);
   const [image, setImage] = React.useState<File | null>(null);
   const fileRef: any = React.useRef<HTMLInputElement | null>(null);
 
@@ -59,7 +59,7 @@ const ModifyUserProfile = (): ReactElement => {
       formdata.append('email', useremail);
       formdata.append('profileImgFile', image?image:"");
       // 원래 프로필 url
-      formdata.append('profileImgUrl', '');
+      formdata.append('profileImgUrl', "d");
       console.log('ddd');
       appdispatch(modifyProfileApi(formdata));
     }

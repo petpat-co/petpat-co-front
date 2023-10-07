@@ -1,8 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { userAPI } from 'src/network/api';
 import { User } from 'src/types/user';
-import jwtDecode from 'jwt-decode';
-
 
 export const initialState: User.UserType = {
   user: {
@@ -18,7 +16,6 @@ export const initialState: User.UserType = {
   is_login: false,
 };
 
- 
 // 회원가입
 export const signUpApi = createAsyncThunk(
   'user/signup',
@@ -37,6 +34,19 @@ export const signUpApi = createAsyncThunk(
         // console.log('response : ' + response.data);
         return;
       }
+    } catch (error: any) {
+      console.log('signUpApi : error response', error.response.data);
+    }
+  },
+);
+
+export const getProfileApi = createAsyncThunk(
+  'user/profile',
+  async (data: any, thunkAPI) => {
+    try {
+      const response = await userAPI.getProfile();
+      console.log('getProfile 성공 ' + JSON.stringify(response.data.data));
+      thunkAPI.dispatch(userSlice.actions.getProfile(response.data.data));
     } catch (error: any) {
       console.log('signUpApi : error response', error.response.data);
     }
@@ -68,17 +78,18 @@ export const logInApi = createAsyncThunk(
   async (user: User.UserInfo, thunkAPI) => {
     try {
       const data = {
-          userEmail: user.userEmail,
-          password: user.userPassword,
-        }
-        const response = await userAPI.logIn({ data });
-        console.log('logInApi : response', response);
-        const token = response.headers.authorization?.split('Bearer ');
-      if (token) {
+        userEmail: user.userEmail,
+        password: user.userPassword,
+      };
+      const response = await userAPI.logIn({ data });
+      console.log('logInApi : response', response);
+      const accessToken = response.headers.authorization?.split('Bearer ');
+      const refreshToken = response.headers.refrshToken;
+      if (accessToken && refreshToken) {
         if (user.checked) {
-
-        };
-        localStorage.setItem('token', token[1]);
+        }
+        localStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('accessToken', accessToken[1]);
         thunkAPI.dispatch(userSlice.actions.setUser(response));
         window.location.replace('/');
         return;
@@ -96,13 +107,14 @@ export const kakaoLogInApi = createAsyncThunk(
     try {
       console.log('코드 : ' + JSON.stringify(code));
       const response = await userAPI.KakaoLogIn(code);
-      const token = response.headers.authorization?.split('Bearer ')[1];
-      if (token) {
-        console.log('토큰토큰 : ' + token);
-        localStorage.setItem('token', token);
-        // window.location.replace('/');
-        const data = jwtDecode(token);
-        console.log(data);
+      const accessToken = response.headers.authorization?.split('Bearer ')[1];
+      const refreshToken = response.headers.refreshToken;
+      if (accessToken && refreshToken) {
+        console.log('토큰토큰 : ' + accessToken);
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+        window.location.replace('/');
+        return;
       }
     } catch (error: any) {
       console.log('kakaoLogInApi : error response', error.response.data);
@@ -112,12 +124,15 @@ export const kakaoLogInApi = createAsyncThunk(
 
 export const logOutApi = createAsyncThunk(
   'user/login/kakao',
-  async (data: "", thunkAPI) => {
+  async (data: '', thunkAPI) => {
     try {
-      const token = localStorage.getItem("token");
-      if (token) {
-        localStorage.removeItem("token");
-        thunkAPI.dispatch(userSlice.actions.logout(""));
+      const accessToken = localStorage.getItem('accessToken');
+      const refreshToken = localStorage.getItem('refreshToken');
+      if (accessToken && refreshToken) {
+        // const response = await userAPI.logout(data);
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken')
+        thunkAPI.dispatch(userSlice.actions.logout(''));
         window.location.replace('/');
       }
     } catch (error: any) {
@@ -125,8 +140,6 @@ export const logOutApi = createAsyncThunk(
     }
   },
 );
-
-
 
 export const userSlice = createSlice({
   name: 'userReducer',
@@ -138,7 +151,7 @@ export const userSlice = createSlice({
         state.is_login = true;
         return;
       } else {
-        window.alert("로그인중인데 뭔가 문제가 있다... 아마도 페이로드가 없음");
+        window.alert('로그인중인데 뭔가 문제가 있다... 아마도 페이로드가 없음');
       }
     },
     emailDpCheck: (state, action: PayloadAction<any>) => {
@@ -146,13 +159,16 @@ export const userSlice = createSlice({
       state.emailCheck = action.payload;
       return;
     },
+    getProfile: (state, action: PayloadAction<any>) => {
+      console.log('REDUCER GETPROFILE' + action.payload);
+      state.user = action.payload;
+    },
     logout: (state, action: PayloadAction<any>) => {
       state = {
         user: {
           userEmail: '',
           userNickname: '',
-          userImg:
-            '',
+          userImg: '',
         },
         emailCheck: false,
         is_login: false,

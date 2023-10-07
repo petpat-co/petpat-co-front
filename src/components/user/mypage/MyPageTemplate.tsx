@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from 'src/core/store';
+import { RootState, useAppDispatch } from 'src/core/store';
 import { useLocation, useNavigate } from 'react-router-dom';
 // style, elements
 import { MyPageTemplateStyle as S } from './MyPageTemplate.style';
@@ -16,8 +16,10 @@ import MyQnaList from './listmenu/MyQnaList';
 import MyLikeList from './listmenu/MyLikeList';
 import MyBookmarkList from './listmenu/MyBookmarkList';
 import MyTradeList from './listmenu/MyTradeList';
+import { getProfileApi } from 'src/core/redux/user/userSlice';
 
 const MyPageTemplate = (): ReactElement => {
+  const appdispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation().pathname.split('/')[2];
 
@@ -102,18 +104,23 @@ const MyPageTemplate = (): ReactElement => {
     }
   }, [location, navigate]);
 
+  React.useEffect(() => {
+    appdispatch(getProfileApi(''));
+  }, [])
+
+
   return (
     <S.Wrap>
       {/* profile section */}
 
       <S.UserProfileSection>
-        <S.UserProfileImg img={defaultProfile.userImg} />
+        <S.UserProfileImg img={defaultProfile.profileImgUrl} />
         <S.UserInfo>
           <Text textStyle={{ size: 'small', colors: 'coolgray400' }}>
             {defaultProfile.userEmail}
           </Text>
           <Text textStyle={{ size: 'title', fontWeight: 'bold' }}>
-            {defaultProfile.userNickname} 님
+            {defaultProfile.nickname} 님
           </Text>
         </S.UserInfo>
         <Button

@@ -106,16 +106,18 @@ export const getRehomingListApi = createAsyncThunk(
   async (data: '', thunkAPI) => {
     try {
       const response = await mypageAPI.getRehomingList();
-      if (response.status === 80200) {
-        console.log('Rehoming 성공' + response.data);
-        const list = response.data;
+      // if (response.status === 80200) {
+        console.log('Rehoming 성공' + response.data.content);
+        // console.log('Rehoming 성공' + response.data.data.content);
+        const list = response.data.content;
+        // const list = response.data.data.content;
         thunkAPI.dispatch(myPage.actions.getRehomingList(list));
-        return;
-      } else if (response.status === 80400) {
-        window.alert('정보 조회 실패');
-        console.log(response);
-        return;
-      }
+        // return;
+      // } else if (response.status === 80400) {
+        // window.alert('정보 조회 실패');
+        // console.log(response);
+        // return;
+      // }
     } catch (error: any) {
       console.log('changePwApi : error response', error.response.data);
     }
@@ -127,16 +129,17 @@ export const getTradeListApi = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const response = await mypageAPI.getTradeList(data);
-      if (response.status === 80200) {
-        console.log('TradeList 성공' + response.data);
-        const list = response.data;
+      // if (response.status === 80200) {
+        console.log('TradeList 성공' + JSON.stringify(response.data.content));
+        const list = response.data.content;
+        // const list = response.data.data.content;
         thunkAPI.dispatch(myPage.actions.getTradeList(list));
-        return;
-      } else if (response.status === 80400) {
-        window.alert('정보 조회 실패');
-        console.log(response);
-        return;
-      }
+      //   return;
+      // } else if (response.status === 80400) {
+      //   window.alert('정보 조회 실패');
+      //   console.log(response);
+      //   return;
+      // }
     } catch (error: any) {
       console.log('changePwApi : error response', error.response.data);
     }
@@ -148,16 +151,16 @@ export const getQnaListApi = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const response = await mypageAPI.getQnaList(data);
-      if (response.status === 80200) {
+      // if (response.status === 80200) {
         console.log('QnaList 성공' + response.data);
         const list = response.data;
         thunkAPI.dispatch(myPage.actions.getQnaList(list));
-        return;
-      } else if (response.status === 80400) {
-        window.alert('정보 조회 실패');
-        console.log(response);
-        return;
-      }
+      //   return;
+      // } else if (response.status === 80400) {
+      //   window.alert('정보 조회 실패');
+      //   console.log(response);
+      //   return;
+      // }
     } catch (error: any) {
       console.log('changePwApi : error response', error.response.data);
     }

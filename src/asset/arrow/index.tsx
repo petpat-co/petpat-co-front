@@ -36,7 +36,7 @@ const CircleWrap = styled.div<StyledProps>`
   height: ${({ height }) => (height ? height : '65px')};
   border-radius: ${({ radius }) => (radius ? radius : '65px')};
   background-color: ${({ bg }) => (bg ? bg : '#fff')};
-  border: ${({ border }) => (border ? border : '1px solid #000')};
+  border: ${({ border }) => (border ? border : '1px solid #1A202C')};
   display: flex;
   align-items: center;
   justify-content: center;

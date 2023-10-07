@@ -21,6 +21,13 @@ export const emailCheck: ApiHandler = (options) =>
     ...options,
   });
 
+export const getProfile: ApiHandler = (options) =>
+  instance({
+    method: 'GET',
+    url: `http://121.141.140.90:8082/api/v1/profile`,
+    ...options,
+  });
+
 // 로그인
 export const logIn: ApiHandler = (options) =>
   instance({
@@ -33,5 +40,11 @@ export const logIn: ApiHandler = (options) =>
 export const KakaoLogIn: ApiHandler = (options) =>
   instance({
     method: 'GET',
-    url: `http://121.141.140.90:8082/api/v1/user/kakao/callback?code=${options}`
+    url: `http://121.141.140.90:8082/api/v1/user/kakao/callback?code=${options}`,
+  });
+
+export const logout: ApiHandler = (options) =>
+  instance({
+    method: 'GET',
+    url: ``,
   });

@@ -34,12 +34,12 @@ const TextWrap = styled.p<StyledProps>`
   width: ${({ width }) => (width ? width : 'auto')};
   height: ${({ height }) => (height ? height : 'auto')};
   
-  color: ${({ theme, color, colors }) => (
+  color: ${({ theme, color, colors }) => 
     // colors : theme color
     // color : props color
     colors?
       theme.colors[colors]
-      : ( color? color : theme.colors.default ))};
+      : ( color? color : theme.colors.default )};
 
   font-size: ${({ theme, size, fontSize }) => (
     // size : theme size

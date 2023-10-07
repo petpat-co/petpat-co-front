@@ -5,11 +5,13 @@ import ReHoming from './pages/rehome/ReHoming';
 import ReHomingWrite from './pages/rehome/ReHomingWrite';
 
 import LogIn from './pages/user/LogIn';
-import SignUp from './pages/user/SignUp'
+import SignUp from './pages/user/SignUp';
 import MyPage from './pages/user/MyPage';
 import FindPassword from './components/user/FindPassword';
 import Kakao from './components/user/Kakao';
-import ChangePassword from './components/user/mypage/ChangePassword';
+import QnA from './pages/qna/QnA';
+import QnaDetail from './components/qna/QnaDetail';
+import QnaWrite from './components/qna/QnaWrite';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default [
@@ -44,6 +46,18 @@ export default [
   {
     path: '/mypage',
     element: MyPage,
+  },
+  {
+    path: '/qna',
+    element: QnA,
+  },
+  {
+    path: '/qna/detail/:postId',
+    element: QnaDetail,
+  },
+  {
+    path: '/qna/write',
+    element: QnaWrite,
   },
   {
     path: '/mypage/account/update',

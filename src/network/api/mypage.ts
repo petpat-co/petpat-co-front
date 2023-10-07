@@ -42,20 +42,20 @@ export const changePW: ApiHandler = (options) =>
 export const getRehomingList: ApiHandler = () =>
   instance({
     method: 'GET',
-    url: addPrefix(`/rehoming`),
+    url: `http://121.141.140.90:8082/api/v1/profile/rehoming`,
   });
 // 작성 게시글 조회
 export const getTradeList: ApiHandler = (options) =>
   instance({
     method: 'GET',
-    url: addPrefix(`/trade`),
+    url: `http://121.141.140.90:8082/api/v1/profile/trade`,
     ...options,
   });
 // 작성 게시글 조회
 export const getQnaList: ApiHandler = (options) =>
   instance({
     method: 'GET',
-    url: addPrefix(`/qna`),
+    url: `http://121.141.140.90:8082/api/v1/profile/qna`,
     ...options,
   });
 
@@ -64,7 +64,7 @@ export const getLikeList: ApiHandler = (options) =>
   instance({
     method: 'GET',
     //postType...?
-    url: addPrefix(`/like/postType=REHOMING`),
+    url: `http://121.141.140.90:8082/api/v1/profile/like/postType=REHOMING`,
     ...options,
   });
 
@@ -72,7 +72,7 @@ export const getLikeList: ApiHandler = (options) =>
 export const getBookmarkList: ApiHandler = (options) =>
   instance({
     method: 'GET',
-    url: addPrefix(`/bookmark/postType=REHOMING`),
+    url: `http://121.141.140.90:8082/api/v1/profile/bookmark/postType=REHOMING`,
     ...options,
   });
 
@@ -80,6 +80,6 @@ export const getBookmarkList: ApiHandler = (options) =>
 export const getCommentList: ApiHandler = (options) =>
 instance({
   method: 'GET',
-  url: addPrefix(``),
+  // url: `http://121.141.140.90:8082/api/v1/profile`,
   ...options,
 });

@@ -59,6 +59,10 @@ export default [
     element: QnaWrite,
   },
   {
+    path: '/qna/modify/:postId',
+    element: QnaWrite,
+  },
+  {
     path: '/mypage/account/update',
     element: MyPage,
   },

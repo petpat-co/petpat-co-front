@@ -17,23 +17,15 @@ interface PropsType {
 }
 
 const QnaItem = (props: PropsType): ReactElement => {
-  const {
-    postId,
-    title,
-    content,
-    username,
-    createdAt,
-    viewCnt,
-    commentCnt,
-  } = props;
-  
+  const { postId, title, content, username, createdAt, viewCnt, commentCnt } =
+    props;
+
   const navigate = useNavigate();
   const date = new Date(createdAt);
 
   const onClickHandler = (postId: number | string) => {
     navigate(`/qna/detail/${postId}`);
   };
-
 
   return (
     <React.Fragment>
@@ -56,9 +48,9 @@ const QnaItem = (props: PropsType): ReactElement => {
         <InfoContainer>
           <p>{username}</p>
           <div>
-            <ViewCount stroke="#6B7280"/>
+            <ViewCount stroke="#6B7280" />
             <p>{viewCnt}</p>
-            <ChatBubble fill="#6B7280"/>
+            <ChatBubble fill="#6B7280" />
             <p>{commentCnt}</p>
           </div>
         </InfoContainer>
@@ -79,7 +71,7 @@ export const Container = styled.div`
   cursor: poiner;
   transition: 0.15s ease-in-out;
   &:hover {
-    border: ${({theme}) => `1px solid ${theme.colors.primary}`};
+    border: ${({ theme }) => `1px solid ${theme.colors.primary}`};
   }
 `;
 
@@ -119,7 +111,7 @@ export const InfoContainer = styled.div`
   height: fit-content;
   display: flex;
   align-items: center;
-  color: #6B7280;
+  color: #6b7280;
   & > div {
     margin: 0 40px;
     display: flex;

@@ -9,7 +9,7 @@ const addPrefix: AddPrefix = (path) => {
 export const signUp: ApiHandler = (options) =>
   instance({
     method: 'POST',
-    url: 'http://121.141.140.90:8082/api/v1/user/signup',
+    url: `http://localhost:8082/api/v1/user/signup`,
     ...options,
   });
 
@@ -17,7 +17,7 @@ export const signUp: ApiHandler = (options) =>
 export const emailCheck: ApiHandler = (options) =>
   instance({
     method: 'POST',
-    url: `http://121.141.140.90:8082/api/v1/user/${options}`,
+    url: `http://localhost:8082/api/v1/user/${options}`,
     ...options,
   });
 

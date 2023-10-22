@@ -8,10 +8,10 @@ export const Container = styled.div`
 `;
 
 export const MainInfoSection = styled.div`
+  position: relative;
   margin: auto;
   display: flex;
-  width: fit-content;
-  max-width: 1920px;
+  width: 100%;
   background: #fff;
   padding-bottom: 136px;
   border-bottom: ${({ theme }) => `1px solid ${theme.colors.primary}`};
@@ -22,7 +22,7 @@ export const Info = styled.div`
   margin: 0 0 0 168px;
 `;
 
-export const ProfileBox = styled.div<{src:string}>`
+export const ProfileBox = styled.div<{ src: string }>`
   margin-bottom: 40px;
   display: flex;
   align-items: center;
@@ -35,7 +35,7 @@ export const ProfileBox = styled.div<{src:string}>`
     background-image: ${({ src }) => `url(${src})`};
     background-repeat: no-repeat;
     background-size: cover;
-    background-position:center;
+    background-position: center;
   }
   & > p {
     font-size: ${({ theme }) => theme.fontSizes.xlarge};
@@ -74,6 +74,19 @@ export const ContentBox = styled.div`
   margin-top: 80px;
 `;
 
+export const MngButtons = styled.div`
+  position: absolute;
+  bottom: 24px;
+  right: 12px;
+
+  display: flex;
+  width: fit-content;
+  gap: 20px;
+  & > button {
+    color: ${({ theme }) => theme.colors.coolgray400};
+  }
+`;
+
 export const ImageBox = styled.div`
   max-width: 800px;
 `;
@@ -92,36 +105,38 @@ export const CommentSection = styled.div`
 
   & > hr {
     height: 1px;
-    background-color: ${({theme}) => theme.colors.coolgray300};
+    background-color: ${({ theme }) => theme.colors.coolgray300};
     border: none;
   }
 `;
 
-export const CommentTitleBox = styled.div<{selected?: string}>`
+export const CommentTitleBox = styled.div<{ selected?: string }>`
   margin: 40px 10px 0 10px;
   display: flex;
   align-items: center;
-  & > .qna_detail_commentTitle{
+  & > .qna_detail_commentTitle {
     font-size: ${({ theme }) => theme.fontSizes.xxlarge};
     color: ${({ theme }) => theme.colors.primary};
     font-weight: 700;
     margin-right: 52px;
   }
 
-  & > p  {
-    margin-right:20px;
+  & > p {
+    margin-right: 20px;
     color: ${({ theme }) => theme.colors.coolgray400};
   }
 
   & > .qna_detail_select__old {
-    font-weight: ${({selected}) => selected==='oldest'? 800 : 500};
-    color: ${({selected, theme}) => selected === 'oldest' ? '#000' : theme.colors.coolgray400};
+    font-weight: ${({ selected }) => (selected === 'oldest' ? 800 : 500)};
+    color: ${({ selected, theme }) =>
+      selected === 'oldest' ? '#000' : theme.colors.coolgray400};
     cursor: pointer;
   }
-  
+
   & > .qna_detail_select__new {
-    font-weight: ${({selected}) => selected==='newest'? 800 : 500};
-    color: ${({selected, theme}) => selected === 'newest' ? '#000' : theme.colors.coolgray400};
+    font-weight: ${({ selected }) => (selected === 'newest' ? 800 : 500)};
+    color: ${({ selected, theme }) =>
+      selected === 'newest' ? '#000' : theme.colors.coolgray400};
     cursor: pointer;
   }
 `;
@@ -130,15 +145,15 @@ export const CommentWrite = styled.div`
   width: 100%;
   margin: 40px 0;
   padding: 24px 0 32px 0;
-  border: ${({theme}) => `1px solid ${theme.colors.default}`};
+  border: ${({ theme }) => `1px solid ${theme.colors.default}`};
   border-radius: 10px;
 
   & > .qna_comment_write__username {
     padding: 0 24px 24px 24px;
     font-size: 24px;
     font-weight: 700;
-  }  
-  
+  }
+
   & > .qna_comment_write__textarea {
     width: 100%;
     height: 100px;
@@ -147,12 +162,12 @@ export const CommentWrite = styled.div`
     margin: 2px 0;
     font-size: 16px;
   }
-  
+
   & > .qna_comment_write__submit {
     float: right;
     padding: 0 32px;
     font-weight: 700;
-    color: ${({theme}) => theme.colors.coolgray500};
+    color: ${({ theme }) => theme.colors.coolgray500};
     cursor: pointer;
   }
 `;
@@ -170,7 +185,7 @@ export const Buttons = styled.div`
     padding: 8px 20px;
     border-radius: 16px;
     font-weight: 600;
-    background-color: ${({theme}) => theme.colors.coolgray100};
+    background-color: ${({ theme }) => theme.colors.coolgray100};
     display: flex;
     align-items: center;
   }
@@ -181,4 +196,4 @@ export const Buttons = styled.div`
     transform: rotate(180deg);
     margin: 0 4px 0 0;
   }
-`
+`;

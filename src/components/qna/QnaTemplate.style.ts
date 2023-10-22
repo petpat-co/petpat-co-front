@@ -18,6 +18,17 @@ export const BannerSection = styled.div`
   & > div {
     padding: 114px 0;
   }
+  & > .search {
+    margin: auto;
+    width: fit-content;
+    padding: 0;
+    position: relative;
+  }
+  & > div > .icon {
+    position: absolute;
+    right: 0;
+    bottom: 12px;
+  }
 `;
 
 export const TitleText = styled.p`
@@ -31,6 +42,7 @@ export const SubText = styled.h2`
   font-weight: 500;
   margin-top: 24px;
   font-size: ${({ theme }) => theme.fontSizes.regular};
+  color: #858585;
 `;
 
 export const SearchInput = styled.input`
@@ -52,8 +64,22 @@ export const ContentsSection = styled.section`
   background-color: #fff;
 `;
 
-export const QnAToolWrap = styled.div`
+export const QnAToolWrapper = styled.div`
   display: flex;
-  margin-bottom: 60px;
   justify-content: space-between;
+`;
+
+
+export const QnaTool = styled.div`
+  display: flex;
+  gap: 40px;
+  margin-bottom: 60px;
+  width: fit-content;
+`;
+
+export const CheckBoxes = styled.div`
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 `;

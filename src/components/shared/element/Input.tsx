@@ -2,16 +2,17 @@ import { forwardRef } from 'react';
 import styled from 'styled-components';
 
 type InputStyleType = {
-  margin?: string;//기본 none
+  margin?: string; //기본 none
   width?: string; //기본 100%
   height?: string; //기본 50px
   border?: string; //기본  1.4px solid #aaaaaa;
   borderRadius?: string; //기본 0px
   isBorderBottom?: boolean;
+  padding?: string;
 };
 
 interface InputProps extends InputStyleType {
-  type?:string;
+  type?: string;
   placeholder: string;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
   defaultValue?: string;
@@ -34,6 +35,7 @@ const Input = forwardRef((props: InputProps, ref?: any) => {
     borderRadius,
     isBorderBottom,
     autoComplete,
+    padding,
   } = props;
 
   const styles = {
@@ -43,6 +45,7 @@ const Input = forwardRef((props: InputProps, ref?: any) => {
     border,
     borderRadius,
     isBorderBottom,
+    padding,
   };
 
   return (
@@ -55,19 +58,19 @@ const Input = forwardRef((props: InputProps, ref?: any) => {
       ref={ref}
       name={name}
       maxLength={maxLength}
-      autoComplete={autoComplete?'on':'off'}
+      autoComplete={autoComplete ? 'on' : 'off'}
     />
   );
 });
 
 const StyledInput = styled.input<InputStyleType>`
-  margin: ${({ margin }) => (margin? margin : 'none')};
+  margin: ${({ margin }) => (margin ? margin : 'none')};
   width: ${({ width }) => (width ? width : '100%')};
   height: ${({ height }) => (height ? height : '50px')};
   border: ${({ border }) => (border ? border : '1.4px solid #aaaaaa')};
   border-radius: ${({ borderRadius }) => (borderRadius ? borderRadius : '0')};
-  padding: 10px;
-  font-size: ${({ theme }) => ( theme.fontSizes.regular )};
+  padding: ${({ padding }) => (padding ? padding : '10px')};
+  font-size: ${({ theme }) => theme.fontSizes.regular};
   ::placeholder {
     color: #cdcdcd;
   }

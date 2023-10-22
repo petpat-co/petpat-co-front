@@ -22,12 +22,12 @@ export const initialState: Post.QnaState = {
 
 export const getQnaListApi = createAsyncThunk(
   'qna/list',
-  async (pageNo: string, thunkAPI) => {
+  async (pageNo: number, thunkAPI) => {
     try {
       const response = await qnaAPI.getQnaList({ pageNo });
       console.log('getQnaListApi response : ', response.data);
       const list = response.data;
-      // thunkAPI.dispatch(qnaSlice.actions.getQnaList(list));
+      thunkAPI.dispatch(qnaSlice.actions.setQnaList(list));
     } catch (error: any) {
       console.log('getQnaListApi : error response', error.response.data);
     }
@@ -41,7 +41,7 @@ export const getQnaDetailApi = createAsyncThunk(
       const response = await qnaAPI.getQnaDetail({ postNo });
       console.log('getQnaDetailApi response : ', response.data);
       const detail = response.data;
-      // thunkAPI.dispatch(qnaSlice.actions.getQnaList(detail));
+      thunkAPI.dispatch(qnaSlice.actions.setQnaList(detail));
     } catch (error: any) {
       console.log('getQnaDetailApi : error response', error.response.data);
     }
@@ -50,7 +50,7 @@ export const getQnaDetailApi = createAsyncThunk(
 
 export const postQnaApi = createAsyncThunk(
   'qna/detail',
-  async (postdata, thunkAPI) => {
+  async (postdata: FormData, thunkAPI) => {
     try {
       const response = await qnaAPI.postQna(postdata);
       console.log('postQnaApi response : ', response.data);
@@ -76,7 +76,7 @@ export const deleteQnaApi = createAsyncThunk(
   'qna/detail',
   async (postNo: string, thunkAPI) => {
     try {
-      const response = await qnaAPI.postQna({ postNo });
+      const response = await qnaAPI.deleteQna({ postNo });
       console.log('deleteQnaApi response : ', response.data);
     } catch (error: any) {
       console.log('deleteQnaApi : error response', error.response.data);
@@ -88,12 +88,12 @@ export const qnaSlice = createSlice({
   name: 'qnaReducer',
   initialState,
   reducers: {
-    getQnaList: (state, action: PayloadAction<any>) => {
+    setQnaList: (state, action: PayloadAction<any>) => {
       console.log('REDUCER' + action.payload);
-      state = action.payload;
+      state.list = action.payload;
       return;
     },
-    getQnaDetail: (state, action: PayloadAction<any>) => {
+    setQnaDetail: (state, action: PayloadAction<any>) => {
       console.log('REDUCER' + action.payload);
       state.post = action.payload;
       return;

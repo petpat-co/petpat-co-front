@@ -29,12 +29,13 @@ instance.interceptors.request.use(
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
 
-    if(accessToken && refreshToken) {
+    // if(accessToken && refreshToken) {
+    if(accessToken) {
       config.headers = {
         'Content-Type': 'application/json; charset=UTF-8',
         accept: 'application/json',
         Authorization: `Bearer ${accessToken}`,
-        RefreshToken: `${refreshToken}`,
+        // RefreshToken: `${refreshToken}`,
       };
     }
     return config;

@@ -9,9 +9,12 @@ import { ReactComponent as UserIcon } from 'src/asset/userCircleIcon.svg';
 import { useModal } from 'src/hooks/modal/useModal';
 import { v4 } from 'uuid';
 import { HeaderStyle as S } from './Header.style';
+import { useAppDispatch } from 'src/core/store';
+import { logOutApi } from 'src/core/redux/user/userSlice';
 
 const Header = () => {
   const navigate = useNavigate();
+  const appdispatch = useAppDispatch();
   const location = useLocation();
   const modal = useModal();
   const [pathname, setPathname] = useState(location.pathname);
@@ -24,10 +27,20 @@ const Header = () => {
   //로그인 기능 추가되면 수정할 예정 -유림 2022.11.15
   const isLogin = location.pathname.includes('/rehome/write');
 
-  // 유나 2023.04.14
+  // 유나 
+  // 2023.04.14
   const onClickLogin = () => {
     navigate('/login');
   };
+  // 2023.06.14
+  const token = localStorage.getItem("token");
+  const onClickMyPage = () => {
+    navigate('/mypage');
+  };
+  const logOut = () => {
+    appdispatch(logOutApi(""));
+  }
+
 
   //pathname 바뀔때마다 state 변경
   useEffect(() => {
@@ -132,7 +145,14 @@ const Header = () => {
                   }}
                 />
               </S.CursorBox>
-              <S.LoginButton onClick={onClickLogin}>로그인</S.LoginButton>
+              
+              {token? 
+              <>
+              <S.LoginButton onClick={onClickMyPage}>마이페이지</S.LoginButton> 
+              <S.LoginButton onClick={logOut}>로그아웃</S.LoginButton>
+              </>
+              : <S.LoginButton onClick={onClickLogin}>로그인</S.LoginButton>}
+            
             </S.LoginSearchBox>
           </S.GridBox>
 

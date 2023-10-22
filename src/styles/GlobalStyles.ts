@@ -2,7 +2,7 @@ import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
 
- @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@700;900&family=Noto+Sans+KR:wght@100;300;400;900&display=swap');
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/variable/pretendardvariable.css");
 
     *,
     *::before,
@@ -10,10 +10,11 @@ export const GlobalStyle = createGlobalStyle`
         margin: 0;
         padding: 0;  
         box-sizing: border-box;
-        font-family: 'Noto Sans KR', sans-serif;
+        font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
     }
     body,html{
-      font-size:16px;
+    font-size:16px;
+    color: #1A202C;
     }
     html,
     body,
@@ -104,7 +105,7 @@ export const GlobalStyle = createGlobalStyle`
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: 'Noto Sans KR', sans-serif;
+        font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
         
     }
     button { 

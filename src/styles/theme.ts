@@ -4,10 +4,12 @@ const colors = {
   primary: '#F35F4C',
   default: '#1A202C', //font default color
   second: '#0047FF',
-
+  
   sub01: '#FEBFB7',
   sub02: '#FFDFDB',
   sub03: '#FFEAE8',
+  
+  error: '#F35F4C',
 
   subTitle: '#666',
   blueTitle: '#718AFF',
@@ -56,11 +58,13 @@ const fontSizes = {
   xlarge: '24px',
   large: '20px',
   regular: '16px',
-  small: '12px',
+  small: '14px',
+  xsmall: '12px',
 };
 
 const fontWeights = {
   bold: '900',
+  lbold: '700',
   regular: '500',
   light: '400',
 };

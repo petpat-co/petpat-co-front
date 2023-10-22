@@ -13,10 +13,10 @@ interface StyledProps {
   margin?: string;
   padding?: string;
   cursor?: string;
+  textAlign?: string;
   size?: string;
   weight?: string;
   colors?: string;
-  textAlign?: string;
 }
 interface PropsType {
   textStyle?: StyledProps;
@@ -35,6 +35,7 @@ const TextWrap = styled.p<StyledProps>`
   height: ${({ height }) => (height ? height : 'auto')};
 
   color: ${({ theme, color, colors }) =>
+
     // colors : theme color
     // color : props color
     colors ? theme.colors[colors] : color ? color : theme.colors.default};
@@ -51,11 +52,9 @@ const TextWrap = styled.p<StyledProps>`
   font-weight: ${({ theme, weight, fontWeight }) =>
     // weight : theme weight
     // fontWeight : props weight
-    weight
-      ? theme.fontWeights[weight]
-      : fontWeight
-      ? fontWeight
-      : theme.fontWeights.regular};
+    weight? 
+      theme.fontWeights[weight]
+      : ( fontWeight? fontWeight : theme.fontWeights.regular)};
 
   line-height: ${({ lineHeight }) => (lineHeight ? lineHeight : '')};
   text-align: ${({ textAlign }) => (textAlign ? textAlign : '')};

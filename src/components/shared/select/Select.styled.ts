@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ReactComponent as Arrow } from '../../../asset/arrowIcon.svg';
+import { ReactComponent as Arrow } from '../../../asset/arrow.svg';
 
 export const SelectContainer = styled.div`
   position: relative;
@@ -14,30 +14,33 @@ export const SelectContainer = styled.div`
 
 export const SelectZone = styled.div<{ width: number }>`
   display: flex;
-  width: ${({ width }) => (width ? `${width}px` : '200px')};
+  // width: ${({ width }) => (width ? `${width}px` : '118px')};
+  width: 118px;
+  height:42px;
+  border-radius: 30px;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid #ececec;
-  padding: 0 8px;
+  border: 1px solid #000;
+  padding: 0 20px;
 `;
 
 export const DropDownList = styled.ul<{ select: number }>`
   position: absolute;
-  top: 32px;
+  top: 48px;
   left: 0;
   right: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 4px;
-  border: 1px solid #ececec;
-  border-top: none;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid #000;
+  border-radius: 16px;
   background-color: white;
+  z-index: 100;
 
   ${({ select }) =>
     select &&
     `li:nth-of-type(${select}) {
-    background-color: #a09f9f;
   }`}
 `;
 
@@ -48,7 +51,8 @@ export const DropDownItem = styled.li`
   cursor: pointer;
 
   &:hover {
-    background-color: #ececec;
+    background-color: ${({theme}) => theme.colors.primary};
+    color: #fff;
   }
 `;
 
@@ -56,5 +60,5 @@ export const StyledArrow = styled(Arrow)<{ open: boolean }>`
   transition: transform 250ms ease-out;
   cursor: pointer;
 
-  ${({ open }) => open && `transform: rotate(-90deg);`}
+  ${({ open }) => open && `transform: rotate(-180deg);`}
 `;

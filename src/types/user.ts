@@ -11,21 +11,31 @@ export namespace User {
     export interface UserInfo {
         userEmail?: string;
         userNickname?: string;
+        nickname?: string;
+        profileImgUrl?: string;
         userPassword?: string;
         userPasswordCheck?: string;
         userImg?: string;
-        userLocation?: string;
-		userPetBreed?: string;
-		userPetName?: string;
-        
         //rememver email checked
         checked?: boolean;
     };
 
     export interface UserType {
         user: UserInfo;
-        is_login?: boolean;
+        is_login: boolean;
         emailCheck?: boolean;
+        mypage?: any;
+    };
+
+    export interface myPageType {
+        myPostList: {
+            rehoming: Array<string>,
+            trade: Array<string>,
+            Qna: Array<string>,
+        };
+        myLikeList: Array<string>;
+        myComment: Array<string>;
+        myBookmark: Array<string>;
     }
 
 }

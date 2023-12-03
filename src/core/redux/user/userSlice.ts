@@ -22,18 +22,18 @@ export const signUpApi = createAsyncThunk(
   async (data: User.UserInfo, thunkAPI) => {
     try {
       const response = await userAPI.signUp({ data });
-      if (response.status === 80200) {
+      // if (response.status === 80200) {
         window.location.replace('/login');
         //바로 로그인 할 경우
         // thunkAPI.dispatch(logInApi({userEmail: user.userEmail, userNickname: user.userNickname}))
         // console.log('signUpApi : '+ response.status);
         // console.log('response : ' + response.data);
-      } else if (response.status === 80400) {
-        window.alert('이메일 형식이 아닙니다.');
+      // } else if (response.status === 80400) {
+        // window.alert('이메일 형식이 아닙니다.');
         // console.log('signUpApi : '+ response.status);
         // console.log('response : ' + response.data);
-        return;
-      }
+        // return;
+      // }
     } catch (error: any) {
       console.log('signUpApi : error response', error.response.data);
     }
@@ -48,7 +48,7 @@ export const getProfileApi = createAsyncThunk(
       console.log('getProfile 성공 ' + JSON.stringify(response.data.data));
       thunkAPI.dispatch(userSlice.actions.getProfile(response.data.data));
     } catch (error: any) {
-      console.log('signUpApi : error response', error.response.data);
+      console.log('getProfileApi : error response', error.response.data);
     }
   },
 );
@@ -83,13 +83,14 @@ export const logInApi = createAsyncThunk(
       };
       const response = await userAPI.logIn({ data });
       console.log('logInApi : response', response);
-      const accessToken = response.headers.authorization?.split('Bearer ');
+      const accessToken = response.headers.authorization?.split('Bearer ')[1];
       const refreshToken = response.headers.refrshToken;
-      if (accessToken && refreshToken) {
+      if(accessToken){
+      // if (accessToken && refreshToken) {
         if (user.checked) {
         }
-        localStorage.setItem('refreshToken', refreshToken);
-        localStorage.setItem('accessToken', accessToken[1]);
+        // localStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('accessToken', accessToken);
         thunkAPI.dispatch(userSlice.actions.setUser(response));
         window.location.replace('/');
         return;

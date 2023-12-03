@@ -9,7 +9,7 @@ export namespace FooterStyle {
     ${({ isMainPage }) =>
       isMainPage &&
       `
-       position: absolute;
+      position: absolute;
       top:4700px;
       z-index:3;
     `};

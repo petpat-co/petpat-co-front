@@ -6,36 +6,46 @@ const addPrefix: AddPrefix = (path) => {
   return config.server.host + '/api/v1/qna' + path;
 };
 
-export const getQnaList: ApiHandler = (options) => // pageNo
+export const getQnaList: ApiHandler = (
+  options, // pageNo
+) =>
   instance({
     method: 'GET',
     // url: addPrefix(`/${options}`),
-    url: addPrefix(`/1`),
+    url: addPrefix('?page=0'),
     ...options,
   });
 
-export const getQnaDetail: ApiHandler = (options) => // postId
+export const getQnaDetail: ApiHandler = (
+  options, // postId
+) =>
   instance({
     method: 'GET',
     url: addPrefix(`/detail/${options}`),
     ...options,
   });
 
-export const postQna: ApiHandler = (options) => // postData 
+export const postQna: ApiHandler = (
+  options, // postData
+) =>
   instance({
     method: 'POST',
     url: addPrefix(''),
     ...options,
   });
 
-export const modifyQna: ApiHandler = (options) => // postId, postData
+export const modifyQna: ApiHandler = (
+  options, // postId, postData
+) =>
   instance({
     method: 'PUT',
     url: addPrefix(`/${options.postId}`),
-    ...options,
+    ...options.formData,
   });
-  
-  export const deleteQna: ApiHandler = (options) => // postId
+
+export const deleteQna: ApiHandler = (
+  options, // postId
+) =>
   instance({
     method: 'DELETE',
     url: addPrefix(`/${options}`),

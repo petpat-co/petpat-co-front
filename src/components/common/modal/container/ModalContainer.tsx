@@ -105,8 +105,8 @@ opacity: 1;
 const OpacityDrop = styled.div`
   width: 100%;
   height: 100%;
-  background-color: #fff;
-  opacity: 0.67;
+  background-color: #000;
+  opacity: 0.4;
   position: absolute;
   top: 0;
   left: 0;

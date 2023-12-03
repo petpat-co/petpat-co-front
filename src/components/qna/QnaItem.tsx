@@ -7,21 +7,22 @@ import { useNavigate } from 'react-router-dom';
 
 interface PropsType {
   title: string;
-  content: string;
-  img?: string;
-  username: string;
+  imagePath?: string;
+  nickname: string;
   createdAt: string;
   viewCnt: number | string;
-  commentCnt: number | string;
-  postId: number | string;
+  qnaId: number | string;
+  commentCnt?: number | string;
+  // content: string;
 }
 
 const QnaItem = (props: PropsType): ReactElement => {
-  const { postId, title, content, username, createdAt, viewCnt, commentCnt } =
+  const { qnaId, title, nickname, createdAt, viewCnt, imagePath, commentCnt } =
     props;
 
   const navigate = useNavigate();
   const date = new Date(createdAt);
+  console.log(createdAt);
 
   const onClickHandler = (postId: number | string) => {
     navigate(`/qna/detail/${postId}`);
@@ -30,9 +31,9 @@ const QnaItem = (props: PropsType): ReactElement => {
   return (
     <React.Fragment>
       <Container
-        key={postId}
+        key={qnaId}
         onClick={() => {
-          onClickHandler(postId);
+          onClickHandler(qnaId);
         }}
       >
         <TitleContainer>
@@ -40,18 +41,16 @@ const QnaItem = (props: PropsType): ReactElement => {
           <p className="qna_createAt">{format(date, 'yy.MM.dd')}</p>
         </TitleContainer>
         <ContentContainer>
-          <div className="qna_content">
-            <p>{content}</p>
-          </div>
-          <Image />
+          <div className="qna_content">{/* <p>{content}</p> */}</div>
+          <Image src={imagePath} />
         </ContentContainer>
         <InfoContainer>
-          <p>{username}</p>
+          <p>{nickname}</p>
           <div>
             <ViewCount stroke="#6B7280" />
             <p>{viewCnt}</p>
             <ChatBubble fill="#6B7280" />
-            <p>{commentCnt}</p>
+            <p>{commentCnt ? commentCnt : 0}</p>
           </div>
         </InfoContainer>
       </Container>
@@ -122,11 +121,15 @@ export const InfoContainer = styled.div`
   }
 `;
 
-export const Image = styled.div`
+export const Image = styled.div<{ src: string | null | undefined }>`
   width: 116px;
   height: 116px;
   border-radius: 10px;
   background-color: #ddd;
+  background-image: ${({ src }) => `url(${src})`};
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 `;
 
 export default QnaItem;

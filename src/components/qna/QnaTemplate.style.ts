@@ -3,27 +3,44 @@ import styled from 'styled-components';
 export const Container = styled.div`
   width: 100%;
   height: 100%;
-  background-color: ${({ theme }) => theme.colors.coolgray100};
+  background-color: ${({ theme }) => theme.colors.coolgray200};
+`;
+
+export const BannerTitle = styled.div`
+  font-weight: 700;
+  font-size: 32px;
+  color: #fff;
+`;
+
+export const ButtonSpan = styled.span`
+  font-weight: 500;
+  font-size: 18px;
+  color: #111827;
 `;
 
 export const BannerSection = styled.div`
-  margin: 150px auto 0 auto;
+  margin: 0 auto;
+
   width: 100%;
-  max-width: 1920px;
+  max-width: 1440px;
   height: 520px;
-  justify-content: center;
-  text-align: center;
+
   background-color: #fff;
   border-radius: 0 0 50px 50px;
+
+  text-align: center;
+
   & > div {
     padding: 114px 0;
   }
+
   & > .search {
-    margin: auto;
-    width: fit-content;
-    padding: 0;
     position: relative;
+    margin: auto;
+    padding: 0;
+    width: fit-content;
   }
+
   & > div > .icon {
     position: absolute;
     right: 0;
@@ -32,7 +49,6 @@ export const BannerSection = styled.div`
 `;
 
 export const TitleText = styled.p`
-  // font-weight: ${({ theme }) => theme.fontWeights.lbold};
   font-weight: 800;
   font-size: ${({ theme }) => theme.fontSizes.xxlarge};
   color: ${({ theme }) => theme.colors.primary};
@@ -48,6 +64,9 @@ export const SubText = styled.h2`
 export const SearchInput = styled.input`
   width: 560px;
   height: 48px;
+  
+  outline: none;
+
   border: none;
   box-sizing: border-box;
   border-bottom: ${({ theme }) => `2px solid ${theme.colors.primary}`};
@@ -57,7 +76,7 @@ export const ContentsSection = styled.section`
   flex-direction: column;
   display: flex;
   width: 100%;
-  max-width: 1920px;
+  max-width: 1440px;
   margin: 32px auto 0 auto;
   padding: 80px 100px;
   border-radius: 50px 50px 0 0;
@@ -68,7 +87,6 @@ export const QnAToolWrapper = styled.div`
   display: flex;
   justify-content: space-between;
 `;
-
 
 export const QnaTool = styled.div`
   display: flex;

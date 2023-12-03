@@ -1,62 +1,18 @@
 import styled from 'styled-components';
 
 export const Wrap = styled.section`
-  width: 1200px;
+  width: 1440px;
   margin: 0 auto;
 
   @media ${({ theme }) => theme.device.web} {
     width: 100%;
   }
 `;
-export const ImageInputWrap = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  padding: 30px 0;
-  height: 440px;
-`;
-export const ImageTextBox = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  width: 163px;
-  height: 63px;
-  ${({ theme }) => theme.dragStyles.preventDrag};
-  & > span {
-    font-size: 20px;
-    color: #848484;
-  }
-`;
-export const ImageText = styled.p`
-  font-weight: 500;
-  font-size: 30px;
-  margin-right: 5px;
-`;
-export const ImageNoticeBox = styled.div`
-  width: calc(100% -200px);
-  height: 380px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`;
-export const ImageWrap = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  height: 282px;
-`;
-export const ImageInner = styled.div`
-  width: 282px;
-  height: 282px;
-  padding-left: 24px;
-`;
-export const NoticeBox = styled.p`
-  width: 100%;
-  font-weight: 500;
-  font-size: 18px;
-  line-height: 26px;
-  color: #858585;
+
+export const TitleText = styled.h2`
+  font-weight: 700;
+  font-size: 32px;
+  color: #fff;
 `;
 
 //제목 input style
@@ -67,14 +23,22 @@ export const TitleInputWrap = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 30px 0;
-  border-top: 1px solid #d9d9d9;
   border-bottom: 1px solid #d9d9d9;
 `;
 export const H2 = styled.h2`
   font-weight: 500;
-  font-size: 30px;
+  font-size: 24px;
   padding: 10px;
+  width: 200px;
 `;
+
+export const InfoTitle = styled.p`
+  margin: 40px 0;
+  font-weight: 700;
+  font-size: 32px;
+  color: ${({ theme }) => theme.colors.primary};
+`;
+
 export const InputLengthBox = styled.div`
   width: calc(100% - 120px);
   height: 123px;
@@ -82,27 +46,49 @@ export const InputLengthBox = styled.div`
   justify-content: space-between;
   align-items: center;
 `;
-export const InputWrap = styled.div`
-  width: calc(100% - 102px);
+export const InputWrap = styled.div<{ width?: string }>`
+  width: ${({ width }) => (width ? width : 'calc(100% - 102px)')};
+  display: flex;
+  align-items: center;
+  gap: 24px;
 `;
+
+export const CheckboxWrapper = styled.div<{width?:string}>`
+  width: ${({width}) => width? width : '80px'};
+  display: flex;
+  gap: 12px;
+  align-items: center;
+
+  & > p {
+    font-weight: 500;
+  }
+`
+
 export const LengthWrap = styled.div`
   width: auto;
   height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
-  color: #1e1e1e;
+  font-size: 18px;
+  color: ${({ theme }) => theme.colors.primary};
 `;
 // category
-export const GrayWrap = styled.div<{ isNoBorder?: boolean }>`
+// export const GrayWrap = styled.div<{ isNoBorder?: boolean }>`
+//   width: 100%;
+//   padding: 30px 0;
+//   border-bottom: ${({ isNoBorder }) =>
+//     isNoBorder ? null : '1px solid #d9d9d9'};
+//   display: flex;
+//   justify-content: space-between;
+// `;
+export const GrayWrap = styled.div`
   width: 100%;
   padding: 30px 0;
-  border-bottom: ${({ isNoBorder }) =>
-    isNoBorder ? null : '1px solid #d9d9d9'};
   display: flex;
   justify-content: space-between;
 `;
+
 export const GrayBox = styled.div`
   width: calc(100% - 200px);
   height: 320px;
@@ -110,17 +96,17 @@ export const GrayBox = styled.div`
 `;
 export const InputButtonWrap = styled.div`
   width: calc(100% - 200px);
-  height: 106px;
+  height: fit-content;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 
   & div {
     display: flex;
+    gap: 16px;
   }
   & button {
     font-size: ${({ theme }) => theme.fontSizes.xlg};
-    margin-right: 10px;
   }
 `;
 export const InputBox = styled.div`
@@ -165,4 +151,56 @@ export const ButtonInner = styled.div`
   @media ${({ theme }) => theme.device.web} {
     width: 100%;
   }
+`;
+
+export const ImageInputWrap = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 30px 0;
+  height: 440px;
+`;
+export const ImageTextBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  width: 163px;
+  height: 63px;
+  ${({ theme }) => theme.dragStyles.preventDrag};
+  & > span {
+    font-size: 20px;
+    color: #848484;
+  }
+`;
+export const ImageText = styled.p`
+  font-weight: 500;
+  font-size: 30px;
+  margin-right: 5px;
+`;
+export const ImageNoticeBox = styled.div`
+  width: calc(100% -200px);
+  height: 380px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+export const ImageWrap = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+`;
+
+export const ImageInner = styled.div`
+  width: 236px;
+  height: 236px;
+`;
+
+export const NoticeBox = styled.p`
+  width: 100%;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 26px;
+  color: #858585;
 `;

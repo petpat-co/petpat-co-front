@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ReactComponent as Arrow } from 'src/asset/arrowIcon.svg';
 import { ReactComponent as Comment } from 'src/asset/commentIcon.svg';
@@ -8,16 +8,34 @@ import { Button, DisplayGrid } from '../../shared/element';
 import Select from '../../shared/select/Select';
 import * as MainS from '../ReHomingTemplate.style';
 import * as S from './ReHomingDetailTemplate.style';
+import { useQuery } from 'react-query';
+import { useAppDispatch } from 'src/core/store';
+import { deleteReHomingApi, getOneReHomingApi } from 'src/core/redux/post/rehomingSlice';
 
 const ReHomingDetailTemplate = () => {
+  const appdispatch = useAppDispatch();
   const params = useParams();
+  console.log(params.postId);
   const navigate = useNavigate();
   const [dogCategory, setDogCategory] = useState<number>(0);
   const [category, setCategory] = useState<number>(0);
 
-  // const { data, status } = useQuery('rehomeList', () =>
-  //   rehomingAPI.getReHomingList({ params }),
+  // const { data, status } = useQuery('rehomeDetail', () =>
+  //   rehomingAPI.getOneReHoming(params.postId),
   // );
+
+  const deletePost = () => {
+    if(params.postId) {
+      appdispatch(deleteReHomingApi(params.postId));
+    }
+  };
+
+  React.useEffect(() => {
+    if (params.postId) {
+      appdispatch(getOneReHomingApi(params.postId));
+    }
+  }, [params.postId]);
+
   return (
     <S.Wrap>
       <MainS.LeftBox>
@@ -92,7 +110,7 @@ const ReHomingDetailTemplate = () => {
           <p>닉네임 들어갈 자리</p>
           <p>서울시 관악구 난곡동</p>
         </S.NicknameAreaBox>
-        <S.ReportBox>신고하기</S.ReportBox>
+        <S.ReportBox onClick={deletePost}>삭제하기</S.ReportBox>
       </S.ProfileBox>
       {/* 내용 */}
       <S.ContentsBox>

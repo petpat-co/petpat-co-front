@@ -2,11 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import { Button, Input } from '../shared/element';
 import { useAppDispatch } from 'src/core/store';
-import { getQnaDetailApi, postQnaApi } from 'src/core/redux/post/qnaSlice';
-import { useLocation } from 'react-router-dom';
+import { modifyQnaApi, postQnaApi } from 'src/core/redux/post/qnaSlice';
+import { useLocation, useNavigate } from 'react-router-dom';
+import ModalContainer from '../common/modal/container/ModalContainer';
+import WriteSuccess from './modal/WriteSuccess';
 
 const QnaWrite = (): React.ReactElement => {
   const appdispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const location = useLocation().pathname.split('/');
   const pathname = location[2];
   const postId = location[3];
@@ -36,7 +40,6 @@ const QnaWrite = (): React.ReactElement => {
   };
 
   // 업로드한 파일 가져오기
-  // 이후 업로드 여러장 가능할 경우 첫번째 조건문 해제
   const onChange = (e: any) => {
     if (e.target.files.length > 5) {
       // 파일 갯수 5개 초과
@@ -44,7 +47,7 @@ const QnaWrite = (): React.ReactElement => {
       return;
     } else if (e.target.files) {
       // 업로드한 파일이 있는 경우
-      setFile(e.target.files);
+      setFile(Array.from(e.target.files));
       window.alert('파일 업로드 완료');
     } else {
       // 업로드 취소
@@ -70,6 +73,8 @@ const QnaWrite = (): React.ReactElement => {
     //   reader.readAsDataURL(files);
     // }
   };
+
+  const [openModal, setOpenModal] = React.useState(false);
 
   // 게시글 등록
   const submit = () => {
@@ -98,17 +103,39 @@ const QnaWrite = (): React.ReactElement => {
       qnaImgUrl: '',
     };
 
-    formData.append('qnaImgFile', file);
-    formData.append('title', title);
-    formData.append('description', content);
+    // formData.append('title', title);
+    // formData.append('content', content);
+    // formData.append('images', file);
+    // 이건 안 되고
 
-    appdispatch(postQnaApi(formData));
+    formData.append('title', title);
+    formData.append('content', content);
+    for (let i = 0; i < file.length; i++) {
+      formData.append('images', file[i]);
+    }
+    // 이건 된다??
+
+    setOpenModal(true);
+    if (pathname === 'modify') {
+      appdispatch(modifyQnaApi({formData:formData, postId:postId}));
+    } else {
+      appdispatch(postQnaApi(formData));
+    }
+  };
+
+  const onClickClose = () => {
+    navigate('/qna');
   };
 
   return (
     <Container>
+      {openModal && (
+        <ModalContainer zIndex={100000} id="0" onClickClose={onClickClose}>
+          <WriteSuccess />
+        </ModalContainer>
+      )}
       <TitleBanner>
-        {pathname == 'modify' ? '질문 게시글 수정하기' : '질문 게시판 글쓰기'}
+        {pathname === 'modify' ? '질문 게시글 수정하기' : '질문 게시판 글쓰기'}
       </TitleBanner>
       <FormContainer>
         <FlexSection>
@@ -208,6 +235,8 @@ const QnaWrite = (): React.ReactElement => {
               <p>- 문제가 발생할 경우 관리자에게 문의해주세요.</p>
             </WarnMessage>
           </div>
+
+          
         </FlexSection>
       </FormContainer>
       <Buttons>
@@ -271,7 +300,7 @@ const Buttons = styled.div`
 `;
 
 const Container = styled.div`
-  padding-top: 278px;
+  padding-top: 150px;
   margin-bottom: 120px;
   width: 100%;
 `;

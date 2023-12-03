@@ -5,17 +5,29 @@ import QnaItem from './QnaItem';
 import { ReactComponent as GlassIcon } from '../../asset/icon/glass.svg';
 import { useAppDispatch } from 'src/core/store';
 import { getQnaListApi } from 'src/core/redux/post/qnaSlice';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { Button } from '../shared/element';
+import ModalContainer from '../common/modal/container/ModalContainer';
+import TopSection from '../shared/layout/TopSection';
 
 const QnaTemplate = () => {
   const appdispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const mockSelect = ['최신순', '좋아요순', '댓글순'];
-  const postList = useSelector((state: any) => state.qna.list);
-
+  const postList = useSelector((state: any) => state.qna.list?.content);
   const [value, setValue] = React.useState<number>(0);
   const [pageNo, setPageNo] = React.useState<number>(0);
+
+  console.log(postList);
+  const goToWrite = () => {
+    navigate('/qna/write');
+  };
+
+  const onClickClose = () => {
+    window.alert('닫기');
+  };
 
   React.useEffect(() => {
     appdispatch(getQnaListApi(pageNo));
@@ -24,6 +36,23 @@ const QnaTemplate = () => {
   return (
     <React.Fragment>
       <S.Container>
+        <div style={{marginTop:'-124px'}}>
+          <TopSection>
+            <S.BannerTitle>질문 게시판</S.BannerTitle>
+            <Button
+              width="auto"
+              border="2px solid #111827"
+              _onClick={() => {}}
+              _disabled={false}
+              activeBg="#fff"
+              padding="0 20px"
+              radius="120px"
+            >
+              <S.ButtonSpan onClick={goToWrite}> 질문 올리기</S.ButtonSpan>
+            </Button>
+          </TopSection>
+        </div>
+
         <S.BannerSection>
           <div>
             <S.TitleText>질문 게시판에 무엇이든 물어보세요</S.TitleText>
@@ -48,17 +77,17 @@ const QnaTemplate = () => {
             </S.QnaTool>
           </S.QnAToolWrapper>
           {postList &&
+            postList.length > 0 &&
             postList.map((item: any, idx: number) => (
               <QnaItem
                 key={idx}
-                postId={item.postId}
+                qnaId={item.qnaId}
                 title={item.title}
-                content={item.description}
-                img={item.qnaImg}
-                createdAt={item.createdAt}
-                username={item.username}
-                viewCnt={item.viewCount}
-                commentCnt={item.commentCount}
+                // content={item.description}
+                imagePath={item.imagePath}
+                createdAt={item.createAt}
+                nickname={item.nickname}
+                viewCnt={item.viewCnt}
               />
             ))}
         </S.ContentsSection>

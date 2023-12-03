@@ -6,20 +6,27 @@ interface PropsType {
 }
 const TopSection = (props: PropsType) => {
   const { children } = props;
-  return <TopSectionWrap>{children}</TopSectionWrap>;
+  return (
+    <Wrapper>
+      <TopSectionWrap>{children}</TopSectionWrap>
+    </Wrapper>
+  );
 };
 
+const Wrapper = styled.div`
+  width: 100%;
+  height: 126px;
+  background: ${({ theme }) => theme.colors.primary};
+`;
+
 const TopSectionWrap = styled.div`
-  width: 1200px;
-  height: 150px;
-  margin: 0 auto;
-  background: #d9d9d9;
-  border-radius: 14px;
+  margin: 278px auto 0 auto;
+  width: 100%;
+  max-width: 1440px;
+  height: 100%;
   display: flex;
   align-items: center;
-  padding: 45px;
   justify-content: space-between;
-  margin-top: 70px;
   @media ${({ theme }) => theme.device.web} {
     width: 100%;
   }

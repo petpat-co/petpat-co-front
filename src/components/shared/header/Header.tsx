@@ -18,6 +18,7 @@ const Header = () => {
   const location = useLocation();
   const modal = useModal();
   const [pathname, setPathname] = useState(location.pathname);
+  const [isMain, setIsMain] = useState(false);
 
   const isWriteButton =
     location.pathname.includes('/rehome') ||
@@ -33,7 +34,7 @@ const Header = () => {
     navigate('/login');
   };
   // 2023.06.14
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('accessToken');
   const onClickMyPage = () => {
     navigate('/mypage');
   };
@@ -48,6 +49,11 @@ const Header = () => {
   //pathname 바뀔때마다 state 변경
   useEffect(() => {
     setPathname(location.pathname);
+    if(location.pathname==='/') {
+      setIsMain(true);
+    } else {
+      setIsMain(false);
+    }
   }, [location]);
 
   const onClickMenu = (path: string) => {
@@ -101,6 +107,7 @@ const Header = () => {
                   key={item.text}
                   onClick={() => onClickMenu(item.path)}
                   isSelected={pathname.includes(item.path)}
+                  isMain={isMain}
                 >
                   {item.text}
                 </S.MenuItems>
@@ -133,6 +140,7 @@ const Header = () => {
                   onClick={() => onClickMenu(item.path)}
                   // isSelected={false}
                   isSelected={pathname.includes(item.path)}
+                  isMain={isMain}
                 >
                   {item.text}
                 </S.MenuItems>
@@ -142,7 +150,7 @@ const Header = () => {
               <S.CursorBox onClick={onClickSearch}>
                 <Icon.Search
                   size="30"
-                  color="#333"
+                  color={isMain?'#fff':'#333'}
                   onClick={() => {
                     console.log('??');
                   }}
@@ -151,13 +159,13 @@ const Header = () => {
 
               {token ? (
                 <>
-                  <S.LoginButton onClick={onClickMyPage}>
+                  <S.LoginButton isMain={isMain} onClick={onClickMyPage}>
                     마이페이지
                   </S.LoginButton>
-                  <S.LoginButton onClick={logOut}>로그아웃</S.LoginButton>
+                  <S.LoginButton isMain={isMain} onClick={logOut}>로그아웃</S.LoginButton>
                 </>
               ) : (
-                <S.LoginButton onClick={onClickLogin}>로그인</S.LoginButton>
+                <S.LoginButton isMain={isMain} onClick={onClickLogin}>로그인</S.LoginButton>
               )}
             </S.LoginSearchBox>
           </S.GridBox>

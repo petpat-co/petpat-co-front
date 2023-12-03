@@ -42,20 +42,20 @@ export const changePW: ApiHandler = (options) =>
 export const getRehomingList: ApiHandler = () =>
   instance({
     method: 'GET',
-    url: `http://121.141.140.90:8082/api/v1/profile/rehoming`,
+    url: `/rehoming`,
   });
 // 작성 게시글 조회
 export const getTradeList: ApiHandler = (options) =>
   instance({
     method: 'GET',
-    url: `http://121.141.140.90:8082/api/v1/profile/trade`,
+    url: `/trade`,
     ...options,
   });
 // 작성 게시글 조회
 export const getQnaList: ApiHandler = (options) =>
   instance({
     method: 'GET',
-    url: `http://121.141.140.90:8082/api/v1/profile/qna`,
+    url: `/qna`,
     ...options,
   });
 
@@ -64,7 +64,7 @@ export const getLikeList: ApiHandler = (options) =>
   instance({
     method: 'GET',
     //postType...?
-    url: `http://121.141.140.90:8082/api/v1/profile/like/postType=REHOMING`,
+    url: `/like/postType=REHOMING`,
     ...options,
   });
 
@@ -72,7 +72,7 @@ export const getLikeList: ApiHandler = (options) =>
 export const getBookmarkList: ApiHandler = (options) =>
   instance({
     method: 'GET',
-    url: `http://121.141.140.90:8082/api/v1/profile/bookmark/postType=REHOMING`,
+    url: `/bookmark/postType=REHOMING`,
     ...options,
   });
 
@@ -80,6 +80,6 @@ export const getBookmarkList: ApiHandler = (options) =>
 export const getCommentList: ApiHandler = (options) =>
 instance({
   method: 'GET',
-  // url: `http://121.141.140.90:8082/api/v1/profile`,
+  // url: `/profile`,
   ...options,
 });

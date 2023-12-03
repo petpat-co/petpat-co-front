@@ -2,12 +2,13 @@ import styled from 'styled-components';
 
 export namespace HeaderStyle {
   export const HeaderWrap = styled.header<{ isBorder: boolean }>`
-    width: 1200px;
+    width: 100%;
+    max-width: 1440px;
     height: 150px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    ${({ isBorder }) => isBorder && `border-bottom: 2px solid #D9D9D9;`}
+    // ${({ isBorder }) => isBorder && `border-bottom: 2px solid #D9D9D9;`}
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
@@ -45,12 +46,14 @@ export namespace HeaderStyle {
     align-items: center;
     justify-content: space-between;
   `;
-  export const MenuItems = styled.div<{ isSelected: boolean }>`
+  export const MenuItems = styled.div<{ isSelected: boolean; isMain: boolean }>`
     font-weight: 700;
     font-size: ${({ theme }) => theme.fontSizes.xlg};
-    color: #fff;
+    color: ${({ isSelected, isMain }) =>
+      isSelected ? '#fff' : isMain ? '#fff' : '#000'};
     border: 1px solid
-      ${({ isSelected, theme }) => (isSelected ? theme.colors.main : '#fff')};
+      ${({ isSelected, theme, isMain }) =>
+        isSelected ? theme.colors.main : isMain ? '#fff' : '#000'};
     background-color: ${({ isSelected, theme }) =>
       isSelected ? theme.colors.main : 'none'};
     border-radius: 30px;
@@ -78,24 +81,26 @@ export namespace HeaderStyle {
     color: #2b2b2b;
   `;
   export const LoginSearchBox = styled.div`
-    width: 143px;
+    width: fit-content;
     height: 42px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-left: 72px;
   `;
-  export const LoginButton = styled.button`
+  export const LoginButton = styled.button<{ isMain: boolean }>`
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    width: 91px;
+    padding: 8px;
+    margin: 0 4px;
+    width: fit-content;
     height: 42px;
     border-radius: 120px;
     font-weight: 700;
-    border: 1px solid #fff;
-    color: #fff;
+    border: ${({ isMain }) => (isMain ? '1px solid #fff' : '1px solid #000')};
+    color: ${({ isMain }) => (isMain ? '#fff' : '#000')};
     font-size: ${({ theme }) => theme.fontSizes.xlg};
   `;
   //로그인 이후 스타일
@@ -108,5 +113,6 @@ export namespace HeaderStyle {
   `;
   export const CursorBox = styled.div`
     cursor: pointer;
+    margin-right: 16px;
   `;
 }

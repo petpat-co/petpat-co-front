@@ -67,7 +67,8 @@ const StyledInput = styled.input<InputStyleType>`
   margin: ${({ margin }) => (margin ? margin : 'none')};
   width: ${({ width }) => (width ? width : '100%')};
   height: ${({ height }) => (height ? height : '50px')};
-  border: ${({ border }) => (border ? border : '1.4px solid #aaaaaa')};
+  border: ${({ border, theme }) =>
+    border ? border : `1.4px solid ${theme.colors.primary}`};
   border-radius: ${({ borderRadius }) => (borderRadius ? borderRadius : '0')};
   padding: ${({ padding }) => (padding ? padding : '10px')};
   font-size: ${({ theme }) => theme.fontSizes.regular};
@@ -81,9 +82,45 @@ const StyledInput = styled.input<InputStyleType>`
     color: #cdcdcd;
   }
   :focus {
-    border: 1.4px solid #fbbc05;
+    // border: ${({ theme }) => `1.4px solid ${theme.colors.coolgray400}`};
     outline: none;
   }
+
+  ${({ type, theme }) =>
+    type === 'checkbox'
+      ? `appearance: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 1.5px solid ${theme.colors.primary};
+    border-radius: 0.35rem;
+    
+    &:checked {
+      border-color: transparent;
+      background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
+      background-size: 100% 100%;
+      background-position: 50%;
+      background-repeat: no-repeat;
+      background-color: ${theme.colors.primary};
+    }
+    
+    `
+      : type === 'radio' &&
+        `appearance: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 1.5px solid ${theme.colors.primary};
+    border-radius: 0.35rem;
+    
+    &:checked {
+      border-color: transparent;
+      background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
+      background-size: 100% 100%;
+      background-position: 50%;
+      background-repeat: no-repeat;
+      background-color: ${theme.colors.primary};
+    }
+    
+    `};
 
   ${({ isBorderBottom }) =>
     isBorderBottom &&

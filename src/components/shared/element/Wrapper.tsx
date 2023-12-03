@@ -12,7 +12,8 @@ const Wrapper = (props: PropsType) => {
 export default Wrapper;
 
 const Wrap = styled.div`
-  width: 1920px;
+  // width: 1920px;
+  width: 100%;
   height: auto;
   margin: 0 auto;
   position: relative;

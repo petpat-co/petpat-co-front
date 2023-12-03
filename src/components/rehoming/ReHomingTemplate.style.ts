@@ -1,14 +1,55 @@
 import styled from 'styled-components';
 
+export const Container = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: ${({ theme }) => theme.colors.coolgray200};
+`;
+
+export const WidthWrapper = styled.div`
+  margin: auto;
+  width: 100%;
+  padding: 80px 16px;
+  border-radius: 0 0 50px 50px;
+  background-color: #fff;
+`;
+
+export const ListWrapper = styled.div`
+  margin: 32px 0;
+
+  width: 100%;
+
+  background-color: #fff;
+  border-radius: 50px 50px 0 0;
+`;
+
+export const ListInner = styled.div`
+  margin: auto;
+  padding: 240px 16px 0 16px;
+  max-width: 1440px;
+  display: flex;
+  justify-content: space-between;
+  gap: 64px;
+`;
+
+export const ListGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  grid-row-gap: 48px;
+
+  margin-bottom: 240px;
+`;
+
 export const TitleText = styled.h2`
   font-weight: 700;
-  font-size: 40px;
-  color: #2b2b2b;
+  font-size: 32px;
+  color: #fff;
 `;
 export const ButtonSpan = styled.span`
   font-weight: 500;
-  font-size: 22px;
-  color: #2b2b2b;
+  font-size: 18px;
+  color: #111827;
 `;
 export const SelectSection = styled.div`
   width: 1200px;

@@ -19,6 +19,9 @@ export interface RehomingType {
   rehomingPrice: number;
   tag: string[];
 }
+
+
+
 type TransferFormData = {
   (data: any, exceptKeyList: Array<string>): FormData;
 };
@@ -38,7 +41,7 @@ const initial = {
   rehomingRegion: '',
   description: '',
   rehomingPrice: 0,
-  tag: [''],
+  // tag: [''],
 };
 /** 분양글 작성, 수정 도와주는 custom hook
  *
@@ -67,7 +70,7 @@ const useRehomingForm = () => {
       rehomingRegion: data.rehomingRegion,
       description: data.description,
       rehomingPrice: data.rehomingPrice,
-      tag: data.tag,
+      // tag: data.tag,
     });
   };
   /** form data 만들어주는 함수
@@ -88,7 +91,7 @@ const useRehomingForm = () => {
   };
   /**
    * @param {"add"||"edit"} 분양글 추가 || 분양글 수정
-   * @param {editDataType} 수정할 때 필요한 옵셔널 인자 - 필수 값은 accompanyId
+   * @param {editDataType} 수정할 때 필요한 옵셔널 인자 - 필수 값은 postId
    *
    * @author 2022.11.18 Edel
    **/
@@ -100,7 +103,7 @@ const useRehomingForm = () => {
       const result = await switchAPI(action, submitData, id);
       console.log(result);
 
-      navigate(`/community/accompany/detail/${id}`);
+      navigate(`/rehoming/detail/${id}`);
     } catch (err: any) {
       throw Utils.console.errorMessage(err);
     }

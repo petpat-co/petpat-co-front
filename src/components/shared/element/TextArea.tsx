@@ -6,6 +6,7 @@ type TextAreaStyleType = {
   height: string;
   border?: string; //기본  1.4px solid #aaaaaa;
   borderRadius?: string; //기본 0px
+  padding?: string;
 };
 interface TextAreaProps extends TextAreaStyleType {
   placeholder: string;
@@ -25,6 +26,7 @@ const TextArea = forwardRef((props: TextAreaProps, ref?: any) => {
     border,
     name,
     borderRadius,
+    padding,
   } = props;
 
   const styles = {
@@ -32,6 +34,7 @@ const TextArea = forwardRef((props: TextAreaProps, ref?: any) => {
     height,
     border,
     borderRadius,
+    padding,
   };
 
   return (
@@ -48,12 +51,12 @@ const TextArea = forwardRef((props: TextAreaProps, ref?: any) => {
 });
 
 const StyledTextArea = styled.textarea<TextAreaStyleType>`
+  padding: ${({ padding }) => (padding ? padding : '0')};
   width: ${({ width }) => (width ? width : '100%')};
   height: ${({ height }) => height};
-  border: ${({ border }) => (border ? border : '1.4px solid #aaaaaa')};
+  border: ${({ border, theme }) => (border ? border : `1.4px solid ${theme.colors.primary}`)};
   border-radius: ${({ borderRadius }) => (borderRadius ? borderRadius : '0')};
-  padding: 10px;
-  font-size: ${({ theme }) => ( theme.fontSizes.large )};
+  font-size: ${({ theme }) => theme.fontSizes.large};
   ::placeholder {
     color: #cdcdcd;
   }
@@ -64,7 +67,7 @@ const StyledTextArea = styled.textarea<TextAreaStyleType>`
     color: #cdcdcd;
   }
   :focus {
-    border: 1.4px solid #fbbc05;
+    border: ${({theme}) => `1.4px solid ${theme.colors.coolgray400}`};
     outline: none;
   }
 `;

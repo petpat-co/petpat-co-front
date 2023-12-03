@@ -5,11 +5,11 @@ const addPrefix: AddPrefix = (path) => {
   return '/api/v1/rehoming' + path;
 };
 
-//분양글 조회
+//분양글 목록 조회
 export const getReHomingList: ApiHandler = (options) =>
   instance({
     method: 'GET',
-    url: addPrefix(``),
+    url: addPrefix(`?page=${options}`),
     ...options,
   });
 
@@ -25,7 +25,7 @@ export const addReHoming: ApiHandler = (options) =>
 export const getOneReHoming: ApiHandler = (options) =>
   instance({
     method: 'GET',
-    url: addPrefix(`/detail`),
+    url: addPrefix(`/detail?postId=${options}`),
     ...options,
   });
 
@@ -33,7 +33,7 @@ export const getOneReHoming: ApiHandler = (options) =>
 export const editReHoming: ApiHandler = (options) =>
   instance({
     method: 'PUT',
-    url: `/api/rehoming/${options.parameter.postId}`,
+    url: addPrefix(`/${options.parameter.postId}`),
     ...options,
   });
 
@@ -41,6 +41,15 @@ export const editReHoming: ApiHandler = (options) =>
 export const deleteReHoming: ApiHandler = (options) =>
   instance({
     method: 'DELETE',
-    url: `/api/rehoming/${options.parameter.postId}`,
+    url: addPrefix(`?postId=${options}`),
+    ...options,
+  });
+
+// 분양 카테고리 리스트 조회
+export const getRehomingCategory: ApiHandler = (options) =>
+  instance({
+    method: 'GET',
+    // url: `/api/v1/categoryGroup/${options}`,
+    url: `/api/v1/rehoming/category/1`,
     ...options,
   });

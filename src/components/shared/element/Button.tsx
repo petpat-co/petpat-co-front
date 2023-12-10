@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { ReactComponent as Arrow } from 'src/asset/arrowIcon.svg';
 import styled from 'styled-components';
 
@@ -25,7 +25,7 @@ interface ButtonStyledProps {
 }
 interface PropsType extends ButtonStyledProps {
   children: ReactNode;
-  _onClick: () => void;
+  _onClick: (e:React.MouseEvent) => void;
   _disabled?: boolean;
 }
 const Button = (props: PropsType) => {
@@ -52,7 +52,7 @@ const Button = (props: PropsType) => {
     colors,
     bgcolor,
   } = props;
-  
+
   const styles = {
     bg,
     color,

@@ -7,7 +7,7 @@ import styled from 'styled-components';
 // ** Import utils
 import theme from '../../../styles/theme';
 
-// ** Import components
+// ** Import svg
 import { ReactComponent as HeartIcon } from '../../../asset/heart.svg';
 import { ReactComponent as ViewIcon } from '../../../asset/postIcon/viewcount.svg';
 
@@ -56,12 +56,8 @@ const ListCard = (props: ListCardProps) => {
 };
 
 const ComponentContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
   font-weight: ${theme.fontWeights.regular};
   cursor: pointer;
-  background-color: ${theme.colors.blueTitle};
   min-width: 0; // 말줄임표 사용 속성 적용 시 필요
 `;
 
@@ -73,19 +69,17 @@ const ImageSection = styled.div<{ src: string | undefined }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-color: ${theme.colors.gray40};
 `;
 
 const InformationSection = styled.div`
-  margin: 16px 0 10px 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: ${theme.fontSizes.small};
   font-weight: ${theme.fontWeights.regular};
   color: ${({ theme }) => theme.colors.coolgray400};
-  padding: 0 2px;
-  background-color: ${theme.colors.gray40};
+  padding: 0 4% 0 1%;
+  margin-top: 2%; // image와 간격 설정
 `;
 
 const AddressText = styled.p`
@@ -114,7 +108,7 @@ const ViewIconWrapper = styled(IconWrapper)`
 const TitleText = styled.p`
   padding: 0 2px;
   font-size: ${theme.fontSizes.regular};
-  background-color: ${theme.colors.primary};
+  margin-top: 1%; // address와 간격 설정
 
   // 말줄임표 속성 적용
   white-space: nowrap;

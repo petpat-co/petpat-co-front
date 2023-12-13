@@ -18,15 +18,14 @@ export const BestListSection = styled.div`
   background-color: ${theme.colors.white};
 `;
 
-export const BestListWrapper = styled.div`
+export const SectionWrapper = styled.div`
   display: flex;
   gap: 36px;
-  background-color: red;
 `;
 
 export const TextWrapper = styled.div`
   flex: 1;
-  background-color: ${theme.colors.second};
+  flex-shrink: 0;
 `;
 
 export const TitleText = styled.p`
@@ -42,17 +41,15 @@ export const BodyText = styled.p`
   text-align: right;
 `;
 
-export const ListWrapper = styled.div`
+export const ListWrapper = styled.div<{ rowNum: number }>`
   flex: 3;
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  background-color: ${theme.colors.hoverMain};
+  display: grid;
+  row-gap: 24px;
+  column-gap: 12px;
+  grid-template-columns: ${({ rowNum }) => `repeat(${rowNum}, auto)`};
+`;
 
-  // TODO: 말줄임표 스타일을 넣기 위해 List는 grid를 사용하고 List 내부의 Item은 flex를 사용하는데,
-  // Item 컨테이너의 max-width를 주었을 때, Item간의 간격조정이 균등하게 안되는 이슈로 일단 List도 flex를 사용함
-  // display: grid;
-  // column-gap: 20px;
-  // width: 100%;
-  // grid-template-columns: repeat(3, auto);
+export const PostListSection = styled(BestListSection)`
+  margin-top: 32px;
+  border-radius: 50px 50px 0 0;
 `;

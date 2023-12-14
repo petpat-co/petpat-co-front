@@ -18,10 +18,16 @@ interface ListCardProps {
   likeCnt: number;
   viewCnt: number;
   title: string;
+  price?: number;
 }
 
 const ListCard = (props: ListCardProps) => {
-  const { id, imgSource, location, likeCnt, viewCnt, title } = props;
+  const { id, imgSource, location, likeCnt, viewCnt, title, price } = props;
+
+  const addComma = (price: number) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
   return (
     <ComponentContainer
       onClick={() => {
@@ -51,6 +57,7 @@ const ListCard = (props: ListCardProps) => {
         </IconContainer>
       </InformationSection>
       <TitleText>{title}</TitleText>
+      {price && <PriceText>{addComma(price)}원</PriceText>}
     </ComponentContainer>
   );
 };
@@ -114,6 +121,12 @@ const TitleText = styled.p`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+`;
+
+const PriceText = styled.p`
+  padding: 0 2px;
+  font-size: ${theme.fontSizes.xlg};
+  margin-top: 2%; // title과 간격 설정
 `;
 
 export default ListCard;

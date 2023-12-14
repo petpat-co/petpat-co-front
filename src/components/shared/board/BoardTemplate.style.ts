@@ -20,7 +20,7 @@ export const BestListSection = styled.div`
 
 export const SectionWrapper = styled.div`
   display: flex;
-  gap: 36px;
+  gap: 48px;
 `;
 
 export const TextWrapper = styled.div`
@@ -44,9 +44,9 @@ export const BodyText = styled.p`
 export const ListWrapper = styled.div<{ rowNum: number }>`
   flex: 3;
   display: grid;
-  row-gap: 24px;
+  row-gap: 30px;
   column-gap: 12px;
-  grid-template-columns: ${({ rowNum }) => `repeat(${rowNum}, auto)`};
+  grid-template-columns: ${({ rowNum }) => `repeat(${rowNum}, 1fr)`};
 `;
 
 export const PostListSection = styled(BestListSection)`

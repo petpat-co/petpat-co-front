@@ -1,47 +1,51 @@
 // ** Import React
-import React from "react";
+import React from 'react';
 
 // ** Import lib
-import styled from "styled-components";
+import styled from 'styled-components';
 
 // ** Import utils
-import theme from "../../../styles/theme";
+import theme from '../../../styles/theme';
 
 // ** Import components
-import Button from "../element/Button";
+import Button from '../element/Button';
 
 export interface TitleSectionPropsType {
-    title: string;
-    buttonText?: string;
-    onClick?: (e:React.MouseEvent) => void;
+  title: string;
+  buttonText?: string;
+  onClick?: (e: React.MouseEvent) => void;
 }
 
-const TitleSection = ({title, buttonText, onClick}: TitleSectionPropsType) => {
-    return (
-        <Container>
-            <Wrap>
-                <TitleText>{title}</TitleText>
-                {buttonText && onClick ?
-                    <Button
-                        width="auto"
-                        border={`2px solid ${theme.colors.coolgray900}`}
-                        _onClick={onClick}
-                        activeBg={theme.colors.white}
-                        padding="0 20px"
-                        radius="120px">
-                        <ButtonSpan>{buttonText}</ButtonSpan>
-                    </Button>
-                    : null
-                }
-            </Wrap>
-        </Container>
-    )
-}
+const TitleSection = ({
+  title,
+  buttonText,
+  onClick,
+}: TitleSectionPropsType) => {
+  return (
+    <Container>
+      <Wrap>
+        <TitleText>{title}</TitleText>
+        {buttonText && onClick ? (
+          <Button
+            width={'auto'}
+            border={`2px solid ${theme.colors.coolgray900}`}
+            _onClick={onClick}
+            activeBg={theme.colors.white}
+            padding={'0 20px'}
+            radius={'120px'}
+          >
+            <ButtonSpan>{buttonText}</ButtonSpan>
+          </Button>
+        ) : null}
+      </Wrap>
+    </Container>
+  );
+};
 
 const Container = styled.div`
   width: 100%;
   height: 126px;
-  background: ${({theme}) => theme.colors.primary};
+  background: ${({ theme }) => theme.colors.primary};
 `;
 
 const Wrap = styled.div`
@@ -52,8 +56,8 @@ const Wrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  
-  // @media ${({theme}) => theme.device.web} {
+
+  // @media ${({ theme }) => theme.device.web} {
   //   width: 100%;
   // }
 `;
@@ -62,7 +66,7 @@ const TitleText = styled.h2`
   font-weight: ${theme.fontWeights.lbold};
   font-size: ${theme.fontSizes.xxlarge};
   color: ${theme.colors.white};
-  `
+`;
 
 const ButtonSpan = styled.span`
   font-weight: ${theme.fontWeights.regular};
@@ -70,4 +74,4 @@ const ButtonSpan = styled.span`
   color: ${theme.colors.coolgray900};
 `;
 
-export default TitleSection
+export default TitleSection;

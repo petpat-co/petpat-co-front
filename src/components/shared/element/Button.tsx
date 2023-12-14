@@ -25,7 +25,7 @@ interface ButtonStyledProps {
 }
 interface PropsType extends ButtonStyledProps {
   children: ReactNode;
-  _onClick: (e:React.MouseEvent) => void;
+  _onClick: (e: React.MouseEvent) => void;
   _disabled?: boolean;
 }
 const Button = (props: PropsType) => {
@@ -73,12 +73,7 @@ const Button = (props: PropsType) => {
     bgcolor,
   };
   return (
-    <StyledButton
-      onClick={_onClick}
-      {...styles}
-      disabled={_disabled}
-      isArrowIcon={isArrowIcon}
-    >
+    <StyledButton onClick={_onClick} {...styles} disabled={_disabled} isArrowIcon={isArrowIcon}>
       {children}
       {isArrowIcon ? (
         <span>
@@ -95,33 +90,45 @@ const StyledButton = styled.button<ButtonStyledProps>`
 
   margin: ${({ margin }) => (margin ? margin : '0')};
   padding: ${({ padding }) => (padding ? padding : '0')};
-  
+
   width: ${({ width }) => (width ? width : '100%')};
   height: ${({ height }) => (height ? height : '50px')};
-  
-  font-size: ${({ theme, size, fontSize }) => (
-    size?
-      theme.fontSizes[size]
-      : ( fontSize? fontSize : theme.fontSizes.large ))};
 
-  font-weight: ${({ theme, weight, fontWeight }) => (
-    weight ? 
-      theme.fontWeights[weight] 
-      : ( fontWeight? fontWeight : theme.fontWeights.regular ))};
-  
-  color: ${({ theme, disabled, colors, color, activeColor }) => (
-    disabled?
-      (colors? theme.colors[colors] : (color? color : theme.colors.gray70))
-      : (activeColor? activeColor : (colors? theme.colors[colors] : theme.colors.default)))};
+  font-size: ${({ theme, size, fontSize }) =>
+    size ? theme.fontSizes[size] : fontSize ? fontSize : theme.fontSizes.large};
 
-  background: ${({ theme, bgcolor, disabled, bg, activeBg }) => (
-    disabled?
-      (bgcolor? theme.colors[bgcolor] : (bg? bg : theme.colors.gray40))
-      : (activeBg? activeBg : (bgcolor?  theme.colors[bgcolor] : theme.colors.white)))};
-  
+  font-weight: ${({ theme, weight, fontWeight }) =>
+    weight ? theme.fontWeights[weight] : fontWeight ? fontWeight : theme.fontWeights.regular};
+
+  color: ${({ theme, disabled, colors, color, activeColor }) =>
+    disabled
+      ? colors
+        ? theme.colors[colors]
+        : color
+        ? color
+        : theme.colors.gray70
+      : activeColor
+      ? activeColor
+      : colors
+      ? theme.colors[colors]
+      : theme.colors.default};
+
+  background: ${({ theme, bgcolor, disabled, bg, activeBg }) =>
+    disabled
+      ? bgcolor
+        ? theme.colors[bgcolor]
+        : bg
+        ? bg
+        : theme.colors.gray40
+      : activeBg
+      ? activeBg
+      : bgcolor
+      ? theme.colors[bgcolor]
+      : theme.colors.white};
+
   border: ${({ border }) => (border ? border : 'none')};
   border-radius: ${({ radius }) => (radius ? radius : '0')};
-  
+
   ${({ isFlex }) =>
     isFlex &&
     `
@@ -136,5 +143,5 @@ const StyledButton = styled.button<ButtonStyledProps>`
     justify-contents:space-between;
     align-items:center;
     `}
-    `;
+`;
 export default Button;

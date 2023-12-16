@@ -86,7 +86,7 @@ const InformationSection = styled.div`
   font-weight: ${theme.fontWeights.regular};
   color: ${({ theme }) => theme.colors.coolgray400};
   padding: 0 4% 0 1%;
-  margin-top: 2%; // image와 간격 설정
+  margin-top: 4%; // image와 간격 설정
 `;
 
 const AddressText = styled.p`
@@ -115,7 +115,7 @@ const ViewIconWrapper = styled(IconWrapper)`
 const TitleText = styled.p`
   padding: 0 2px;
   font-size: ${theme.fontSizes.regular};
-  margin-top: 1%; // address와 간격 설정
+  margin-top: 2%; // address와 간격 설정
 
   // 말줄임표 속성 적용
   white-space: nowrap;
@@ -126,7 +126,7 @@ const TitleText = styled.p`
 const PriceText = styled.p`
   padding: 0 2px;
   font-size: ${theme.fontSizes.xlg};
-  margin-top: 2%; // title과 간격 설정
+  margin-top: 3%; // title과 간격 설정
 `;
 
 export default ListCard;

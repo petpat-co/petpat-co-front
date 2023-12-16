@@ -1,12 +1,18 @@
+// ** Import React
 import React, { ReactElement } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+// ** Import components
 import BoardTemplate from '../shared/board/BoardTemplate';
 
 const GoodsTradeTemplate = (): ReactElement => {
+  const navigate = useNavigate();
+
   return (
     <BoardTemplate
       title={'물품거래 게시판'}
       buttonText={'물품글 올리기'}
-      onClick={() => console.log('글쓰기 페이지 이동')}
+      onClick={() => navigate('/trade/write')}
       bannerTitle={
         <>
           이번주에 관심

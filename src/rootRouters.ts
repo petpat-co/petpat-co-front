@@ -1,4 +1,4 @@
-import GoodsTrade from './pages/GoodsTrade';
+import GoodsTrade from './pages/trade/GoodsTrade';
 import MainHome from './pages/MainHome';
 import ReHomingDetail from './pages/rehome/detail/ReHomingDetail';
 import ReHoming from './pages/rehome/ReHoming';
@@ -11,6 +11,7 @@ import MyPage from './pages/user/MyPage';
 import FindPassword from './components/user/FindPassword';
 import SignUp from './pages/user/SignUp';
 import Kakao from './components/user/Kakao';
+import GoodsTradeWrite from './pages/trade/GoodsTradeWrite';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default [
@@ -33,6 +34,10 @@ export default [
   {
     path: '/trade',
     element: GoodsTrade,
+  },
+  {
+    path: '/trade/write',
+    element: GoodsTradeWrite,
   },
   {
     path: '/login',

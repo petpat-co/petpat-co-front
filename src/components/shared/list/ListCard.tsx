@@ -64,7 +64,6 @@ const ListCard = (props: ListCardProps) => {
 
 const ComponentContainer = styled.div`
   font-weight: ${theme.fontWeights.regular};
-  cursor: pointer;
   min-width: 0; // 말줄임표 사용 속성 적용 시 필요
 `;
 
@@ -76,6 +75,7 @@ const ImageSection = styled.div<{ src: string | undefined }>`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  cursor: pointer;
 `;
 
 const InformationSection = styled.div`
@@ -116,6 +116,7 @@ const TitleText = styled.p`
   padding: 0 2px;
   font-size: ${theme.fontSizes.regular};
   margin-top: 2%; // address와 간격 설정
+  cursor: pointer;
 
   // 말줄임표 속성 적용
   white-space: nowrap;

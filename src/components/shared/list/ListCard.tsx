@@ -1,5 +1,6 @@
 // ** Import React
 import React, { useState } from 'react';
+import { useAppDispatch } from '../../../core/store';
 
 // ** Import lib
 import styled from 'styled-components';
@@ -14,13 +15,27 @@ import { ReactComponent as ViewIcon } from '../../../asset/postIcon/viewcount.sv
 // ** Import types
 import { Post } from '../../../types/post';
 
+// ** Import api
+import { postLikedListApi } from '../../../core/redux/post/tradeSlice';
+
 interface ListCardProps {
   item: Post.BoardList;
 }
 
 const ListCard = (props: ListCardProps) => {
-  const { id, imagePath, region, liked, viewCnt, title, price, status } =
-    props.item;
+  const {
+    id,
+    imagePath,
+    region,
+    liked,
+    viewCnt,
+    title,
+    price,
+    status,
+    postType,
+  } = props.item;
+
+  const appDispatch = useAppDispatch();
 
   const [isLiked, setIsLiked] = useState<boolean>(liked);
 
@@ -42,7 +57,12 @@ const ListCard = (props: ListCardProps) => {
       <InformationSection>
         <AddressText>{region}</AddressText>
         <IconContainer>
-          <HeartIconWrapper onClick={() => setIsLiked(!isLiked)}>
+          <HeartIconWrapper
+            onClick={() => {
+              setIsLiked(!isLiked);
+              appDispatch(postLikedListApi({ postType, id }));
+            }}
+          >
             {/* TODO: 좋아요 버튼 활성화 시 표시될 아이콘 요청 */}
             <HeartIcon
               fill={

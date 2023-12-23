@@ -29,6 +29,7 @@ export namespace Post {
     id: number;
     title: string;
     viewCnt: number;
+    postType: string;
   }
 
   // 분양, 물품 관련 공통으로 쓰이는 프로퍼티 타입 정의 (rehome, trade)

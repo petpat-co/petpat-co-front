@@ -18,6 +18,7 @@ export const initialState: Post.TradeState = {
       status: 0,
       liked: false,
       viewCnt: 0,
+      postType: '',
     },
   ],
 };
@@ -29,7 +30,7 @@ export const getTradeListApi = createAsyncThunk(
       const response = await tradeAPI.getTradeList({ pageNo });
       console.log('getTradeListApi response : ', response.data);
       let list = response.data.data.content;
-      // 프로퍼티 key, value 변경 처리
+      // 데이터 가공
       list = list.map((data: any) => {
         // key 변경
         data.id = data.tradeId;
@@ -44,11 +45,26 @@ export const getTradeListApi = createAsyncThunk(
           data.status = 0;
         }
 
+        // key-value 추가
+        data.postType = 'TRADE';
+
         return data;
       });
       thunkAPI.dispatch(tradeSlice.actions.setTradeList(list));
     } catch (error: any) {
       console.log('getTradeListApi : error response', error.response.data);
+    }
+  },
+);
+
+export const postLikedListApi = createAsyncThunk(
+  '/likes',
+  async (postInfo: { postType: string; id: number }, thunkAPI) => {
+    try {
+      const response = await tradeAPI.postLikedStatus(postInfo);
+      console.log('postLikedListApi response : ', response.data);
+    } catch (error: any) {
+      console.log('postLikedListApi : error response', error.response.data);
     }
   },
 );

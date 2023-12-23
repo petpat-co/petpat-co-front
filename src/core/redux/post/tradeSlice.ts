@@ -15,7 +15,7 @@ export const initialState: Post.TradeState = {
       price: 0,
       imagePath: '',
       region: '',
-      status: '',
+      status: 0,
       liked: false,
       viewCnt: 0,
     },
@@ -29,10 +29,21 @@ export const getTradeListApi = createAsyncThunk(
       const response = await tradeAPI.getTradeList({ pageNo });
       console.log('getTradeListApi response : ', response.data);
       let list = response.data.data.content;
-      // 프로퍼티 value 값 변경 처리
+      // 프로퍼티 key, value 변경 처리
       list = list.map((data: any) => {
+        // key 변경
         data.id = data.tradeId;
         delete data.tradeId;
+
+        // value 변경
+        if (data.status === 'TRADE_RESERVING') {
+          data.status = 1;
+        } else if (data.status === 'TRADE_COMPLETED') {
+          data.status = 2;
+        } else {
+          data.status = 0;
+        }
+
         return data;
       });
       thunkAPI.dispatch(tradeSlice.actions.setTradeList(list));

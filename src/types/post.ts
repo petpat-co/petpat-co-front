@@ -36,7 +36,7 @@ export namespace Post {
     region: string;
     imagePath: string;
     liked: boolean;
-    status: string;
+    status: number; // 0:진행중 1:예약중 2:완료
     price?: number;
   }
 

@@ -1,12 +1,26 @@
 // ** Import React
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from '../../core/store';
 
 // ** Import components
 import BoardTemplate from '../shared/board/BoardTemplate';
 
+// ** Import api
+import { getTradeListApi } from '../../core/redux/post/tradeSlice';
+
 const GoodsTradeTemplate = (): ReactElement => {
   const navigate = useNavigate();
+  const appDispatch = useAppDispatch();
+  const postList = useSelector((state: any) => state.trade.list);
+
+  const [pageNo, setPageNo] = useState<number>(0);
+
+  useEffect(() => {
+    // 게시글 데이터 페칭 처리
+    appDispatch(getTradeListApi(pageNo));
+  }, []);
 
   return (
     <BoardTemplate
@@ -28,7 +42,7 @@ const GoodsTradeTemplate = (): ReactElement => {
         </>
       }
       bannerData={tempBestDataList}
-      postData={tempPostDataList}
+      postListData={postList}
     />
   );
 };

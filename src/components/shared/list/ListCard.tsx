@@ -11,18 +11,16 @@ import theme from '../../../styles/theme';
 import { ReactComponent as HeartIcon } from '../../../asset/heart.svg';
 import { ReactComponent as ViewIcon } from '../../../asset/postIcon/viewcount.svg';
 
+// ** Import types
+import { Post } from '../../../types/post';
+
 interface ListCardProps {
-  id: number;
-  imgSource?: string | undefined;
-  location: string;
-  likeCnt: number;
-  viewCnt: number;
-  title: string;
-  price?: number;
+  item: Post.BoardList;
 }
 
 const ListCard = (props: ListCardProps) => {
-  const { id, imgSource, location, likeCnt, viewCnt, title, price } = props;
+  const { id, imagePath, region, liked, viewCnt, title, price, status } =
+    props.item;
 
   const addComma = (price: number) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -34,9 +32,9 @@ const ListCard = (props: ListCardProps) => {
         console.log('상세 페이지 이동');
       }}
     >
-      <ImageSection src={imgSource} />
+      <ImageSection src={imagePath} />
       <InformationSection>
-        <AddressText>{location}</AddressText>
+        <AddressText>{region}</AddressText>
         <IconContainer>
           <HeartIconWrapper>
             <HeartIcon
@@ -44,7 +42,7 @@ const ListCard = (props: ListCardProps) => {
               width="18px"
               height="18px"
             />
-            {likeCnt}
+            {liked}
           </HeartIconWrapper>
           <ViewIconWrapper>
             <ViewIcon

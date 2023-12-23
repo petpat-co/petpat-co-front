@@ -5,12 +5,14 @@ import { modalSlice } from '../redux/modal/modalSlice';
 import { userSlice } from '../redux/user/userSlice';
 import { myPage } from '../redux/user/myPage';
 import { qnaSlice } from '../redux/post/qnaSlice';
+import { tradeSlice } from '../redux/post/tradeSlice';
 
 const rootReducer = combineReducers({
   modal: modalSlice.reducer,
   user: userSlice.reducer,
   mypage: myPage.reducer,
   qna: qnaSlice.reducer,
+  trade: tradeSlice.reducer,
 });
 
 export const store = configureStore({

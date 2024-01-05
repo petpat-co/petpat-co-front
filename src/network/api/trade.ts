@@ -21,6 +21,30 @@ export const getTradeList: ApiHandler = (
     ...options,
   });
 
+// 물품 상세조회
+export const getTradeDetail: ApiHandler = (
+  options, // id
+) =>
+  instance({
+    headers: {
+      Authorization: `Bearer ${Token}`,
+    },
+    method: 'GET',
+    url: addPrefix(`/${options}`),
+    ...options,
+  });
+
+// 물품 등록
+export const postTrade: ApiHandler = (
+  options, // postData
+) =>
+  instance({
+    method: 'POST',
+    url: addPrefix(''),
+    ...options,
+  });
+
+// TODO: 공통 사용 여부 논의
 // 좋아요 등록
 export const postLikedStatus: ApiHandler = (
   options, // postType, id

@@ -44,5 +44,6 @@ export namespace Post {
   // trade > 리덕스 state 타입 정의
   export interface TradeState {
     list: Array<BoardList>;
+    isSuccess: boolean;
   }
 }

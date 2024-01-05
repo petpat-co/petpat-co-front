@@ -7,6 +7,9 @@ import { tradeAPI } from 'src/network/api';
 // ** Import types
 import { Post } from '../../../types/post';
 
+// ** Import lib
+import axios from 'axios';
+
 export const initialState: Post.TradeState = {
   list: [
     {
@@ -21,6 +24,7 @@ export const initialState: Post.TradeState = {
       postType: '',
     },
   ],
+  isSuccess: false,
 };
 
 export const getTradeListApi = createAsyncThunk(
@@ -57,6 +61,35 @@ export const getTradeListApi = createAsyncThunk(
   },
 );
 
+export const postTradeApi = createAsyncThunk(
+  'trade/write',
+  async (postData: FormData, thunkAPI) => {
+    try {
+      const Token = localStorage.getItem('accessToken');
+      const response = await axios.post(
+        'http://localhost:8082/api/v1/trade',
+        postData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${Token}`,
+          },
+        },
+      );
+      // TODO: 아래의 함수가 동작하지 않는 이유
+      // const response = await tradeAPI.postTrade(postData);
+      console.log('postTradeApi response : ', response.data);
+      thunkAPI.dispatch(tradeSlice.actions.setIsSuccess(true));
+      return true;
+    } catch (error: any) {
+      console.log('postTradeApi : error response', error.response.data);
+      thunkAPI.dispatch(tradeSlice.actions.setIsSuccess(false));
+      return false;
+    }
+  },
+);
+
+// TODO: 공통 사용 여부 논의
 export const postLikedListApi = createAsyncThunk(
   '/likes',
   async (postInfo: { postType: string; id: number }, thunkAPI) => {
@@ -76,6 +109,12 @@ export const tradeSlice = createSlice({
     setTradeList: (state, action: PayloadAction<any>) => {
       console.log('REDUCER' + action.payload);
       state.list = action.payload;
+      return;
+    },
+
+    setIsSuccess: (state, action: PayloadAction<any>) => {
+      console.log('REDUCER' + action.payload);
+      state.isSuccess = action.payload;
       return;
     },
   },

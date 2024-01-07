@@ -135,7 +135,6 @@ export const GlobalStyle = createGlobalStyle`
     color: #cdcdcd;
     }
     :focus {
-    // border: 1.4px solid #fbbc05;
     outline: none;
     }
     }

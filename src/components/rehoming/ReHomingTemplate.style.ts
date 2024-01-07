@@ -39,7 +39,7 @@ export const ListGrid = styled.div`
   gap: 24px;
   grid-row-gap: 48px;
   max-height: 100vh;
-  overflow-y: auto; 
+  // overflow-y: auto; 
   margin-bottom: 240px;
 
 `;
@@ -49,11 +49,13 @@ export const TitleText = styled.h2`
   font-size: 32px;
   color: #fff;
 `;
+
 export const ButtonSpan = styled.span`
   font-weight: 500;
   font-size: 18px;
   color: #111827;
 `;
+
 export const SelectSection = styled.div`
   width: 1200px;
   margin: 70px auto 0;
@@ -65,6 +67,7 @@ export const SelectSection = styled.div`
     width: 100%;
   }
 `;
+
 export const LeftBox = styled.div`
   width: calc(100% - 150px);
   height: 100%;
@@ -72,10 +75,12 @@ export const LeftBox = styled.div`
   flex-direction: column;
   justify-content: space-between;
 `;
+
 export const FirstBox = styled.div`
   width: 100%;
   display: flex;
 `;
+
 export const HomeBox = styled.div`
   width: auto;
   display: flex;
@@ -88,9 +93,11 @@ export const HomeBox = styled.div`
     font-size: ${({ theme }) => theme.fontSizes.xlg};
   }
 `;
+
 export const SelectWrap = styled.div`
   display: flex;
 `;
+
 export const SecondBox = styled.div`
   width: 100%;
   height: 36px;

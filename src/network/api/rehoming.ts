@@ -9,7 +9,7 @@ const addPrefix: AddPrefix = (path) => {
 export const getReHomingList: ApiHandler = (options) =>
   instance({
     method: 'GET',
-    url: addPrefix(`?page=${options}`),
+    url: addPrefix(`?page=0`),
     ...options,
   });
 
@@ -51,5 +51,14 @@ export const getRehomingCategory: ApiHandler = (options) =>
     method: 'GET',
     // url: `/api/v1/categoryGroup/${options}`,
     url: `/api/v1/rehoming/category/1`,
+    ...options,
+  });
+
+
+// 북마크 
+export const bookMark: ApiHandler = (options) =>
+  instance({
+    method: 'POST',
+    url: `/api/v1/bookmark/${options}`,
     ...options,
   });

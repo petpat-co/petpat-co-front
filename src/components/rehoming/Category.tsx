@@ -4,6 +4,7 @@ import { ReactComponent as Arrow } from 'src/asset/arrowIcon.svg';
 import { useAppDispatch } from 'src/core/store';
 import { getRehomingCategory } from 'src/network/api/rehoming';
 import { getRehomingCategoryApi } from 'src/core/redux/post/rehomingSlice';
+import { useSelector } from 'react-redux';
 
 const menulist = [
   {
@@ -45,6 +46,9 @@ const Category = () => {
   const appdispatch = useAppDispatch();
   const [openMenu, setOpenMenu] = useState<number | null>();
 
+  const categories = useSelector((state:any) => state.rehoming.category);
+  console.log(categories);
+
   const menuClickHandler = (index: number) => {
     setOpenMenu(openMenu === index ? null : index);
   };
@@ -52,7 +56,7 @@ const Category = () => {
   const renderSubMenu = (subMenu: any) => (
     <SubMenu>
       {subMenu.map((item: any, index: number) => (
-        <p key={index+item.subtitle}>
+        <p key={index + item.subtitle}>
           {item.subtitle} <span className="count">({item.count})</span>
         </p>
       ))}
@@ -61,18 +65,18 @@ const Category = () => {
 
   React.useEffect(() => {
     appdispatch(getRehomingCategoryApi('분양'));
-  },[])
+  }, []);
 
   return (
     <MenuBox>
       <p className="pet_type">강아지</p>
       <SearchRehoming placeholder="무엇을 찾고 계신가요?" />
       <CategoryList>
-        {menulist.map((item, idx) => {
+        {categories.map((item:any, idx:number) => {
           return (
-            <React.Fragment key={idx+item.title}>
-              <p onClick={() => menuClickHandler(idx)}>
-                {item.title} ({item.count})
+            <React.Fragment key={idx + item.title}>
+              <p onClick={() => menuClickHandler(item.petCategoryId)}>
+                {item.petCategoryName} ({item.petCategoryCnt})
               </p>
               {openMenu === idx && renderSubMenu(item.menu)}
             </React.Fragment>

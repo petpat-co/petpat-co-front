@@ -24,6 +24,43 @@ export namespace Post {
     isSuccess: boolean;
   }
 
+
+  export interface Rehoming {
+    bookmarkCnt: number,
+    bookmarked: false,
+    category: string,
+    cityCountryName: string,
+    cityName: string,
+    createdAt: string,
+    description: string,
+    detailAdName: string,
+    fullAdName: string,
+    gender: string,
+    likeCnt: number,
+    liked: false,
+    nickname: string,
+    petAge: string,
+    petName: string,
+    postType: string,
+    rehomingId: number,
+    rehomingImg: Array<string>,
+    status: string,
+    title: string,
+    townShipName: string,
+    type: string,
+    updatedAt: string,
+    userId: number,
+    viewCnt: number,
+  }
+
+
+  export interface RehomingState {
+    category: Array<string>;
+    list: Array<string>;
+    post: Rehoming;
+    onError: boolean;
+  }
+  
   // 게시판 관련 공통으로 쓰이는 프로퍼티 타입 정의
   export interface Common {
     id: number;

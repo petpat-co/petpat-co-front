@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { userAPI } from 'src/network/api';
+import { mypageAPI, userAPI } from 'src/network/api';
 import { User } from 'src/types/user';
 
 export const initialState: User.UserType = {
@@ -23,16 +23,16 @@ export const signUpApi = createAsyncThunk(
     try {
       const response = await userAPI.signUp({ data });
       // if (response.status === 80200) {
-        window.location.replace('/login');
-        //바로 로그인 할 경우
-        // thunkAPI.dispatch(logInApi({userEmail: user.userEmail, userNickname: user.userNickname}))
-        // console.log('signUpApi : '+ response.status);
-        // console.log('response : ' + response.data);
+      window.location.replace('/login');
+      //바로 로그인 할 경우
+      // thunkAPI.dispatch(logInApi({userEmail: user.userEmail, userNickname: user.userNickname}))
+      // console.log('signUpApi : '+ response.status);
+      // console.log('response : ' + response.data);
       // } else if (response.status === 80400) {
-        // window.alert('이메일 형식이 아닙니다.');
-        // console.log('signUpApi : '+ response.status);
-        // console.log('response : ' + response.data);
-        // return;
+      // window.alert('이메일 형식이 아닙니다.');
+      // console.log('signUpApi : '+ response.status);
+      // console.log('response : ' + response.data);
+      // return;
       // }
     } catch (error: any) {
       console.log('signUpApi : error response', error.response.data);
@@ -40,11 +40,13 @@ export const signUpApi = createAsyncThunk(
   },
 );
 
+
+// 2024.01 회원 정보 조회 
 export const getProfileApi = createAsyncThunk(
   'user/profile',
   async (data: any, thunkAPI) => {
     try {
-      const response = await userAPI.getProfile();
+      const response = await mypageAPI.getProfile();
       console.log('getProfile 성공 ' + JSON.stringify(response.data.data));
       thunkAPI.dispatch(userSlice.actions.getProfile(response.data.data));
     } catch (error: any) {
@@ -85,8 +87,8 @@ export const logInApi = createAsyncThunk(
       console.log('logInApi : response', response);
       const accessToken = response.headers.authorization?.split('Bearer ')[1];
       const refreshToken = response.headers.refrshToken;
-      if(accessToken){
-      // if (accessToken && refreshToken) {
+      if (accessToken) {
+        // if (accessToken && refreshToken) {
         if (user.checked) {
         }
         // localStorage.setItem('refreshToken', refreshToken);
@@ -129,13 +131,15 @@ export const logOutApi = createAsyncThunk(
     try {
       const accessToken = localStorage.getItem('accessToken');
       const refreshToken = localStorage.getItem('refreshToken');
-      if (accessToken && refreshToken) {
-        // const response = await userAPI.logout(data);
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken')
-        thunkAPI.dispatch(userSlice.actions.logout(''));
-        window.location.replace('/');
-      }
+      localStorage.removeItem('accessToken');
+      window.location.replace('/');
+      // if (accessToken && refreshToken) {
+      //   // const response = await userAPI.logout(data);
+      //   localStorage.removeItem('accessToken');
+      //   localStorage.removeItem('refreshToken');
+      //   thunkAPI.dispatch(userSlice.actions.logout(''));
+      //   window.location.replace('/');
+      // }
     } catch (error: any) {
       console.log('kakaoLogInApi : error response', error.response.data);
     }

@@ -18,6 +18,14 @@ export const modifyProfile: ApiHandler = (options) =>
     ...options,
   });
 
+// 2024.01 유저 정보 조회
+export const getProfile: ApiHandler = (options) =>
+  instance({
+    method: 'GET',
+    url: addPrefix(''),
+    ...options,
+  });
+
 // 비밀번호 체크
 const Token = localStorage.getItem('token');
 export const checkPW: ApiHandler = (options) =>

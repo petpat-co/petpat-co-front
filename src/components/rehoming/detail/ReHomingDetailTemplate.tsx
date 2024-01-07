@@ -1,197 +1,300 @@
-import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { ReactComponent as Arrow } from 'src/asset/arrowIcon.svg';
-import { ReactComponent as Comment } from 'src/asset/commentIcon.svg';
-import { ReactComponent as Heart } from 'src/asset/heartIcon.svg';
-import { ReactComponent as View } from 'src/asset/viewIcon.svg';
-import { Button, DisplayGrid } from '../../shared/element';
-import Select from '../../shared/select/Select';
-import * as MainS from '../ReHomingTemplate.style';
+import React from 'react';
 import * as S from './ReHomingDetailTemplate.style';
-import { useQuery } from 'react-query';
+import { ReactComponent as BookMark } from '../../../asset/bookmark.svg';
+import { ReactComponent as Heart } from '../../../asset/heart.svg';
+import { ReactComponent as ViewCount } from '../../../asset/postIcon/viewcount.svg';
+import { ReactComponent as CommentCount } from '../../../asset/postIcon/chatbubble.svg';
+import { ReactComponent as Arrow } from '../../../asset/arrow.svg';
+import format from 'date-fns/format';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Button } from '../../shared/element';
 import { useAppDispatch } from 'src/core/store';
-import { deleteReHomingApi, getOneReHomingApi } from 'src/core/redux/post/rehomingSlice';
 
-const ReHomingDetailTemplate = () => {
-  const appdispatch = useAppDispatch();
-  const params = useParams();
-  console.log(params.postId);
+import { ReactComponent as LocationIcon } from '../../../asset/postIcon/location.svg';
+import { ReactComponent as ModalIcon } from '../../../asset/modalicon/sadface.svg';
+
+import ModalContainer from 'src/components/common/modal/container/ModalContainer';
+
+import { useSelector } from 'react-redux';
+import CommentItem from 'src/components/shared/CommentItem';
+import {
+  bookmarkApi,
+  deleteReHomingApi,
+  getOneReHomingApi,
+  selectOnError,
+} from 'src/core/redux/post/rehomingSlice';
+
+const RehomingDetail = (): React.ReactElement => {
   const navigate = useNavigate();
-  const [dogCategory, setDogCategory] = useState<number>(0);
-  const [category, setCategory] = useState<number>(0);
+  const appdispatch = useAppDispatch();
+  const postId = useLocation().pathname.split('/')[3];
 
-  // const { data, status } = useQuery('rehomeDetail', () =>
-  //   rehomingAPI.getOneReHoming(params.postId),
-  // );
+  const [sort, setSort] = React.useState('oldest');
 
-  const deletePost = () => {
-    if(params.postId) {
-      appdispatch(deleteReHomingApi(params.postId));
+  const content = useSelector((state: any) => state.rehoming.post);
+  // const petAge = content.petAge.split('-');
+  const petAge = content.petAge;
+  const [bookmark, setBookmark] = React.useState(
+    content?.bookmarked ? content.bookmark : false,
+  );
+
+  const [onModal, setOnModal] = React.useState(false);
+  const [onModalDel, setOnModalDel] = React.useState(false);
+
+  const onClickClose = () => {
+    setOnModal(false);
+  };
+
+  const onClickBookmark = () => {
+    appdispatch(bookmarkApi(postId));
+  };
+
+  const postContent = (str: string) => {
+    str = str.replace(/\r\n/gi, '<br />');
+    str = str.replace(/\\n/gi, '<br />');
+    str = str.replace(/\n/gi, '<br />');
+    return str;
+  };
+
+  const goToList = () => {
+    navigate('/rehome', { replace: true });
+  };
+
+  const postModify = () => {
+    navigate('/rehoming/modify/' + postId);
+  };
+
+  // 2024.01 [유나]
+  // 삭제하시겠습니까? > 확인 > deleteRehomingApi
+  // => reject인 경우 onError true > modal 메시지 분기
+  const onError = useSelector(selectOnError);
+
+  const postDelete = async () => {
+    try {
+      await appdispatch(deleteReHomingApi(postId));
+    } catch (e) {
+      console.error('[RehomingDetailTemplate] postDelete Error : ', e);
+    } finally {
+      setOnModal(false);
+      setOnModalDel(true);
     }
   };
 
   React.useEffect(() => {
-    if (params.postId) {
-      appdispatch(getOneReHomingApi(params.postId));
-    }
-  }, [params.postId]);
+    appdispatch(getOneReHomingApi(postId));
+  }, []);
 
   return (
-    <S.Wrap>
-      <MainS.LeftBox>
-        <MainS.FirstBox>
-          <MainS.HomeBox>
-            <span> 홈 </span>
-            <Arrow stroke="#333" strokeWidth="1" width="30" height="30" />
-          </MainS.HomeBox>
-          {firstData.map((el, idx) => {
-            return (
-              <MainS.SelectWrap key={idx}>
-                <Select
-                  data={el.list}
-                  value={idx ? category : dogCategory}
-                  setValue={idx ? setCategory : setDogCategory}
+    <React.Fragment>
+      <S.Container>
+        <S.MainInfoSection>
+          <S.ImageBox>
+            <S.Image src={content.rehomingImg[0]} />
+          </S.ImageBox>
+          <S.Info>
+            <S.ProfileBox src={content.userImgUrl}>
+              <div className="profile__image" />
+              <p>{content.nickname}</p>
+            </S.ProfileBox>
+            <S.TitleSection>
+              <p className="detail__title">{content.title}</p>
+              <S.IconBox>
+                <Heart />
+                <BookMark
+                  color={bookmark ? '#F35F4C' : ''}
+                  onClick={() => onClickBookmark()}
                 />
-                {idx ? null : (
-                  <Arrow stroke="#333" strokeWidth="1" width="30" height="30" />
-                )}
-              </MainS.SelectWrap>
-            );
-          })}
-        </MainS.FirstBox>
-      </MainS.LeftBox>
-      <S.ImgWrap>
-        <S.IconBox isRotate={true}>
-          <Arrow stroke="#333" strokeWidth="3" width="40" height="40" />
-        </S.IconBox>
-        <S.ImgBox>
-          <S.ImgBig>
-            <img
-              src="https://news.nateimg.co.kr/orgImg/hn/2019/01/21/00501111_20190121.JPG"
-              alt="대표이미지"
-            />
-          </S.ImgBig>
-          <S.ImgSmallBox>
-            <S.ImgSmallInner length={imgData.length + 1}>
-              {imgData.map((item, idx) => {
-                if (idx === 2) {
-                  return (
-                    <S.BgImgBox key={idx}>
-                      <img
-                        src="https://news.nateimg.co.kr/orgImg/hn/2019/01/21/00501111_20190121.JPG"
-                        alt="대표이미지"
-                      />
-                    </S.BgImgBox>
-                  );
-                }
+              </S.IconBox>
+            </S.TitleSection>
+            <S.IconBox>
+              <div>
+                <ViewCount stroke="#d9d9d9" />
+                <p className="detail__count">{content.viewCnt}</p>
+                <CommentCount fill="#d9d9d9" />
+                <p className="detail__count">{content.bookmarkCnt}</p>
+              </div>
+            </S.IconBox>
+            <S.ContentBox>
+              <S.Location>
+                <LocationIcon />
+                <p>{content.cityName}</p>
+              </S.Location>
+              <S.PetInfoSection>
+                <p>종</p>
+                <p>
+                  {content.category}, {content.type}
+                </p>
+                <p>이름</p>
+                <p>{content.petName}</p>
+                <p>생일</p>
+                {/* {petAge.length > 2 ? (
+                  <p>
+                    {petAge[0]}년 {petAge[1]}월 {petAge[2]}일생
+                  </p>
+                ) : ( */}
+                <p>{content.petAge}</p>
+                {/* )} */}
+                <p>성별</p>
+                <p>{content.gender === 'BOY' ? '남' : '여'}</p>
+              </S.PetInfoSection>
+            </S.ContentBox>
+            <S.MngButtons>
+              <Button
+                _onClick={() => {
+                  postModify();
+                }}
+              >
+                수정하기
+              </Button>
+              <Button
+                _onClick={() => {
+                  setOnModal(true);
+                  // postDelete();
+                }}
+              >
+                삭제하기
+              </Button>
+            </S.MngButtons>
+          </S.Info>
+        </S.MainInfoSection>
+        <S.ContentSection>
+          <p>
+            {postContent(content.description)
+              .split('<br />')
+              .map((line: any, idx: number) => {
                 return (
-                  <S.ImgSmall key={idx}>
-                    <img
-                      src="https://news.nateimg.co.kr/orgImg/hn/2019/01/21/00501111_20190121.JPG"
-                      alt="대표이미지"
-                    />
-                  </S.ImgSmall>
+                  <span key={idx}>
+                    {line}
+                    <br />
+                  </span>
                 );
               })}
-            </S.ImgSmallInner>
-          </S.ImgSmallBox>
-        </S.ImgBox>
-        <S.IconBox>
-          <Arrow stroke="#333" strokeWidth="3" width="40" height="40" />
-        </S.IconBox>
-      </S.ImgWrap>
-      {/* profile */}
-      <S.ProfileBox>
-        <S.ProfileImg
-          src="https://news.nateimg.co.kr/orgImg/hn/2019/01/21/00501111_20190121.JPG"
-          alt="프로필이미지"
-        />
-        <S.NicknameAreaBox>
-          <p>닉네임 들어갈 자리</p>
-          <p>서울시 관악구 난곡동</p>
-        </S.NicknameAreaBox>
-        <S.ReportBox onClick={deletePost}>삭제하기</S.ReportBox>
-      </S.ProfileBox>
-      {/* 내용 */}
-      <S.ContentsBox>
-        <DisplayGrid height="43px" padding="10px 0 0">
-          <S.IngText>모집중</S.IngText>
-          <S.DateText>22.10.11</S.DateText>
-        </DisplayGrid>
-        <DisplayGrid height="auto" flexDirection="column" padding="10px 0 0">
-          <S.TitleText>
-            우리집 댕댕이가 새끼를 낳았어요 댕댕이 새끼의 주인이 될분있나요?
-          </S.TitleText>
-          <S.ContentText>
-            우리집 댕댕이는 골든 리트리버입니다. 총 6마리를 낳았는데 암컷 3마리
-            수컷 3마리를 낳았어요. 관심있으신 분들은 채팅을 통해 말씀해 주세요~!
-            우리집 댕댕이는 골든 리트리버입니다. 총 6마리를 낳았는데 암컷 3마리
-            수컷 3마리를 낳았어요. 관심있으신 분들은 채팅을 통해 말씀해 주세요~!
-            우리집 댕댕이는 골든 리트리버입니다. 총 6마리를 낳았는데 암컷 3마리
-            수컷 3마리를 낳았어요. 관심있으신 분들은 채팅을 통해 말씀해 주세요~!
-          </S.ContentText>
-        </DisplayGrid>
-        <S.PetProfileBox>
-          <DisplayGrid height="auto" justify="flex-start" margin="0 0 22px">
-            <p>품종 :</p> <span>리트리버</span>
-          </DisplayGrid>
-          <DisplayGrid height="auto" justify="flex-start" margin="0 0 22px">
-            <p>나이 :</p> <span>6개월</span>
-          </DisplayGrid>
-        </S.PetProfileBox>
-        <S.BottomIconBox>
-          <View />
-          <S.grayText>100</S.grayText>
-          <Comment />
-          <S.grayText>100</S.grayText>
-        </S.BottomIconBox>
-      </S.ContentsBox>
-      <DisplayGrid height="auto" justify="flex-start" margin="20px 0 70px">
-        {hashTag.map((item) => (
-          <S.HashTag key={item}>
-            <span>#</span> {item}
-          </S.HashTag>
-        ))}
-      </DisplayGrid>
-      <DisplayGrid height="auto" margin="70px 0 0">
-        <Button
-          width="49%"
-          height="58px"
-          border="none"
-          _onClick={() => {}}
-          _disabled={false}
-          activeBg="#B4B4B4"
-          radius="14px"
-          isFlex={true}
+          </p>
+        </S.ContentSection>
+        <S.CommentSection>
+          <S.CommentTitleBox selected={sort}>
+            <p className="detail_commentTitle">댓글</p>
+            <p
+              className="detail_select__old"
+              onClick={() => {
+                setSort('oldest');
+              }}
+            >
+              등록순
+            </p>
+            <p
+              className="detail_select__new"
+              onClick={() => {
+                setSort('newest');
+              }}
+            >
+              최신순
+            </p>
+          </S.CommentTitleBox>
+          {comments.map((comment, idx) => {
+            const date = format(new Date(comment.createdAt), 'yy.MM.dd HH:mm');
+            return (
+              <>
+                <CommentItem
+                  key={idx}
+                  username={comment.username}
+                  userImgUrl={comment.userImgUrl}
+                  commentContent={comment.commentContent}
+                  createdAt={date}
+                />
+              </>
+            );
+          })}
+          <S.CommentWrite>
+            <p className="comment_write__username">코멘트작성자</p>
+            <textarea
+              className="comment_write__textarea"
+              placeholder="댓글을 남겨보세요"
+            />
+            <p className="comment_write__submit">등록</p>
+          </S.CommentWrite>
+          <hr />
+        </S.CommentSection>
+        <S.Buttons>
+          <button className="detail_button__list" onClick={goToList}>
+            목록
+          </button>
+          <button className="detail_button__top">
+            <Arrow className="detail_icon__arrow" />
+            맨위로
+          </button>
+        </S.Buttons>
+      </S.Container>
+
+      {onModal && (
+        <ModalContainer
+          zIndex={1000}
+          id="modaltest"
+          onClickClose={onClickClose}
+          title="게시글을 삭제할까요?"
+          image={true}
         >
-          <S.ButtonSpan>+000</S.ButtonSpan>
-          <Heart width="38" height="38" strokeWidth="3" stroke="#838383" />
-        </Button>
-        <Button
-          width="49%"
-          height="58px"
-          border="none"
-          _onClick={() => {}}
-          _disabled={false}
-          activeBg="#9D9D9D"
-          radius="14px"
-          isFlex={true}
+          <ModalIcon />
+          <S.ModalButtonWrapper>
+            <Button width="140px" _onClick={postDelete} modal>
+              삭제하기
+            </Button>
+            <Button
+              width="80px"
+              bgcolor="coolgray400"
+              _onClick={() => {
+                setOnModal(false);
+              }}
+              modal
+            >
+              취소
+            </Button>
+          </S.ModalButtonWrapper>
+        </ModalContainer>
+      )}
+
+      {onModalDel && (
+        <ModalContainer
+          zIndex={1000}
+          id="postDeleted"
+          onClickClose={onClickClose}
+          title={!onError ? '게시글이 삭제되었습니다' : '문제가 발생했습니다.'}
+          image={true}
         >
-          <S.ButtonSpan>예약중</S.ButtonSpan>
-        </Button>
-      </DisplayGrid>
-    </S.Wrap>
+
+
+          <ModalIcon />
+          
+          <Button margin='20px 0 0 0' width="200px" _onClick={goToList} modal>
+            목록으로 이동하기
+          </Button>
+
+
+
+        </ModalContainer>
+      )}
+    </React.Fragment>
   );
 };
 
-export default ReHomingDetailTemplate;
-const firstData = [
+const comments = [
   {
-    list: ['강아지', '고양이', '기타'],
+    userImgUrl:
+      'https://d2v5dzhdg4zhx3.cloudfront.net/web-assets/images/storypages/short/linkedin-profile-picture-maker/dummy_image/thumb/004.webp',
+    username: '유나룽',
+    commentContent:
+      '댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용',
+    createdAt: '2022-09-31 12:00:00',
+    updatedAt: '2022-09-31 12:00:00',
   },
   {
-    list: ['강아지 간식 사료', '고양이 간식 츄르', '기타'],
+    userImgUrl:
+      'https://m.media-amazon.com/images/I/91aC52nu6zL._AC_UF894,1000_QL80_.jpg',
+    username: 'username',
+    commentContent: 'commentContent',
+    createdAt: '2022-09-31 12:00:00',
+    updatedAt: '2022-09-31 12:00:00',
   },
 ];
-const imgData = [0, 1, 2, 3, 4, 5];
-const hashTag = ['강아지', '고양이', '포메라니안', '아이 귀여워'];
+
+export default RehomingDetail;

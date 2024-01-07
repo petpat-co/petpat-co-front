@@ -22,6 +22,7 @@ interface ButtonStyledProps {
   weight?: string;
   colors?: string;
   bgcolor?: string;
+  modal?: boolean;
 }
 interface PropsType extends ButtonStyledProps {
   children: ReactNode;
@@ -51,6 +52,7 @@ const Button = (props: PropsType) => {
     weight,
     colors,
     bgcolor,
+    modal,
   } = props;
 
   const styles = {
@@ -72,8 +74,13 @@ const Button = (props: PropsType) => {
     colors,
     bgcolor,
   };
-  return (
-    <StyledButton onClick={_onClick} {...styles} disabled={_disabled} isArrowIcon={isArrowIcon}>
+  return !modal ? (
+    <StyledButton
+      onClick={_onClick}
+      {...styles}
+      disabled={_disabled}
+      isArrowIcon={isArrowIcon}
+    >
       {children}
       {isArrowIcon ? (
         <span>
@@ -81,6 +88,20 @@ const Button = (props: PropsType) => {
         </span>
       ) : null}
     </StyledButton>
+  ) : (
+    <ModalButton
+      onClick={_onClick}
+      {...styles}
+      disabled={_disabled}
+      isArrowIcon={isArrowIcon}
+    >
+      {children}
+      {isArrowIcon ? (
+        <span>
+          <Arrow stroke="#333" strokeWidth="2" width="30" height="30" />
+        </span>
+      ) : null}
+    </ModalButton>
   );
 };
 
@@ -143,5 +164,70 @@ const StyledButton = styled.button<ButtonStyledProps>`
     justify-contents:space-between;
     align-items:center;
     `}
+`;
+
+const ModalButton = styled.button<ButtonStyledProps>`
+  box-sizing: border-box;
+  transition: background-color 0.15s ease-out;
+
+  margin: ${({ margin }) => (margin ? margin : '0')};
+  padding: ${({ padding }) => (padding ? padding : '0')};
+
+  width: ${({ width }) => (width ? width : '100%')};
+  height: ${({ height }) => (height ? height : '42px')};
+
+  font-size: ${({ theme, size, fontSize }) =>
+    size ? theme.fontSizes[size] : fontSize ? fontSize : theme.fontSizes.large};
+
+  font-weight: ${({ theme, weight, fontWeight }) =>
+    weight
+      ? theme.fontWeights[weight]
+      : fontWeight
+      ? fontWeight
+      : theme.fontWeights.regular};
+
+  color: ${({ theme, disabled, colors, color, activeColor }) =>
+    disabled
+      ? colors
+        ? theme.colors[colors]
+        : color
+        ? color
+        : theme.colors.gray70
+      : activeColor
+      ? activeColor
+      : colors
+      ? theme.colors[colors]
+      : '#fff'};
+
+  background: ${({ theme, bgcolor, disabled, bg, activeBg }) =>
+    disabled
+      ? bgcolor
+        ? theme.colors[bgcolor]
+        : bg
+        ? bg
+        : theme.colors.gray40
+      : activeBg
+      ? activeBg
+      : bgcolor
+      ? theme.colors[bgcolor]
+      : theme.colors.primary};
+
+  border: ${({ border }) => (border ? border : 'none')};
+  border-radius: ${({ radius }) => (radius ? radius : '50px')};
+
+  ${({ isFlex }) =>
+    isFlex &&
+    `
+display:flex;
+justify-content: center;
+align-items: center;
+`}
+  ${({ isArrowIcon }) =>
+    isArrowIcon &&
+    `
+  display:flex;
+  justify-contents:space-between;
+  align-items:center;
+  `}
 `;
 export default Button;

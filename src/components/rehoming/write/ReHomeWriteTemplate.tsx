@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useCallback, useState } from 'react';
-import useRehomingForm from 'src/hooks/useRehomingForm';
 import { TextArea } from '../../shared/element';
 import Button from '../../shared/element/Button';
 import Input from '../../shared/element/Input';

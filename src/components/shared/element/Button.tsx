@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { ReactComponent as Arrow } from 'src/asset/arrowIcon.svg';
 import styled from 'styled-components';
 
@@ -26,7 +26,7 @@ interface ButtonStyledProps {
 }
 interface PropsType extends ButtonStyledProps {
   children: ReactNode;
-  _onClick: () => void;
+  _onClick: (e: React.MouseEvent) => void;
   _disabled?: boolean;
 }
 const Button = (props: PropsType) => {
@@ -119,11 +119,7 @@ const StyledButton = styled.button<ButtonStyledProps>`
     size ? theme.fontSizes[size] : fontSize ? fontSize : theme.fontSizes.large};
 
   font-weight: ${({ theme, weight, fontWeight }) =>
-    weight
-      ? theme.fontWeights[weight]
-      : fontWeight
-      ? fontWeight
-      : theme.fontWeights.regular};
+    weight ? theme.fontWeights[weight] : fontWeight ? fontWeight : theme.fontWeights.regular};
 
   color: ${({ theme, disabled, colors, color, activeColor }) =>
     disabled

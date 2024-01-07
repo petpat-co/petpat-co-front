@@ -1,5 +1,6 @@
 import { ChangeEvent, forwardRef } from 'react';
 import styled from 'styled-components';
+import theme from '../../../styles/theme';
 
 type TextAreaStyleType = {
   width?: string; //기본 100%
@@ -7,6 +8,7 @@ type TextAreaStyleType = {
   border?: string; //기본  1.4px solid #aaaaaa;
   borderRadius?: string; //기본 0px
   padding?: string;
+  fontSize?: string;
 };
 interface TextAreaProps extends TextAreaStyleType {
   placeholder: string;
@@ -27,6 +29,7 @@ const TextArea = forwardRef((props: TextAreaProps, ref?: any) => {
     name,
     borderRadius,
     padding,
+    fontSize,
   } = props;
 
   const styles = {
@@ -35,6 +38,7 @@ const TextArea = forwardRef((props: TextAreaProps, ref?: any) => {
     border,
     borderRadius,
     padding,
+    fontSize,
   };
 
   return (
@@ -54,9 +58,11 @@ const StyledTextArea = styled.textarea<TextAreaStyleType>`
   padding: ${({ padding }) => (padding ? padding : '0')};
   width: ${({ width }) => (width ? width : '100%')};
   height: ${({ height }) => height};
-  border: ${({ border, theme }) => (border ? border : `1.4px solid ${theme.colors.primary}`)};
+  border: ${({ border, theme }) =>
+    border ? border : `1.4px solid ${theme.colors.primary}`};
   border-radius: ${({ borderRadius }) => (borderRadius ? borderRadius : '0')};
-  font-size: ${({ theme }) => theme.fontSizes.large};
+  font-size: ${({ fontSize }) =>
+    fontSize ? fontSize : `${theme.fontSizes.large}`};
   ::placeholder {
     color: #cdcdcd;
   }
@@ -67,7 +73,7 @@ const StyledTextArea = styled.textarea<TextAreaStyleType>`
     color: #cdcdcd;
   }
   :focus {
-    border: ${({theme}) => `1.4px solid ${theme.colors.coolgray400}`};
+    border: ${({ theme }) => `1.4px solid ${theme.colors.coolgray400}`};
     outline: none;
   }
 `;

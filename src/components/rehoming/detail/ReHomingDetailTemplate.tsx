@@ -7,7 +7,7 @@ import { ReactComponent as CommentCount } from '../../../asset/postIcon/chatbubb
 import { ReactComponent as Arrow } from '../../../asset/arrow.svg';
 import format from 'date-fns/format';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Button, DisplayGrid } from '../../shared/element';
+import { Button } from '../../shared/element';
 import { useAppDispatch } from 'src/core/store';
 
 import { ReactComponent as LocationIcon } from '../../../asset/postIcon/location.svg';

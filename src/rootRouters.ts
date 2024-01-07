@@ -12,6 +12,7 @@ import FindPassword from './components/user/FindPassword';
 import SignUp from './pages/user/SignUp';
 import Kakao from './components/user/Kakao';
 import GoodsTradeWrite from './pages/trade/GoodsTradeWrite';
+import DetailTemplate from './components/shared/detail/DetailTemplate';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default [
@@ -29,6 +30,11 @@ export default [
   },
   {
     path: '/rehome/detail/:postId',
+    // element: ReHomingDetail,
+    element: DetailTemplate,
+  },
+  {
+    path: '/rehome/detail/2',
     element: ReHomingDetail,
   },
   {

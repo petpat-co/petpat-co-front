@@ -74,7 +74,7 @@ const Category = () => {
       <CategoryList>
         {categories.map((item:any, idx:number) => {
           return (
-            <React.Fragment key={idx + item.title}>
+            <React.Fragment key={idx+item.petCategoryId}>
               <p onClick={() => menuClickHandler(item.petCategoryId)}>
                 {item.petCategoryName} ({item.petCategoryCnt})
               </p>

@@ -168,7 +168,7 @@ const topPost = [
     view: '100',
     comment: '100',
     postType: 'REHOMING',
-    rehomingId: 2,
+    rehomingId: 1,
     userId: 1,
     description: '멍멍이 분양해요',
     petName: '왕왕',

@@ -9,6 +9,7 @@ type InputStyleType = {
   borderRadius?: string; //기본 0px
   isBorderBottom?: boolean;
   padding?: string;
+  check?:boolean;
 };
 
 interface InputProps extends InputStyleType {
@@ -19,7 +20,10 @@ interface InputProps extends InputStyleType {
   maxLength: number;
   name: string;
   autoComplete?: boolean;
+  checked?:string;
+
 }
+
 const Input = forwardRef((props: InputProps, ref?: any) => {
   const {
     type,
@@ -36,6 +40,7 @@ const Input = forwardRef((props: InputProps, ref?: any) => {
     isBorderBottom,
     autoComplete,
     padding,
+    check,
   } = props;
 
   const styles = {
@@ -59,6 +64,7 @@ const Input = forwardRef((props: InputProps, ref?: any) => {
       name={name}
       maxLength={maxLength}
       autoComplete={autoComplete ? 'on' : 'off'}
+      check={check}
     />
   );
 });

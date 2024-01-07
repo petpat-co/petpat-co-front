@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 interface StyledProps {
@@ -15,21 +15,63 @@ interface PropsType {
   innerStyles?: StyledProps;
   wrapStyles?: StyledProps;
   id: string;
+  title?: string;
+  image?: boolean;
   onClickClose: (id: string) => void;
 }
-const ModalContainer = (props: PropsType) => {
-  const { zIndex, children, innerStyles, wrapStyles, onClickClose, id } = props;
 
+//  -----------------------------------------------
+//    ModalContainer
+//
+//    - 호출 컴포넌트에 정의
+//    const [onModal, setOnModal] = React.useState(false); ------ ※ modal open:true-close:false
+//    const onClickClose = () => { ------------------------------ ※ modal 닫을 때 실행되는 함수
+//    setOnModal(false);
+//    };
+//
+//    - 호출
+//    {onModal && (
+//       <ModalContainer
+//         zIndex={1000}
+//         id="modaltest"
+//         onClickClose={onClickClose}
+//         title="모달 타이틀" --------- ※ primary 컬러로 표시될 제목 영역. 작성하지 않는 경우 노출x
+//         image={true}>  ------------- ※ icon이 있는 경우 true 지정 후 바로 아랫줄과 같이 첫번째 children으로 icon을 전달
+//           <ModalIcon />
+//           <p>첫번째줄</p>
+//           <p>두번째줄</p>
+//      </ModalContainer>
+//    )}
+//
+//
+// 24.01 [유나] 컴포넌트 수정 = {
+//   기본 스타일 지정,
+//   title, image 등 props 유무에 따른 분기,
+//   modal 호출 방법 정리,
+// }
+//  -----------------------------------------------
+
+const ModalContainer = (props: PropsType) => {
+  const {
+    zIndex, // zIndex 지정.
+    children,
+    innerStyles,
+    wrapStyles,
+    onClickClose, // modal 닫힐 때 실행할 함수
+    id,
+    title,
+    image, // icon 존재 여부 boolean
+  } = props;
+
+  // modal open state
   const [isActive, setIsActive] = useState(false);
 
-  useEffect(() => {
-    const clearTime = setTimeout(() => {
-      setIsActive(true);
-    }, 1);
-    return () => {
-      clearTimeout(clearTime);
-    };
-  }, []);
+  const styles = {
+    ...innerStyles,
+    ...wrapStyles,
+    zIndex,
+    isActive,
+  };
 
   //이벤트 전파 방지
   const stopPropagation = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -44,17 +86,49 @@ const ModalContainer = (props: PropsType) => {
     }, 500);
   };
 
-  const styles = {
-    ...innerStyles,
-    ...wrapStyles,
-    zIndex,
-    isActive,
-  };
+  useEffect(() => {
+    const clearTime = setTimeout(() => {
+      setIsActive(true);
+    }, 1);
+    return () => {
+      clearTimeout(clearTime);
+    };
+  }, [isActive]);
+
+  // 2024-01 유나
+  // props.children 가공
+  // image == true인 경우 children[0]을 icon component로 간주하여 연관 props들을 가공합니다.
+  const childrenArr = React.Children.toArray(props.children);
+  const modalIcon = image && childrenArr.length > 0 ? childrenArr[0] : null;
+  const content = image ? childrenArr.slice(1) : childrenArr;
+
+  // 2024-01 유나
+  // background 스크롤 방지
+  useEffect(() => {
+    document.body.style.cssText = `
+      position: fixed; 
+      top: -${window.scrollY}px;
+      overflow-y: scroll;
+      width: 100%;`;
+    return () => {
+      const scrollY = document.body.style.top;
+      document.body.style.cssText = '';
+      window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
+    };
+  }, [isActive]);
+
   return (
     <>
       <OpacityDrop />
       <Wrap {...styles} onClick={handleClickCloseButton}>
-        <div onClick={(e) => stopPropagation(e)}>{children}</div>
+        <ModalWrapper>
+          <ModalColorBanner {...styles} />
+          {image && <ImageSection>{modalIcon}</ImageSection>}
+          <ContentSection>
+            {title && <Title>{title}</Title>}
+            <div onClick={(e) => stopPropagation(e)}>{content}</div>
+          </ContentSection>
+        </ModalWrapper>
       </Wrap>
     </>
   );
@@ -66,19 +140,26 @@ interface WrapStyledProps extends StyledProps {
   zIndex: number;
   isActive: boolean;
 }
+
 const Wrap = styled.div<WrapStyledProps>`
+  display: flex;
+
   position: fixed;
   top: 0;
+
+  box-sizing: border-box;
+  padding: ${({ padding }) => (padding ? padding : '0')};
+
   width: 100%;
   height: 100%;
-  z-index: ${({ zIndex }) => (zIndex ? zIndex * 10 : null)};
-  opacity: 0;
-  display: flex;
+
   align-items: ${({ alignItems }) => (alignItems ? alignItems : 'center')};
   justify-content: ${({ justify }) => (justify ? justify : 'center')};
-  box-sizing: border-box;
+  opacity: 0;
+
   transition: opacity 0.6s;
-  padding: ${({ padding }) => (padding ? padding : '0')};
+
+  z-index: ${({ zIndex }) => (zIndex ? zIndex * 10 : null)};
 
   & > div {
     width: ${({ width }) => (width ? width : '605px')};
@@ -94,7 +175,7 @@ const Wrap = styled.div<WrapStyledProps>`
   ${({ isActive }) =>
     isActive &&
     `
-opacity: 1;
+  opacity: 1;
   transition: opacity 0.6s;
   & > div {
     transform: translateY(0);
@@ -102,6 +183,19 @@ opacity: 1;
   }
   `}
 `;
+
+const ModalWrapper = styled.div`
+  width: 100%;
+`;
+
+const ModalColorBanner = styled.div<WrapStyledProps>`
+  width: 100%;
+  height: 216px;
+  background-color: ${({ theme }) => theme.colors.primary};
+  border-radius: ${({ radius }) =>
+    radius ? `${radius} ${radius} 0 0` : `30px 30px 0 0`};
+`;
+
 const OpacityDrop = styled.div`
   width: 100%;
   height: 100%;
@@ -111,4 +205,37 @@ const OpacityDrop = styled.div`
   top: 0;
   left: 0;
   z-index: 9;
+`;
+
+// 2024-01 유나
+const ImageSection = styled.div`
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 150px;
+  height: 150px;
+
+  border-radius: 100px;
+  background-color: #fff;
+
+  z-index: 10;
+`;
+
+const Title = styled.div`
+  margin-bottom: 16px;
+
+  font-size: 24px;
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.primary};
+`;
+
+const ContentSection = styled.div`
+  width: 100%;
+  padding: 100px 40px;
+  text-align: center;
 `;

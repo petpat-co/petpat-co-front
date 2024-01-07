@@ -10,9 +10,8 @@ export namespace FooterStyle {
       isMainPage &&
       `
       position: absolute;
-      top:4700px;
-      z-index:3;
-    `};
+      z-index:2;
+      `};
   `;
   export const FooterInner = styled.div`
     width: 1200px;

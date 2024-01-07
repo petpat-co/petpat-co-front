@@ -11,17 +11,16 @@ import { useLocation, useParams } from 'react-router-dom';
 import Select from 'src/components/shared/select/Select';
 import styled from 'styled-components';
 import { useAppDispatch } from 'src/core/store';
-import { rehomingAPI } from 'src/network/api';
-import { postRehomingApi } from 'src/core/redux/post/rehomingSlice';
+import { modifyRehomingApi, postRehomingApi } from 'src/core/redux/post/rehomingSlice';
+import { editReHoming } from 'src/network/api/rehoming';
 
 const initialFormState = {
-  title: '제목목',
-  description: '이거는설명이에요',
-  petName: '돌돌이',
-  petAge: '20231201',
-  type: '232',
-  category: '2',
-  gender: 'BOY',
+  title: '',
+  description: '',
+  petName: '',
+  petAge: '',
+  type: '199',
+  category: '1',
   cityName: '경기도 부천시',
   cityCountryName: '원미구',
   townShipName: '역곡동',
@@ -36,6 +35,8 @@ const RehomeWriteTemplate = () => {
   const postId = params[3] ? params[3] : null;
 
   const [form, setForm] = useState(initialFormState);
+  const [gender, setGender] = useState('');
+  const [check, setCheck] = useState(false);
 
   const fileRef: any = React.useRef(null);
   const [file, setFile] = React.useState<any>(null);
@@ -80,6 +81,16 @@ const RehomeWriteTemplate = () => {
     setMainImage(idx);
   };
 
+  const onChangeDate = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      const date =
+        '' + value.split('-')[0] + value.split('-')[1] + value.split('-')[2];
+      setForm((s) => ({ ...s, [name]: date }));
+    },
+    [form],
+  );
+
   const onChangeInput = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target;
@@ -96,32 +107,32 @@ const RehomeWriteTemplate = () => {
     [form],
   );
 
-  const onChangeCheck = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const { name, value } = e.target;
-      setForm((s) => ({ ...s, [name]: value }));
-    },
-    [form],
-  );
+  const onChangeCheck = (checked: any) => {
+    if (checked) {
+      setCheck(true);
+    } else {
+      setCheck(false);
+    }
+  };
 
   // 게시글 등록
   const submit = () => {
     // 데이터 유효성
     if (!form.title) {
       // 제목 작성
-      window.alert('제목');
+      window.alert('제목 없음');
       return;
     } else if (!form.description) {
       // 글 내용 작성
-      window.alert('내용');
+      window.alert('내용 없음');
       return;
     } else if (!file.length) {
       // 파일이 없을 경우
-      window.alert('파일');
+      window.alert('파일 없음');
       return;
     } else if (file.length > 5) {
       // 파일 갯수가 5개를 초과할 경우
-      window.alert('파일!');
+      window.alert('파일 개수 초과');
       return;
     }
 
@@ -131,23 +142,31 @@ const RehomeWriteTemplate = () => {
       formData.append(key, value);
     });
 
+    // gender 추가
+    formData.append('gender', gender);
+
     // 이미지 추가
     for (let i = 0; i < file.length; i++) {
       formData.append('rehomingImg', file[i]);
+    }
+
+    // 이름 없음에 체크한 경우 petName '없음'으로 등록
+    if (check === true) {
+      formData.delete('petName');
+      formData.append('petName', '없음');
     }
 
     // setOpenModal(true);
     console.log(formData.get('title'));
     console.log(formData.get('rehomingImg'));
     console.log(formData.get('description'));
+    console.log(formData.get('type'));
+    console.log(formData.get('category'));
     switch (root) {
       case 'write':
         return appdispatch(postRehomingApi(formData));
-      // case 'edit':
-      //   return appdispatch(editRehomingApi{
-      //     data: formData,
-      //     parameter: postId,
-      //   });
+      case 'modify':
+        return appdispatch(modifyRehomingApi({formData,postId}));
     }
   };
 
@@ -158,7 +177,7 @@ const RehomeWriteTemplate = () => {
   return (
     <>
       <TopSection>
-        <S.TitleText>분양 글쓰기</S.TitleText>
+        <S.TitleText>{root==="modify"?"분양 글 수정하기":"분양 글쓰기"}</S.TitleText>
       </TopSection>
 
       <S.Wrap>
@@ -198,6 +217,7 @@ const RehomeWriteTemplate = () => {
               borderRadius="28px"
               placeholder="종을 선택해 주세요"
               onChange={onChangeInput}
+              defaultValue="포메라니안"
               maxLength={200}
               name="category"
               padding="0 32px"
@@ -211,7 +231,10 @@ const RehomeWriteTemplate = () => {
             <Input
               borderRadius="28px"
               placeholder="이름을 입력해 주세요"
-              onChange={onChangeInput}
+              onChange={(e) => {
+                onChangeInput(e);
+                setCheck(false);
+              }}
               maxLength={200}
               name="petName"
               padding="0 32px"
@@ -221,7 +244,9 @@ const RehomeWriteTemplate = () => {
               <Input
                 type="checkbox"
                 placeholder=""
-                onChange={() => {}}
+                onChange={(e) => {
+                  onChangeCheck(e.target.checked);
+                }}
                 maxLength={20}
                 name="unNamed"
               />
@@ -235,8 +260,8 @@ const RehomeWriteTemplate = () => {
             <Input
               type="date"
               borderRadius="28px"
-              placeholder="제목을 입력해 주세요"
-              onChange={onChangeInput}
+              placeholder=""
+              onChange={onChangeDate}
               maxLength={200}
               name="petAge"
               padding="0 32px"
@@ -251,9 +276,11 @@ const RehomeWriteTemplate = () => {
               <Input
                 type="radio"
                 placeholder=""
-                onChange={() => {}}
+                onChange={() => {
+                  setGender('GIRL');
+                }}
                 maxLength={20}
-                name="genderFemale"
+                name="gender"
               />
               <p>여</p>
             </S.CheckboxWrapper>
@@ -261,9 +288,12 @@ const RehomeWriteTemplate = () => {
               <Input
                 type="radio"
                 placeholder=""
-                onChange={() => {}}
+                onChange={() => {
+                  setGender('BOY');
+                }}
                 maxLength={20}
-                name="genderMale"
+                name="gender"
+                check={true}
               />
               <p>남</p>
             </S.CheckboxWrapper>
@@ -310,6 +340,7 @@ const RehomeWriteTemplate = () => {
               maxLength={200}
               name="location"
               padding="0 24px"
+              defaultValue='경기도 부천시 원미구 역곡동 유나네집, 106동 1003호'
             />
           </S.InputButtonWrap>
         </S.GrayWrap>
@@ -338,66 +369,6 @@ const RehomeWriteTemplate = () => {
             <S.ImageText>이미지</S.ImageText>
             <span>(0/00)</span>
           </S.ImageTextBox>
-
-          {/* 기존 이미지 업로드 */}
-          {/* 
-          <S.ImageNoticeBox>
-            <S.ImageWrap>
-              <S.ImageInner>
-                <ImageUpload
-                  setFile={setFile}
-                  imgFile={file}
-                  height="236px"
-                  borderRadius="28px"
-                  bg="#FFEAE8"
-                />
-              </S.ImageInner>
-              <S.ImageInner>
-                <ImageUpload
-                  setFile={setFile}
-                  imgFile={file}
-                  height="236px"
-                  borderRadius="28px"
-                  bg="#FFEAE8"
-                />
-              </S.ImageInner>
-              <S.ImageInner>
-                <ImageUpload
-                  setFile={setFile}
-                  imgFile={file}
-                  height="236px"
-                  borderRadius="28px"
-                  bg="#FFEAE8"
-                />
-              </S.ImageInner>
-              <S.ImageInner>
-                <ImageUpload
-                  setFile={setFile}
-                  imgFile={file}
-                  height="236px"
-                  borderRadius="28px"
-                  bg="#FFEAE8"
-                />
-              </S.ImageInner>
-              <S.ImageInner>
-                <ImageUpload
-                  setFile={setFile}
-                  imgFile={file}
-                  height="236px"
-                  borderRadius="28px"
-                  bg="#FFEAE8"
-                />
-              </S.ImageInner>
-            </S.ImageWrap>
-            <S.NoticeBox>
-              *이미지올릴때 경고문이 길게 있을것같아요 1:! 로 올리면 안잘리고
-              아니면 잘리고
-              <br />
-              -몇MB 이상 올리면 용량이 초과 된다던가 <br />
-              -이상한 사진을 올린다하면 님 강퇴같은 문구
-            </S.NoticeBox>
-          </S.ImageNoticeBox>
- */}
 
           <div>
             <ImageContainer>

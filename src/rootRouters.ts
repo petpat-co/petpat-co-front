@@ -31,6 +31,10 @@ export default [
     element: ReHomingDetail,
   },
   {
+    path: '/rehoming/modify/:postId',
+    element: ReHomingWrite,
+  },
+  {
     path: '/trade',
     element: GoodsTrade,
   },

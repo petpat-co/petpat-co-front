@@ -49,7 +49,7 @@ const Header = () => {
   //pathname 바뀔때마다 state 변경
   useEffect(() => {
     setPathname(location.pathname);
-    if(location.pathname==='/') {
+    if (location.pathname === '/') {
       setIsMain(true);
     } else {
       setIsMain(false);
@@ -150,7 +150,7 @@ const Header = () => {
               <S.CursorBox onClick={onClickSearch}>
                 <Icon.Search
                   size="30"
-                  color={isMain?'#fff':'#333'}
+                  color={isMain ? '#fff' : '#333'}
                   onClick={() => {
                     console.log('??');
                   }}
@@ -162,10 +162,14 @@ const Header = () => {
                   <S.LoginButton isMain={isMain} onClick={onClickMyPage}>
                     마이페이지
                   </S.LoginButton>
-                  <S.LoginButton isMain={isMain} onClick={logOut}>로그아웃</S.LoginButton>
+                  <S.LoginButton isMain={isMain} onClick={logOut}>
+                    로그아웃
+                  </S.LoginButton>
                 </>
               ) : (
-                <S.LoginButton isMain={isMain} onClick={onClickLogin}>로그인</S.LoginButton>
+                <S.LoginButton isMain={isMain} onClick={onClickLogin}>
+                  로그인
+                </S.LoginButton>
               )}
             </S.LoginSearchBox>
           </S.GridBox>

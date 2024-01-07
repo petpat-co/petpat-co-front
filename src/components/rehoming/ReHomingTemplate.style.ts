@@ -30,6 +30,7 @@ export const ListInner = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 64px;
+  align-items: flex-start;
 `;
 
 export const ListGrid = styled.div`
@@ -37,8 +38,10 @@ export const ListGrid = styled.div`
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
   grid-row-gap: 48px;
-
+  max-height: 100vh;
+  overflow-y: auto; 
   margin-bottom: 240px;
+
 `;
 
 export const TitleText = styled.h2`

@@ -16,7 +16,7 @@ import { ReactComponent as ViewIcon } from '../../../asset/postIcon/viewcount.sv
 import { Post } from '../../../types/post';
 
 // ** Import api
-import { postLikedListApi } from '../../../core/redux/post/tradeSlice';
+import { postLikedListApi } from '../../../core/redux/post/commonSlice';
 
 interface ListCardProps {
   item: Post.BoardList;

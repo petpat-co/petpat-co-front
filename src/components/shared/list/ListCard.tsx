@@ -1,5 +1,6 @@
 // ** Import React
-import React from 'react';
+import React, { useState } from 'react';
+import { useAppDispatch } from '../../../core/store';
 
 // ** Import lib
 import styled from 'styled-components';
@@ -11,40 +12,67 @@ import theme from '../../../styles/theme';
 import { ReactComponent as HeartIcon } from '../../../asset/heart.svg';
 import { ReactComponent as ViewIcon } from '../../../asset/postIcon/viewcount.svg';
 
+// ** Import types
+import { Post } from '../../../types/post';
+
+// ** Import api
+import { postLikedListApi } from '../../../core/redux/post/tradeSlice';
+
 interface ListCardProps {
-  id: number;
-  imgSource?: string | undefined;
-  location: string;
-  likeCnt: number;
-  viewCnt: number;
-  title: string;
-  price?: number;
+  item: Post.BoardList;
 }
 
 const ListCard = (props: ListCardProps) => {
-  const { id, imgSource, location, likeCnt, viewCnt, title, price } = props;
+  const {
+    id,
+    imagePath,
+    region,
+    liked,
+    viewCnt,
+    title,
+    price,
+    status,
+    postType,
+  } = props.item;
+
+  const appDispatch = useAppDispatch();
+
+  const [isLiked, setIsLiked] = useState<boolean>(liked);
 
   const addComma = (price: number) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   };
 
   return (
-    <ComponentContainer
-      onClick={() => {
-        console.log('상세 페이지 이동');
-      }}
-    >
-      <ImageSection src={imgSource} />
+    <ComponentContainer>
+      <ImageContainer>
+        <ImageSection
+          src={imagePath}
+          onClick={() => console.log('상세 페이지 이동')}
+        />
+        {status > 0 && (
+          <StatusSection>{status == 1 ? '예약중' : '판매완료'}</StatusSection>
+        )}
+      </ImageContainer>
       <InformationSection>
-        <AddressText>{location}</AddressText>
+        <AddressText>{region}</AddressText>
         <IconContainer>
-          <HeartIconWrapper>
+          <HeartIconWrapper
+            onClick={() => {
+              setIsLiked(!isLiked);
+              appDispatch(postLikedListApi({ postType, id }));
+            }}
+          >
+            {/* TODO: 좋아요 버튼 활성화 시 표시될 아이콘 요청 */}
             <HeartIcon
-              fill={`${theme.colors.coolgray400}`}
+              fill={
+                isLiked
+                  ? `${theme.colors.primary}`
+                  : `${theme.colors.coolgray400}`
+              }
               width="18px"
               height="18px"
             />
-            {likeCnt}
           </HeartIconWrapper>
           <ViewIconWrapper>
             <ViewIcon
@@ -56,7 +84,9 @@ const ListCard = (props: ListCardProps) => {
           </ViewIconWrapper>
         </IconContainer>
       </InformationSection>
-      <TitleText>{title}</TitleText>
+      <TitleText onClick={() => console.log('상세 페이지 이동')}>
+        {title}
+      </TitleText>
       {price && <PriceText>{addComma(price)}원</PriceText>}
     </ComponentContainer>
   );
@@ -67,15 +97,36 @@ const ComponentContainer = styled.div`
   min-width: 0; // 말줄임표 사용 속성 적용 시 필요
 `;
 
-const ImageSection = styled.div<{ src: string | undefined }>`
-  aspect-ratio: 1;
+const ImageContainer = styled.div`
+  position: relative;
+`;
+
+const BorderBoxStyle = styled.div`
   border: ${({ theme }) => `1px solid ${theme.colors.coolgray900}`};
-  border-radius: 30px;
+`;
+
+const ImageSection = styled(BorderBoxStyle)<{ src: string | undefined }>`
+  aspect-ratio: 1;
+  border-radius: 24px;
   background-image: ${({ src }) => `url(${src})`};
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   cursor: pointer;
+`;
+
+const StatusSection = styled(BorderBoxStyle)`
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  padding: 12px 0;
+  background-color: ${theme.colors.coolgray200};
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+
+  text-align: center;
+  font-size: ${theme.fontSizes.small};
+  color: ${theme.colors.coolgray500};
 `;
 
 const InformationSection = styled.div`
@@ -104,8 +155,11 @@ const IconWrapper = styled.div`
   align-items: center;
 `;
 
-const HeartIconWrapper = styled(IconWrapper)`
+const HeartIconWrapper = styled.button`
   gap: 4px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 `;
 
 const ViewIconWrapper = styled(IconWrapper)`

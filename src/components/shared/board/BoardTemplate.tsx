@@ -9,11 +9,14 @@ import TitleSection, { TitleSectionPropsType } from '../layout/TitleSection';
 import ListCard from '../list/ListCard';
 import Category from '../../rehoming/Category';
 
+// ** Import types
+import { Post } from '../../../types/post';
+
 interface PropsType extends TitleSectionPropsType {
   bannerTitle: ReactNode;
   bannerContent: ReactNode;
   bannerData: any[];
-  postData: any[];
+  postListData: Post.BoardList[];
 }
 
 const BoardTemplate = (props: PropsType) => {
@@ -24,7 +27,7 @@ const BoardTemplate = (props: PropsType) => {
     bannerTitle,
     bannerContent,
     bannerData,
-    postData,
+    postListData,
   } = props;
 
   return (
@@ -41,18 +44,7 @@ const BoardTemplate = (props: PropsType) => {
           </S.TextWrapper>
           <S.ListWrapper rowNum={3}>
             {bannerData.map((item, idx) => {
-              return (
-                <ListCard
-                  key={idx + item.title}
-                  id={item.rehomingId}
-                  imgSource={item.rehomingImg}
-                  title={item.title}
-                  location={item.location}
-                  viewCnt={item.viewCnt}
-                  likeCnt={item.likeCnt}
-                  price={item.price}
-                />
-              );
+              return <ListCard key={idx + item.title} item={item} />;
             })}
           </S.ListWrapper>
         </S.SectionWrapper>
@@ -65,19 +57,8 @@ const BoardTemplate = (props: PropsType) => {
             <Category />
           </S.TextWrapper>
           <S.ListWrapper rowNum={4}>
-            {postData.map((item, idx) => {
-              return (
-                <ListCard
-                  key={idx + item.title}
-                  id={item.rehomingId}
-                  imgSource={item.rehomingImg}
-                  title={item.title}
-                  location={item.location}
-                  viewCnt={item.viewCnt}
-                  likeCnt={item.likeCnt}
-                  price={item.price}
-                />
-              );
+            {postListData.map((item, idx) => {
+              return <ListCard key={idx + item.title} item={item} />;
             })}
           </S.ListWrapper>
         </S.SectionWrapper>

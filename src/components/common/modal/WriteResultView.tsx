@@ -1,7 +1,6 @@
 // ** Import React
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 // ** Import components
 import { Button } from 'src/components/shared/element';
@@ -23,7 +22,7 @@ type WriteResultViewProps = {
 
 const WriteResultView = ({ page, isSuccess }: WriteResultViewProps) => {
   const navigate = useNavigate();
-  const nickname = useSelector((state: any) => state.user.userNickname);
+  const nickname = JSON.parse(localStorage.getItem('userInfo')!).nickname;
 
   const goToList = () => {
     if (!isSuccess) {
@@ -54,8 +53,7 @@ const WriteResultView = ({ page, isSuccess }: WriteResultViewProps) => {
   const icon = isSuccess ? <Success /> : <Fail />;
 
   return (
-    <ComponentContainer>
-      <TopBannerSection />
+    <>
       <CircleIconSection>{icon}</CircleIconSection>
       <TextSection>
         <TitleText>{title}</TitleText>
@@ -73,24 +71,9 @@ const WriteResultView = ({ page, isSuccess }: WriteResultViewProps) => {
           확인했어요
         </Button>
       </BtnContainer>
-    </ComponentContainer>
+    </>
   );
 };
-
-const ComponentContainer = styled.div`
-  position: relative;
-  width: 640px;
-  height: 584px;
-  border-radius: 30px;
-  background-color: ${theme.colors.white};
-`;
-
-const TopBannerSection = styled.div`
-  width: 100%;
-  height: 216px;
-  background-color: ${({ theme }) => theme.colors.primary};
-  border-radius: 30px 30px 0 0;
-`;
 
 const CircleIconSection = styled.div`
   position: absolute;
@@ -124,7 +107,6 @@ const TextSection = styled.div`
   width: 100%;
   display: grid;
   gap: 16px;
-  margin: 100px auto 0 auto;
   text-align: center;
 `;
 

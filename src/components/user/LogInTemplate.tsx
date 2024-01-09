@@ -1,10 +1,10 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement } from 'react';
 import { useAppDispatch } from 'src/core/store';
 import { useNavigate } from 'react-router-dom';
 import { LogInTemplateStyle as S } from './LogInTemplate.style';
 
 //api
-import { logInApi } from 'src/core/redux/user/userSlice';
+import { getProfileApi, logInApi } from 'src/core/redux/user/userSlice';
 
 //utills
 import { KAKAO_AUTH_URL } from 'src/core/OAuth';
@@ -20,7 +20,6 @@ import { ReactComponent as Naver } from 'src/asset/loginIcon/naver.svg';
 import { ReactComponent as Google } from 'src/asset/loginIcon/google.svg';
 import { ReactComponent as Github } from 'src/asset/loginIcon/github.svg';
 import { ReactComponent as Facebook } from 'src/asset/loginIcon/facebook.svg';
-
 
 const LogInTemplate = (): ReactElement => {
   const appdispatch = useAppDispatch();
@@ -42,10 +41,9 @@ const LogInTemplate = (): ReactElement => {
     }
   };
 
-
   //login
   const logIn = () => {
-    console.log(rememberChecked)
+    console.log(rememberChecked);
     //data validation
     if (!userEmail || !userPassword) {
       console.log('빈 칸을 모두 채워주세요.');
@@ -56,18 +54,25 @@ const LogInTemplate = (): ReactElement => {
     } else if (!passwordCheck(userPassword)) {
       console.log('비밀번호를 확인해주세요.');
       return;
-    };
+    }
     //fetching data
     const userdata = {
       userEmail: userEmail,
       userPassword: userPassword,
-      checked: rememberChecked
+      checked: rememberChecked,
     };
     //dispatching data
-    appdispatch(logInApi(userdata));
+    appdispatch(logInApi(userdata)).then((res) => {
+      // 로그인 성공 시
+      if (res.payload) {
+        // 사용자 정보 저장 및 메인 화면으로 이동
+        appdispatch(getProfileApi(''));
+        window.location.replace('/');
+      } else {
+        // TODO: 로그인 실패 시 처리
+      }
+    });
   };
-
-
 
   const goToSignUp = () => {
     navigate('/signup');
@@ -76,17 +81,15 @@ const LogInTemplate = (): ReactElement => {
     navigate('/user/fpw');
   };
 
-
-
   return (
     <S.Wrap>
-
       {/* 로그인 헤더 */}
       <S.GreetingWrap>
         <Text
           textStyle={{
             color: '#6B7280',
-          }}>
+          }}
+        >
           펫팻에 어서오세요!
         </Text>
         <Text
@@ -106,14 +109,15 @@ const LogInTemplate = (): ReactElement => {
           textStyle={{
             margin: '12px 0',
             fontSize: '16px',
-          }}>
+          }}
+        >
           아이디
         </Text>
         <Input
-          name='email'
-          placeholder=''
+          name="email"
+          placeholder=""
           maxLength={50}
-          borderRadius='5px'
+          borderRadius="5px"
           onChange={(e) => {
             setUserEmail(e.target.value);
           }}
@@ -124,15 +128,16 @@ const LogInTemplate = (): ReactElement => {
         <Text
           textStyle={{
             margin: '12px 0',
-          }}>
+          }}
+        >
           비밀번호
         </Text>
         <Input
-          name='password'
-          type='password'
-          placeholder=''
+          name="password"
+          type="password"
+          placeholder=""
           maxLength={50}
-          borderRadius='5px'
+          borderRadius="5px"
           onChange={(e) => {
             setUserPassword(e.target.value);
           }}
@@ -141,11 +146,17 @@ const LogInTemplate = (): ReactElement => {
 
       {/* 로그인 정보 기억 및 로그인 완료 버튼 */}
       <S.CheckRememberMe>
-        <input type='checkbox' checked={rememberChecked} onChange={rememberMe} />
-        <Text textStyle={{
-          margin: '0 12px',
-          size: 'small',
-        }}>
+        <input
+          type="checkbox"
+          checked={rememberChecked}
+          onChange={rememberMe}
+        />
+        <Text
+          textStyle={{
+            margin: '0 12px',
+            size: 'small',
+          }}
+        >
           로그인 상태 유지하기
         </Text>
       </S.CheckRememberMe>
@@ -153,19 +164,22 @@ const LogInTemplate = (): ReactElement => {
       <Button
         _onClick={logIn}
         _disabled={false}
-        activeBg='#F35F4C'
-        activeColor='#fff'
-        radius='5px'
-      >로그인
+        activeBg="#F35F4C"
+        activeColor="#fff"
+        radius="5px"
+      >
+        로그인
       </Button>
 
       {/* 소셜 로그인 */}
       <S.Section>
-        <Text textStyle={{
-          margin: '60px 0 0 0',
-          size: 'regular',
-          fontWeight: '700',
-        }}>
+        <Text
+          textStyle={{
+            margin: '60px 0 0 0',
+            size: 'regular',
+            fontWeight: '700',
+          }}
+        >
           SNS 계정으로 로그인하기
         </Text>
       </S.Section>
@@ -194,11 +208,13 @@ const LogInTemplate = (): ReactElement => {
         <Button
           _onClick={goToFindPassword}
           _disabled={false}
-          width='fit-content'
-          height='fit-content'
-          size='small'
-          weight='light'
-        >비밀번호 찾기</Button>
+          width="fit-content"
+          height="fit-content"
+          size="small"
+          weight="light"
+        >
+          비밀번호 찾기
+        </Button>
 
         {/* <Text textStyle={{
           width: 'fit-content',
@@ -213,25 +229,28 @@ const LogInTemplate = (): ReactElement => {
           fontWeight='400'
         >아이디 찾기</Button> */}
 
-        <Text textStyle={{
-          width: 'fit-content',
-          margin: '0 14px',
-          size: 'small'
-        }}>|</Text>
+        <Text
+          textStyle={{
+            width: 'fit-content',
+            margin: '0 14px',
+            size: 'small',
+          }}
+        >
+          |
+        </Text>
         <Button
           _onClick={goToSignUp}
           _disabled={false}
-          width='fit-content'
-          height='fit-content'
-          size='small'
-          weight='light'
-        >회원가입</Button>
+          width="fit-content"
+          height="fit-content"
+          size="small"
+          weight="light"
+        >
+          회원가입
+        </Button>
       </S.FindUserGrid>
     </S.Wrap>
   );
 };
-
-
-
 
 export default LogInTemplate;

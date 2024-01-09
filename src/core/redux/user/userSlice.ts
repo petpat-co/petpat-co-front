@@ -4,12 +4,13 @@ import { User } from 'src/types/user';
 
 export const initialState: User.UserType = {
   user: {
+    userId: 0,
     userEmail: '',
-    userNickname: '',
+    nickname: '',
     // userpassword를 저장해놓는게 맞나...?
     // userPassword: 'password!123',
     // userPasswordCheck: 'password!123',
-    userImg:
+    profileImgUrl:
       'https://pbs.twimg.com/profile_images/1116573617645424640/u5h2q3jv_400x400.png',
   },
   emailCheck: false,
@@ -40,14 +41,14 @@ export const signUpApi = createAsyncThunk(
   },
 );
 
-
-// 2024.01 회원 정보 조회 
+// 2024.01 회원 정보 조회
 export const getProfileApi = createAsyncThunk(
   'user/profile',
   async (data: any, thunkAPI) => {
     try {
       const response = await mypageAPI.getProfile();
       console.log('getProfile 성공 ' + JSON.stringify(response.data.data));
+      localStorage.setItem('userInfo', JSON.stringify(response.data.data));
       thunkAPI.dispatch(userSlice.actions.getProfile(response.data.data));
     } catch (error: any) {
       console.log('getProfileApi : error response', error.response.data);
@@ -94,11 +95,12 @@ export const logInApi = createAsyncThunk(
         // localStorage.setItem('refreshToken', refreshToken);
         localStorage.setItem('accessToken', accessToken);
         thunkAPI.dispatch(userSlice.actions.setUser(response));
-        window.location.replace('/');
-        return;
+        // window.location.replace('/');
+        return true;
       }
     } catch (error: any) {
       console.log('logInApi : error response', error.response.data);
+      return false;
     }
   },
 );

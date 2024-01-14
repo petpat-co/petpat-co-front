@@ -21,23 +21,27 @@ export const InputTitleText = styled.h2`
 
 export const InputSectionWrapper = styled.div`
   flex: 4;
+  position: relative;
 `;
 
 export const RowContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
+  position: relative;
 `;
 
 export const ColumnContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  position: relative;
+  gap: 12px;
 `;
 
 export const InputSubText = styled.p`
   font-size: ${theme.fontSizes.xlg};
   color: ${theme.colors.primary};
+  min-width: 50px;
 `;
 
 export const DividerLine = styled.div`

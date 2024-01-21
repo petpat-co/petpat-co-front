@@ -8,7 +8,6 @@ import * as S from './BoardTemplate.style';
 import TitleSection, { TitleSectionPropsType } from '../layout/TitleSection';
 import ListCard from '../list/ListCard';
 import Accordion from '../list/Accordion';
-import Category from '../../rehoming/Category';
 
 // ** Import types
 import { Post } from '../../../types/post';
@@ -18,6 +17,7 @@ interface PropsType extends TitleSectionPropsType {
   bannerContent: ReactNode;
   bannerData: any[];
   postListData: Post.BoardList[];
+  categoryListData: any[];
 }
 
 const BoardTemplate = (props: PropsType) => {
@@ -29,6 +29,7 @@ const BoardTemplate = (props: PropsType) => {
     bannerContent,
     bannerData,
     postListData,
+    categoryListData,
   } = props;
 
   return (
@@ -56,57 +57,44 @@ const BoardTemplate = (props: PropsType) => {
         <S.SectionWrapper>
           <S.TextWrapper>
             <Accordion.Root>
-              <Accordion.Item value={'강아지'}>
-                <Accordion.Title isMajor={true}>강아지</Accordion.Title>
-                <Accordion.Content>
-                  <Accordion.Item value={'강아지 사료'}>
-                    <Accordion.Title>강아지 사료</Accordion.Title>
-                    <ul>
-                      <Accordion.Detail>건식 사료(0)</Accordion.Detail>
-                      <Accordion.Detail>소프트 사료(100)</Accordion.Detail>
-                      <Accordion.Detail>습식 사료(11)</Accordion.Detail>
-                      <Accordion.Detail>건조/생식 사료(33)</Accordion.Detail>
-                      <Accordion.Detail>분유(33)</Accordion.Detail>
-                      <Accordion.Detail>기능성 사료(34)</Accordion.Detail>
-                    </ul>
-                  </Accordion.Item>
-                  <Accordion.Item value={'강아지 간식'}>
-                    <Accordion.Title>강아지 간식</Accordion.Title>
-                    <ul>
-                      <Accordion.Detail>건식 사료(0)</Accordion.Detail>
-                      <Accordion.Detail>소프트 사료(100)</Accordion.Detail>
-                      <Accordion.Detail>습식 사료(11)</Accordion.Detail>
-                      <Accordion.Detail>건조/생식 사료(33)</Accordion.Detail>
-                      <Accordion.Detail>분유(33)</Accordion.Detail>
-                      <Accordion.Detail>기능성 사료(34)</Accordion.Detail>
-                    </ul>
-                  </Accordion.Item>
-                  <Accordion.Item value={'강아지 영양제'}>
-                    <Accordion.Title>강아지 영양제</Accordion.Title>
-                    <ul>
-                      <Accordion.Detail>건식 사료(0)</Accordion.Detail>
-                      <Accordion.Detail>소프트 사료(100)</Accordion.Detail>
-                      <Accordion.Detail>습식 사료(11)</Accordion.Detail>
-                      <Accordion.Detail>건조/생식 사료(33)</Accordion.Detail>
-                      <Accordion.Detail>분유(33)</Accordion.Detail>
-                      <Accordion.Detail>기능성 사료(34)</Accordion.Detail>
-                    </ul>
-                  </Accordion.Item>
-                  <Accordion.Item value={'강아지 용품'}>
-                    <Accordion.Title>강아지 용품</Accordion.Title>
-                    <ul>
-                      <Accordion.Detail>건식 사료(0)</Accordion.Detail>
-                      <Accordion.Detail>소프트 사료(100)</Accordion.Detail>
-                      <Accordion.Detail>습식 사료(11)</Accordion.Detail>
-                      <Accordion.Detail>건조/생식 사료(33)</Accordion.Detail>
-                      <Accordion.Detail>분유(33)</Accordion.Detail>
-                      <Accordion.Detail>기능성 사료(34)</Accordion.Detail>
-                    </ul>
-                  </Accordion.Item>
-                </Accordion.Content>
-              </Accordion.Item>
+              {categoryListData.map((petCategory: any) => (
+                <Accordion.Item
+                  value={petCategory.categoryName}
+                  key={petCategory.id}
+                >
+                  <Accordion.Title isMain={true} key={petCategory.id}>
+                    {petCategory.categoryName}
+                  </Accordion.Title>
+                  <Accordion.Content>
+                    {petCategory.detailCategoryList.map(
+                      (goodsCategory: any) => (
+                        <Accordion.Item
+                          value={goodsCategory.tradeCategoryName}
+                          key={goodsCategory.tradeCategoryId}
+                        >
+                          <Accordion.Title key={goodsCategory.tradeCategoryId}>
+                            {goodsCategory.tradeCategoryName}
+                          </Accordion.Title>
+                          <ul>
+                            {goodsCategory.tradeCategoryDetailList.map(
+                              (detailGoodsCategory: any) => (
+                                <Accordion.Detail
+                                  key={
+                                    detailGoodsCategory.tradeCategoryDetailId
+                                  }
+                                >
+                                  {detailGoodsCategory.tradeCategoryDetailName}
+                                </Accordion.Detail>
+                              ),
+                            )}
+                          </ul>
+                        </Accordion.Item>
+                      ),
+                    )}
+                  </Accordion.Content>
+                </Accordion.Item>
+              ))}
             </Accordion.Root>
-            {/*<Category />*/}
           </S.TextWrapper>
           <S.ListWrapper rowNum={4}>
             {postListData.map((item, idx) => {

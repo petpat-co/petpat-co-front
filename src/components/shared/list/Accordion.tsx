@@ -10,11 +10,9 @@ import {
 // ** Import svg
 import { ReactComponent as Arrow } from 'src/asset/arrowIcon.svg';
 
-// ** Import lib
-import styled from 'styled-components';
-
 // ** Import utils
 import theme from '../../../styles/theme';
+import * as S from './Accordion.style';
 
 // ** -------- AccordionRoot 영역 -------- ** /
 const useAccordionContext = () => {
@@ -79,21 +77,17 @@ const AccordionItemContext = createContext<string>('');
 const AccordionItem = ({ value, children }: AccordionItemProps) => {
   return (
     <AccordionItemContext.Provider value={value}>
-      <ItemSection>{children}</ItemSection>
+      <S.ItemSection>{children}</S.ItemSection>
     </AccordionItemContext.Provider>
   );
 };
 
-const ItemSection = styled.div`
-  margin: 24px 0;
-`;
-
 // ** -------- AccordionTitle 영역 -------- ** /
 interface AccordionTitleProps extends PropsWithChildren {
-  isMajor?: boolean;
+  isMain?: boolean;
 }
 
-const AccordionTitle = ({ isMajor, children }: AccordionTitleProps) => {
+const AccordionTitle = ({ isMain, children }: AccordionTitleProps) => {
   const { value, setter } = useAccordionContext();
   const label = useAccordionItemContext();
 
@@ -101,96 +95,51 @@ const AccordionTitle = ({ isMajor, children }: AccordionTitleProps) => {
   const isOpened = value.has(label);
 
   return (
-    <TitleSection>
-      <TitleWrapper
-        isMajor={isMajor}
+    <S.TitleSection>
+      <S.TitleWrapper
+        isMain={isMain}
         onClick={() => {
-          console.log('label => ', label);
           setter(label);
         }}
       >
-        <TitleText isMajor={isMajor}>{children}</TitleText>
+        <S.TitleText isMain={isMain}>{children}</S.TitleText>
         <Arrow
-          width={isMajor ? 24 : 18}
-          height={isMajor ? 24 : 18}
+          width={isMain ? 24 : 18}
+          height={isMain ? 24 : 18}
           stroke={
-            isMajor ? `${theme.colors.primary}` : `${theme.colors.coolgray900}`
+            isMain ? `${theme.colors.primary}` : `${theme.colors.coolgray900}`
           }
           strokeWidth="4"
           transform={`rotate(${isOpened ? -90 : 90})`}
           cursor={'pointer'}
         />
-      </TitleWrapper>
-      {isMajor && <DividerLine />}
-    </TitleSection>
+      </S.TitleWrapper>
+      {isMain && <S.DividerLine />}
+    </S.TitleSection>
   );
 };
 
-const TitleSection = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const TitleWrapper = styled.div<{ isMajor?: boolean }>`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: ${(props) => (props.isMajor ? `0 10px 20px 10px` : `0 2px 10px 0`)};
-`;
-
-const TitleText = styled.p<{ isMajor?: boolean }>`
-  font-size: ${(props) =>
-    props.isMajor ? theme.fontSizes.xxlg : theme.fontSizes.regular};
-  font-weight: ${theme.fontWeights.lbold};
-  color: ${(props) =>
-    props.isMajor ? theme.colors.primary : theme.colors.coolgray900};
-`;
-
-export const DividerLine = styled.div`
-  height: 1px;
-  background: ${theme.colors.primary};
-`;
-
 // ** -------- AccordionContent 영역 -------- ** /
 const AccordionContent = ({ children }: PropsWithChildren) => {
-  const { value, setter } = useAccordionContext();
+  const { value } = useAccordionContext();
   const label = useAccordionItemContext();
   const isOpened = value.has(label);
 
   return (
-    <ContentSection isOpened={isOpened}>
-      {isOpened && <ContentText>{children}</ContentText>}
-    </ContentSection>
+    <S.ContentSection isOpened={isOpened}>
+      {isOpened && <S.ContentText>{children}</S.ContentText>}
+    </S.ContentSection>
   );
 };
 
-const ContentSection = styled.div<{ isOpened: boolean }>`
-  max-height: ${(props) => (props.isOpened ? 800 : 0)}px;
-  overflow: hidden;
-  transition: ${(props) =>
-    props.isOpened ? 'all 0.5s ease-in' : 'all 0.3s ease-out'};
-`;
-
-const ContentText = styled.p`
-  font-size: ${theme.fontSizes.small};
-  font-weight: ${theme.fontWeights.light};
-  color: ${theme.colors.coolgray900};
-  padding: 0 10px;
-`;
-
 // ** -------- AccordionDetail 영역 -------- ** /
 const AccordionDetail = ({ children }: PropsWithChildren) => {
-  const { value, setter } = useAccordionContext();
+  const { value } = useAccordionContext();
   const label = useAccordionItemContext();
   const isOpened = value.has(label);
 
-  return <>{isOpened && <DetailText>{children}</DetailText>}</>;
+  return <>{isOpened && <S.DetailText>{children}</S.DetailText>}</>;
 };
-
-const DetailText = styled.li`
-  padding: 12px 0;
-  cursor: pointer;
-`;
 
 const Root = AccordionRoot;
 const Item = AccordionItem;

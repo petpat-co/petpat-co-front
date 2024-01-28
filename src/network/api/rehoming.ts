@@ -1,3 +1,5 @@
+import { option } from 'yargs';
+import { config } from '../config';
 import instance from '../instance';
 import { AddPrefix, ApiHandler } from '../type/api';
 
@@ -54,11 +56,17 @@ export const getRehomingCategory: ApiHandler = (options) =>
     ...options,
   });
 
-
-// 북마크 
+// 북마크
 export const bookMark: ApiHandler = (options) =>
   instance({
     method: 'POST',
-    url: `/api/v1/bookmark/${options}`,
+    url: `/api/v1/bookmarks/REHOMING/${options}`,
+    ...options,
+  });
+
+export const like: ApiHandler = (options) =>
+  instance({
+    method: 'POST',
+    url: `api/v1/likes/REHOMING/${options}`,
     ...options,
   });

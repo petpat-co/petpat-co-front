@@ -10,6 +10,7 @@ import AlbumList from '../shared/list/AlbumList';
 import Category from './Category';
 import { useAppDispatch } from 'src/core/store';
 import { getRehomingListApi } from 'src/core/redux/post/rehomingSlice';
+import { useSelector } from 'react-redux';
 
 const RehomingTemplate = (): ReactElement => {
   const navigate = useNavigate();
@@ -37,9 +38,11 @@ const RehomingTemplate = (): ReactElement => {
     navigate('/rehome/write');
   };
 
+  // const postList = useSelector((state: any) => state?.rehoming?.list).content;
+  
   React.useEffect(() => {
     appdispatch(getRehomingListApi(pageno));
-  }, [])
+  }, []);
 
   return (
     <S.Container>
@@ -75,7 +78,7 @@ const RehomingTemplate = (): ReactElement => {
           </div>
           <div className="top_rehoming_list">
             {topPost.map((item, idx) => {
-              return <AlbumList key={idx+item.title} item={item} />;
+              return <AlbumList key={idx + item.title} item={item} />;
             })}
           </div>
         </TopRehoming>
@@ -130,8 +133,8 @@ const RehomingTemplate = (): ReactElement => {
         <S.ListInner>
           <Category />
           <S.ListGrid>
-            {postList.map((item, idx) => {
-              return <AlbumList key={idx+item.title} item={item} />;
+            {postList?.map((item: any, idx: number) => {
+              return <AlbumList key={idx + item.title} item={item} />;
             })}
           </S.ListGrid>
         </S.ListInner>

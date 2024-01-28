@@ -238,4 +238,11 @@ const ContentSection = styled.div`
   width: 100%;
   padding: 100px 40px;
   text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.coolgray700};
+
+  /* 동물보호법에 따라 허가받지 않은 유료 가정분양은 불법으로 규정되고 있습니다. */
+
+  line-height: 26px;
 `;

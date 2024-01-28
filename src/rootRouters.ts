@@ -34,11 +34,12 @@ export default [
     element: DetailTemplate,
   },
   {
-    path: '/rehome/detail/2',
-    element: ReHomingDetail,
+    path: '/trade/detail/:postId',
+    // element: ReHomingDetail,
+    element: DetailTemplate,
   },
   {
-    path: '/rehoming/modify/:postId',
+    path: '/rehome/modify/:postId',
     element: ReHomingWrite,
   },
   {

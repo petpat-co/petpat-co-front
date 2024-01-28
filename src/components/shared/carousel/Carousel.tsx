@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as S from './Carousel.style';
+import { ReactComponent as Arrow } from '../../../asset/arrow/carouselArrow.svg';
 
 interface PropsType {
   imageList: Array<string>;
@@ -12,8 +13,6 @@ const Carousel = (props: PropsType) => {
   const [offTransition, setOffTransition] = React.useState(false);
   // 현재 머무르고 있는 image index
   const [curIndex, setCurIndex] = React.useState(0);
-
-  console.log(curIndex);
 
   const setSliders = () => {
     const addedData = [];
@@ -51,6 +50,7 @@ const Carousel = (props: PropsType) => {
 
   // 일정 시간(transition) button 동작 disable
   const [disabled, setDisabled] = React.useState(false);
+
   const buttonControll = () => {
     setDisabled(true);
     setTimeout(() => setDisabled(false), 300);
@@ -74,40 +74,69 @@ const Carousel = (props: PropsType) => {
     }
   }, [transition]);
 
+  // height 조절
+  // CSS로 조절하는 더 좋은 방법이 생각나면 추후 수정하겠습니다 (ㅠㅠ)
+  const carouselRef = React.useRef<HTMLDivElement | null>(null);
+  const [carouselHeight, setCarouselHeight] = useState(0);
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      if (carouselRef.current) {
+        const width = carouselRef.current.offsetWidth;
+        setCarouselHeight(width);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
     <React.Fragment>
-      <button
-        disabled={disabled}
-        onClick={() => {
-          handleSlide(curIndex - 1);
-          setDisabled(true);
-          setTimeout(() => setDisabled(false), 300);
-        }}
-      >
-        뒤로
-      </button>
-      <S.Container>
+      <S.Container style={{ height: `${carouselHeight}px` }}>
+        {/* 왼쪽(뒤로) */}
+        <S.CircleBtn
+          dir="left"
+          disabled={disabled}
+          onClick={() => {
+            handleSlide(curIndex - 1);
+            setDisabled(true);
+            setTimeout(() => setDisabled(false), 300);
+          }}
+        >
+          <Arrow />
+        </S.CircleBtn>
+
+        {/* 캐러셀*/}
         <S.Carousel
+          ref={carouselRef}
           style={{
             transform: `translateX(${-100 * curIndex}%)`,
-            transition,
+            height: `${carouselHeight}px`,
           }}
         >
           {slides.map((image: string, i: number) => (
             <S.Image key={i} src={image} />
           ))}
         </S.Carousel>
+
+        {/* 오른쪽(앞으로) */}
+        <S.CircleBtn
+          dir="right"
+          disabled={disabled}
+          onClick={() => {
+            handleSlide(curIndex + 1);
+            setDisabled(true);
+            setTimeout(() => setDisabled(false), 300);
+          }}
+        >
+          <Arrow />
+        </S.CircleBtn>
       </S.Container>
-      <button
-        disabled={disabled}
-        onClick={() => {
-          handleSlide(curIndex + 1);
-          setDisabled(true);
-          setTimeout(() => setDisabled(false), 300);
-        }}
-      >
-        앞으로
-      </button>
     </React.Fragment>
   );
 };

@@ -1,3 +1,4 @@
+import { config } from '../config';
 import instance from '../instance';
 import { AddPrefix, ApiHandler } from '../type/api';
 // import { config } from '../config';
@@ -84,10 +85,10 @@ export const getBookmarkList: ApiHandler = (options) =>
     ...options,
   });
 
-  // 작성 댓글 조회
+// 작성 댓글 조회
 export const getCommentList: ApiHandler = (options) =>
-instance({
-  method: 'GET',
-  // url: `/profile`,
-  ...options,
-});
+  instance({
+    method: 'GET',
+    // url: `/profile`,
+    ...options,
+  });

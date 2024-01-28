@@ -22,6 +22,9 @@ export const modifyProfile: ApiHandler = (options) =>
 // 2024.01 유저 정보 조회
 export const getProfile: ApiHandler = (options) =>
   instance({
+    headers: {
+      Authorization: `Bearer ${Token}`,
+    },
     method: 'GET',
     url: addPrefix(''),
     ...options,

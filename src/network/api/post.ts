@@ -2,6 +2,8 @@ import { config } from '../config';
 import instance from '../instance';
 import { AddPrefix, ApiHandler } from '../type/api';
 
+const Token = localStorage.getItem('token');
+
 const addPrefix: AddPrefix = (path) => {
   return config.server.host + '/api/v1' + path;
 };
@@ -62,5 +64,18 @@ export const bookmarkPost: ApiHandler = (
   instance({
     method: 'POST',
     url: addPrefix(`/bookmarks/${options.postType}/${options.postId}`),
+    ...options,
+  });
+
+// 좋아요 등록
+export const postLikedStatus: ApiHandler = (
+  options, // postType, id
+) =>
+  instance({
+    headers: {
+      Authorization: `Bearer ${Token}`,
+    },
+    method: 'POST',
+    url: `${config.server.host}/api/v1/likes/${options.postType}/${options.id}`,
     ...options,
   });

@@ -73,8 +73,7 @@ const StyledTextArea = styled.textarea<TextAreaStyleType>`
     color: #cdcdcd;
   }
   :focus {
-    border: ${({ theme }) => `1.4px solid ${theme.colors.coolgray400}`};
-    outline: none;
+    // border: ${({ theme }) => `1.4px solid ${theme.colors.coolgray400}`};
   }
 `;
 export default TextArea;

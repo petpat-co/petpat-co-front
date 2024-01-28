@@ -181,6 +181,7 @@ export const deletePostApi = createAsyncThunk(
   },
 );
 
+// 추후에 common으로 옮기겠습니다 >.< !!
 export const bookmarkApi = createAsyncThunk(
   'rehoming/bookmark',
   async (data: any | string, thunkAPI) => {

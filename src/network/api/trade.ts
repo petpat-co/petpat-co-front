@@ -3,7 +3,7 @@ import instance from '../instance';
 import { AddPrefix, ApiHandler } from '../type/api';
 
 const addPrefix: AddPrefix = (path) => {
-  return config.server.host + '/api/v1/trade' + path;
+  return config.server.host + '/api/v1' + path;
 };
 
 const Token = localStorage.getItem('token');
@@ -13,24 +13,25 @@ export const getTradeList: ApiHandler = (
   options, // pageNo
 ) =>
   instance({
+    // TODO: 토큰 공통으로 처리 필요
     headers: {
       Authorization: `Bearer ${Token}`,
     },
     method: 'GET',
-    url: addPrefix('?page=0'),
+    url: addPrefix(`/trade?page=${options.pageNo}`),
     ...options,
   });
 
 // 물품 상세조회
 export const getTradeDetail: ApiHandler = (
-  options, // id
+  options, // tradeId
 ) =>
   instance({
     headers: {
       Authorization: `Bearer ${Token}`,
     },
     method: 'GET',
-    url: addPrefix(`/${options}`),
+    url: addPrefix(`/trade/${options.tradeId}`),
     ...options,
   });
 
@@ -41,19 +42,22 @@ export const postTrade: ApiHandler = (
   instance({
     method: 'POST',
     url: addPrefix(''),
+    data: options,
+    headers: {
+      Authorization: `Bearer ${Token}`,
+      'Content-Type': 'multipart/form-data',
+    },
     ...options,
   });
 
-// TODO: 공통 사용 여부 논의
-// 좋아요 등록
-export const postLikedStatus: ApiHandler = (
-  options, // postType, id
+export const tradeCategoryList: ApiHandler = (
+  options, // categoryId
 ) =>
   instance({
     headers: {
       Authorization: `Bearer ${Token}`,
     },
-    method: 'POST',
-    url: `${config.server.host}/api/v1/likes/${options.postType}/${options.id}`,
+    method: 'GET',
+    url: addPrefix(`/trade/category/${options.categoryId}`),
     ...options,
   });

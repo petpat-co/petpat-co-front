@@ -89,19 +89,6 @@ export const postTradeApi = createAsyncThunk(
   },
 );
 
-// TODO: 공통 사용 여부 논의
-export const postLikedListApi = createAsyncThunk(
-  '/likes',
-  async (postInfo: { postType: string; id: number }, thunkAPI) => {
-    try {
-      const response = await tradeAPI.postLikedStatus(postInfo);
-      console.log('postLikedListApi response : ', response.data);
-    } catch (error: any) {
-      console.log('postLikedListApi : error response', error.response.data);
-    }
-  },
-);
-
 export const tradeSlice = createSlice({
   name: 'tradeReducer',
   initialState,

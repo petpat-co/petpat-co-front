@@ -21,6 +21,7 @@ export const BestListSection = styled.div`
 export const SectionWrapper = styled.div`
   display: flex;
   gap: 48px;
+  align-items: flex-start;
 `;
 
 export const TextWrapper = styled.div`

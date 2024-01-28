@@ -7,7 +7,7 @@ import * as S from './BoardTemplate.style';
 // ** Import components
 import TitleSection, { TitleSectionPropsType } from '../layout/TitleSection';
 import ListCard from '../list/ListCard';
-import Category from '../../rehoming/Category';
+import Accordion from '../list/Accordion';
 
 // ** Import types
 import { Post } from '../../../types/post';
@@ -17,6 +17,7 @@ interface PropsType extends TitleSectionPropsType {
   bannerContent: ReactNode;
   bannerData: any[];
   postListData: Post.BoardList[];
+  categoryListData: any[];
 }
 
 const BoardTemplate = (props: PropsType) => {
@@ -28,6 +29,7 @@ const BoardTemplate = (props: PropsType) => {
     bannerContent,
     bannerData,
     postListData,
+    categoryListData,
   } = props;
 
   return (
@@ -54,7 +56,45 @@ const BoardTemplate = (props: PropsType) => {
       <S.PostListSection>
         <S.SectionWrapper>
           <S.TextWrapper>
-            <Category />
+            <Accordion.Root>
+              {categoryListData.map((petCategory: any) => (
+                <Accordion.Item
+                  value={petCategory.categoryName}
+                  key={petCategory.id}
+                >
+                  <Accordion.Title isMain={true} key={petCategory.id}>
+                    {petCategory.categoryName}
+                  </Accordion.Title>
+                  <Accordion.Content>
+                    {petCategory.detailCategoryList.map(
+                      (goodsCategory: any) => (
+                        <Accordion.Item
+                          value={goodsCategory.tradeCategoryName}
+                          key={goodsCategory.tradeCategoryId}
+                        >
+                          <Accordion.Title key={goodsCategory.tradeCategoryId}>
+                            {goodsCategory.tradeCategoryName}
+                          </Accordion.Title>
+                          <ul>
+                            {goodsCategory.tradeCategoryDetailList.map(
+                              (detailGoodsCategory: any) => (
+                                <Accordion.Detail
+                                  key={
+                                    detailGoodsCategory.tradeCategoryDetailId
+                                  }
+                                >
+                                  {detailGoodsCategory.tradeCategoryDetailName}
+                                </Accordion.Detail>
+                              ),
+                            )}
+                          </ul>
+                        </Accordion.Item>
+                      ),
+                    )}
+                  </Accordion.Content>
+                </Accordion.Item>
+              ))}
+            </Accordion.Root>
           </S.TextWrapper>
           <S.ListWrapper rowNum={4}>
             {postListData.map((item, idx) => {

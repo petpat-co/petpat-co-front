@@ -106,6 +106,8 @@ export namespace Post {
   export interface TradeState {
     list: Array<BoardList>;
     isSuccess: boolean;
+    categoryList: any[];
+    initCategory: any;
   }
 
   export interface Trade {

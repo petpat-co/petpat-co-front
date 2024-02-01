@@ -2,22 +2,21 @@ import React, { ChangeEvent, useCallback, useState } from 'react';
 import { TextArea } from '../../shared/element';
 import Button from '../../shared/element/Button';
 import Input from '../../shared/element/Input';
-import { ImageUpload } from '../../shared/input/ImageUpload';
-import WritingTemplate from '../../shared/layout/WritingTemplate';
 import * as S from './ReHomeWriteTemplate.style';
 import TopSection from 'src/components/shared/layout/TopSection';
 import { useLocation, useParams } from 'react-router-dom';
-import Select from 'src/components/shared/select/Select';
 import styled from 'styled-components';
 import { useAppDispatch } from 'src/core/store';
-import { modifyRehomingApi, postRehomingApi } from 'src/core/redux/post/rehomingSlice';
-import { editReHoming } from 'src/network/api/rehoming';
+import {
+  modifyRehomingApi,
+  postRehomingApi,
+} from 'src/core/redux/post/rehomingSlice';
 
 const initialFormState = {
-  title: '',
-  description: '',
-  petName: '',
-  petAge: '',
+  title: '분양 글 제목',
+  description: '분양 글 내용',
+  petName: '돌돌이',
+  petAge: '12',
   type: '199',
   category: '1',
   cityName: '경기도 부천시',
@@ -165,7 +164,7 @@ const RehomeWriteTemplate = () => {
       case 'write':
         return appdispatch(postRehomingApi(formData));
       case 'modify':
-        return appdispatch(modifyRehomingApi({formData,postId}));
+        return appdispatch(modifyRehomingApi({ formData, postId }));
     }
   };
 
@@ -176,7 +175,9 @@ const RehomeWriteTemplate = () => {
   return (
     <>
       <TopSection>
-        <S.TitleText>{root==="modify"?"분양 글 수정하기":"분양 글쓰기"}</S.TitleText>
+        <S.TitleText>
+          {root === 'modify' ? '분양 글 수정하기' : '분양 글쓰기'}
+        </S.TitleText>
       </TopSection>
 
       <S.Wrap>
@@ -339,7 +340,7 @@ const RehomeWriteTemplate = () => {
               maxLength={200}
               name="location"
               padding="0 24px"
-              defaultValue='경기도 부천시 원미구 역곡동 유나네집, 106동 1003호'
+              defaultValue="경기도 부천시 원미구 역곡동 유나네집, 106동 1003호"
             />
           </S.InputButtonWrap>
         </S.GrayWrap>

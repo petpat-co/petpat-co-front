@@ -1,54 +1,67 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAppDispatch } from 'src/core/store';
+
+// style
 import * as S from './ReHomingDetailTemplate.style';
+
+// util
+import format from 'date-fns/format';
+
+// icon svg -> component
 import { ReactComponent as BookMark } from '../../../asset/bookmark.svg';
 import { ReactComponent as Heart } from '../../../asset/heart.svg';
 import { ReactComponent as ViewCount } from '../../../asset/postIcon/viewcount.svg';
 import { ReactComponent as CommentCount } from '../../../asset/postIcon/chatbubble.svg';
 import { ReactComponent as Arrow } from '../../../asset/arrow.svg';
-import format from 'date-fns/format';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { Button } from '../../shared/element';
-import { useAppDispatch } from 'src/core/store';
-
 import { ReactComponent as LocationIcon } from '../../../asset/postIcon/location.svg';
 import { ReactComponent as ModalIcon } from '../../../asset/modalicon/sadface.svg';
 
+// component, element
 import ModalContainer from 'src/components/common/modal/container/ModalContainer';
-
-import { useSelector } from 'react-redux';
 import CommentItem from 'src/components/shared/CommentItem';
+import { Button } from '../../shared/element';
+
+// api
 import {
   bookmarkApi,
   deleteReHomingApi,
   getOneReHomingApi,
+  likeApi,
   selectOnError,
 } from 'src/core/redux/post/rehomingSlice';
 
+// component start
 const RehomingDetail = (): React.ReactElement => {
   const navigate = useNavigate();
   const appdispatch = useAppDispatch();
-  const postId = useLocation().pathname.split('/')[3];
 
+  const postId = useLocation().pathname.split('/')[3];
+  const content = useSelector((state: any) => state.rehoming.post);
+  const like = useSelector((state: any) => state.rehoming.post.liked);
+  const [liked, setLiked] = React.useState(like);
+  const bookmark = useSelector((state: any) => state.rehoming.post.bookmarked);
+  const [bookmarked, setBookmarked] = React.useState(bookmark);
   const [sort, setSort] = React.useState('oldest');
 
-  const content = useSelector((state: any) => state.rehoming.post);
+  // PET AGE 관련 분기처리 필요
   // const petAge = content.petAge.split('-');
   const petAge = content.petAge;
-  const [bookmark, setBookmark] = React.useState(
-    content?.bookmarked ? content.bookmark : false,
-  );
-
-  const [onModal, setOnModal] = React.useState(false);
-  const [onModalDel, setOnModalDel] = React.useState(false);
-
-  const onClickClose = () => {
-    setOnModal(false);
-  };
 
   const onClickBookmark = () => {
     appdispatch(bookmarkApi(postId));
+    setBookmarked(!bookmarked);
+    appdispatch(getOneReHomingApi(postId));
   };
 
+  const onClickLike = () => {
+    appdispatch(likeApi(postId));
+    setLiked(!liked);
+    appdispatch(getOneReHomingApi(postId));
+  };
+
+  // 글 내용 태그 처리시 해당 함수 사용
   const postContent = (str: string) => {
     str = str.replace(/\r\n/gi, '<br />');
     str = str.replace(/\\n/gi, '<br />');
@@ -56,19 +69,28 @@ const RehomingDetail = (): React.ReactElement => {
     return str;
   };
 
+  // move page
+  // 글 목록으로 이동 (뒤로가기 x)
   const goToList = () => {
     navigate('/rehome', { replace: true });
   };
 
+  // 글 수정 페이지로
   const postModify = () => {
     navigate('/rehoming/modify/' + postId);
   };
 
-  // 2024.01 [유나]
-  // 삭제하시겠습니까? > 확인 > deleteRehomingApi
-  // => reject인 경우 onError true > modal 메시지 분기
+  // 2024.01 [유나] ---------------- MODAL START ------------
+  const [onModal, setOnModal] = React.useState(false);
+  const [onModalDel, setOnModalDel] = React.useState(false);
   const onError = useSelector(selectOnError);
 
+  const onClickClose = () => {
+    setOnModal(false);
+  };
+
+  // 삭제하시겠습니까? > 확인 > deleteRehomingApi
+  // => reject인 경우 onError true > modal 메시지 분기
   const postDelete = async () => {
     try {
       await appdispatch(deleteReHomingApi(postId));
@@ -79,10 +101,12 @@ const RehomingDetail = (): React.ReactElement => {
       setOnModalDel(true);
     }
   };
+  // 2024.01 [유나] ---------------- MODAL END --------------
 
+  // 글 상세정보 조회
   React.useEffect(() => {
     appdispatch(getOneReHomingApi(postId));
-  }, []);
+  }, [bookmarked, liked]);
 
   return (
     <React.Fragment>
@@ -99,9 +123,12 @@ const RehomingDetail = (): React.ReactElement => {
             <S.TitleSection>
               <p className="detail__title">{content.title}</p>
               <S.IconBox>
-                <Heart />
+                <Heart
+                  fill={like ? '#F35F4C' : ''}
+                  onClick={() => onClickLike()}
+                />
                 <BookMark
-                  color={bookmark ? '#F35F4C' : ''}
+                  fill={bookmark ? '#F35F4C' : ''}
                   onClick={() => onClickBookmark()}
                 />
               </S.IconBox>
@@ -261,16 +288,11 @@ const RehomingDetail = (): React.ReactElement => {
           title={!onError ? '게시글이 삭제되었습니다' : '문제가 발생했습니다.'}
           image={true}
         >
-
-
           <ModalIcon />
-          
-          <Button margin='20px 0 0 0' width="200px" _onClick={goToList} modal>
+
+          <Button margin="20px 0 0 0" width="200px" _onClick={goToList} modal>
             목록으로 이동하기
           </Button>
-
-
-
         </ModalContainer>
       )}
     </React.Fragment>

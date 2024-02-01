@@ -7,6 +7,7 @@ import { myPage } from '../redux/user/myPage';
 import { qnaSlice } from '../redux/post/qnaSlice';
 import { rehomingSlice } from '../redux/post/rehomingSlice';
 import { tradeSlice } from '../redux/post/tradeSlice';
+import { postSlice } from '../redux/post/postSlice';
 
 const rootReducer = combineReducers({
   modal: modalSlice.reducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   qna: qnaSlice.reducer,
   rehoming: rehomingSlice.reducer,
   trade: tradeSlice.reducer,
+  post: postSlice.reducer,
 });
 
 export const store = configureStore({

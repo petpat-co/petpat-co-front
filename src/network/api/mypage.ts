@@ -1,3 +1,4 @@
+import { config } from '../config';
 import instance from '../instance';
 import { AddPrefix, ApiHandler } from '../type/api';
 // import { config } from '../config';

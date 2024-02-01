@@ -236,7 +236,7 @@ const Title = styled.div`
 
 const ContentSection = styled.div`
   width: 100%;
-  padding: 100px 40px;
+  padding: 100px 40px 60px;
   text-align: center;
   font-size: 18px;
   font-weight: 500;

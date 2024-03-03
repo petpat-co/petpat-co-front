@@ -14,11 +14,16 @@ import { ReactComponent as Arrow } from 'src/asset/arrowIcon.svg';
 import theme from '../../../styles/theme';
 import * as S from './Accordion.style';
 
+export type AccordionPropsType = {
+  id: number;
+  value: string;
+};
+
 // ** -------- AccordionRoot 영역 -------- ** /
 const useAccordionContext = () => {
   const context = useContext(AccordionContext);
   if (!context) {
-    throw 'Error';
+    throw new Error('AccordionContext is undefined');
   }
 
   return context;
@@ -31,8 +36,21 @@ interface AccordionContextType {
 
 const AccordionContext = createContext<AccordionContextType | null>(null);
 
-const AccordionRoot = (props: PropsWithChildren) => {
-  const [item, setItem] = useState<Set<string>>(new Set()); // 열려있는 아이템 정보 상태관리
+interface AccordionRootProps extends PropsWithChildren {
+  initData: {
+    lastInfo: AccordionPropsType;
+    parentInfo: AccordionPropsType;
+    childInfo?: AccordionPropsType | null;
+  }; // 열려있는 아이템 초기 정보
+}
+
+const AccordionRoot = ({ initData, children }: AccordionRootProps) => {
+  const initItems = [
+    initData.parentInfo.value,
+    initData.childInfo?.value,
+  ].filter((value): value is string => value !== undefined);
+
+  const [item, setItem] = useState<Set<string>>(new Set(initItems)); // 열려있는 아이템 정보 상태관리
 
   // 아이템 상태를 변경해 줄 함수
   const setter = useCallback(
@@ -53,7 +71,7 @@ const AccordionRoot = (props: PropsWithChildren) => {
 
   return (
     <AccordionContext.Provider value={{ value: item, setter }}>
-      {props.children}
+      {children}
     </AccordionContext.Provider>
   );
 };
@@ -62,7 +80,7 @@ const AccordionRoot = (props: PropsWithChildren) => {
 const useAccordionItemContext = () => {
   const context = useContext(AccordionItemContext);
   if (!context) {
-    throw 'Error';
+    throw new Error('AccordionItemContext is undefined');
   }
 
   return context;
@@ -84,7 +102,7 @@ const AccordionItem = ({ value, children }: AccordionItemProps) => {
 
 // ** -------- AccordionTitle 영역 -------- ** /
 interface AccordionTitleProps extends PropsWithChildren {
-  isMain?: boolean;
+  isMain?: boolean; // 최상위 정보 여부
 }
 
 const AccordionTitle = ({ isMain, children }: AccordionTitleProps) => {
@@ -133,12 +151,44 @@ const AccordionContent = ({ children }: PropsWithChildren) => {
 };
 
 // ** -------- AccordionDetail 영역 -------- ** /
-const AccordionDetail = ({ children }: PropsWithChildren) => {
+interface AccordionDetailProps extends PropsWithChildren {
+  parentObj: AccordionPropsType; // 상위 그룹 정보
+  childObj?: AccordionPropsType | null; // 하위 그룹 정보 (nullable)
+  currentObj: AccordionPropsType; // 최종 선택 정보
+  sendData: (
+    currentObj: AccordionPropsType,
+    parentObj: AccordionPropsType,
+    childObj?: AccordionPropsType | null,
+  ) => void;
+  isSelected: boolean; // 선택 상태 여부
+}
+
+const AccordionDetail = ({
+  currentObj,
+  parentObj,
+  childObj,
+  sendData,
+  isSelected,
+  children,
+}: AccordionDetailProps) => {
   const { value } = useAccordionContext();
   const label = useAccordionItemContext();
   const isOpened = value.has(label);
 
-  return <>{isOpened && <S.DetailText>{children}</S.DetailText>}</>;
+  // 카테고리 클릭 시 부모 컴포넌트로 선택한 카테고리 정보 전달
+  const handleClick = () => {
+    sendData(currentObj, parentObj, childObj);
+  };
+
+  return (
+    <>
+      {isOpened && (
+        <S.DetailText isSelected={isSelected} onClick={handleClick}>
+          {children}
+        </S.DetailText>
+      )}
+    </>
+  );
 };
 
 const Root = AccordionRoot;

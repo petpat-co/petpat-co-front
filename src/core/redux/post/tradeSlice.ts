@@ -25,6 +25,30 @@ export const initialState: Post.TradeState = {
     },
   ],
   isSuccess: false,
+  categoryList: [
+    {
+      categoryId: 0,
+      categoryName: '',
+      detailCategoryList: [
+        {
+          tradeCategoryId: 0,
+          tradeCategoryName: '',
+          tradeCategoryDetailList: [
+            {
+              tradeCategoryDetailId: 0,
+              tradeCategoryDetailName: '',
+              tradeCategoryDetailCnt: 0,
+            },
+          ],
+        },
+      ],
+    },
+  ],
+  initCategory: {
+    parentInfo: { id: 0, value: '' },
+    childInfo: { id: 0, value: '' },
+    lastInfo: { id: 0, value: '' },
+  },
 };
 
 export const getTradeListApi = createAsyncThunk(
@@ -71,8 +95,8 @@ export const postTradeApi = createAsyncThunk(
         postData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${Token}`,
+            'Content-Type': 'multipart/form-data',
           },
         },
       );
@@ -85,6 +109,41 @@ export const postTradeApi = createAsyncThunk(
       console.log('postTradeApi : error response', error.response.data);
       thunkAPI.dispatch(tradeSlice.actions.setIsSuccess(false));
       return false;
+    }
+  },
+);
+
+// TODO: 카테고리 조회 API 변경 예정
+export const getCategoryListApi = createAsyncThunk(
+  'trade/categoryList',
+  async (initData: any[], thunkAPI) => {
+    try {
+      Promise.all(
+        initData.map(async (category: any) => {
+          let detailCategoryList = (
+            await tradeAPI.tradeCategoryList({
+              categoryId: category.categoryId,
+            })
+          ).data.data;
+
+          return {
+            id: category.id,
+            categoryName: category.categoryName,
+            categoryId: category.categoryId,
+            detailCategoryList: detailCategoryList,
+          };
+        }),
+      ).then((getCategoryList) => {
+        console.log('update list ==> ', getCategoryList);
+        // 초기 데이터 저장
+        thunkAPI.dispatch(
+          tradeSlice.actions.setInitCategory(getCategoryList[0]),
+        );
+        // 카테고리 목록 저장
+        thunkAPI.dispatch(tradeSlice.actions.setCategoryList(getCategoryList));
+      });
+    } catch (error: any) {
+      console.log('getCategoryListApi : error response', error.response.data);
     }
   },
 );
@@ -102,6 +161,40 @@ export const tradeSlice = createSlice({
     setIsSuccess: (state, action: PayloadAction<any>) => {
       console.log('REDUCER' + action.payload);
       state.isSuccess = action.payload;
+      return;
+    },
+
+    setInitCategory: (state, action: PayloadAction<any>) => {
+      const lastInfo = {
+        id: action.payload.detailCategoryList[0].tradeCategoryDetailList[0]
+          .tradeCategoryDetailId,
+        value:
+          action.payload.detailCategoryList[0].tradeCategoryDetailList[0]
+            .tradeCategoryDetailName,
+      };
+
+      const childInfo = {
+        id: action.payload.detailCategoryList[0].tradeCategoryId,
+        value: action.payload.detailCategoryList[0].tradeCategoryName,
+      };
+
+      const parentInfo = {
+        id: action.payload.categoryId,
+        value: action.payload.categoryName,
+      };
+
+      state.initCategory = {
+        lastInfo,
+        childInfo,
+        parentInfo,
+      };
+
+      console.log('state init categroy ==> ', state.initCategory);
+      return;
+    },
+
+    setCategoryList: (state, action: PayloadAction<any>) => {
+      state.categoryList = action.payload;
       return;
     },
   },

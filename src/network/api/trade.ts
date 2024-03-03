@@ -22,6 +22,17 @@ export const getTradeList: ApiHandler = (
     ...options,
   });
 
+// 금주 관심물품 목록 조회
+export const getBestTradeList: ApiHandler = (options) =>
+  instance({
+    headers: {
+      Authorization: `Bearer ${Token}`,
+    },
+    method: 'GET',
+    url: addPrefix('/trade/trending'),
+    ...options,
+  });
+
 // 물품 상세조회
 export const getTradeDetail: ApiHandler = (
   options, // tradeId

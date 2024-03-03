@@ -7,7 +7,6 @@ import theme from '../../../styles/theme';
 export const ComponentContainer = styled.div`
   width: 100%;
   height: 100%;
-  background-color: ${({ theme }) => theme.colors.coolgray200};
   padding-top: 150px;
 `;
 
@@ -20,13 +19,14 @@ export const BestListSection = styled.div`
 
 export const SectionWrapper = styled.div`
   display: flex;
-  gap: 48px;
+  gap: 60px;
   align-items: flex-start;
 `;
 
 export const TextWrapper = styled.div`
   flex: 1;
   flex-shrink: 0;
+  max-width: 240px;
 `;
 
 export const TitleText = styled.p`
@@ -48,9 +48,18 @@ export const ListWrapper = styled.div<{ rowNum: number }>`
   row-gap: 30px;
   column-gap: 12px;
   grid-template-columns: ${({ rowNum }) => `repeat(${rowNum}, 1fr)`};
+  position: relative; // MenuList Indicator의 상대 위치 설정
+  margin-top: 24px; // Accordion Menu랑 시작점 맞춤
 `;
 
 export const PostListSection = styled(BestListSection)`
   margin-top: 32px;
   border-radius: 50px 50px 0 0;
+`;
+
+export const CategoryCntText = styled.span`
+  font-size: ${theme.fontSizes.small};
+  font-weight: ${theme.fontWeights.light};
+  color: ${theme.colors.coolgray400};
+  margin-left: 4px;
 `;

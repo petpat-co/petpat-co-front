@@ -31,20 +31,22 @@ export const DividerLine = styled.div`
 `;
 
 export const ContentSection = styled.div<{ isOpened: boolean }>`
-  max-height: ${(props) => (props.isOpened ? 800 : 0)}px;
+  // max-height: ${(props) => (props.isOpened ? 800 : 0)}px;
   overflow: hidden;
   transition: ${(props) =>
     props.isOpened ? 'all 0.5s ease-in' : 'all 0.3s ease-out'};
 `;
 
 export const ContentText = styled.p`
-  font-size: ${theme.fontSizes.small};
-  font-weight: ${theme.fontWeights.light};
-  color: ${theme.colors.coolgray900};
   padding: 0 10px;
 `;
 
-export const DetailText = styled.li`
+export const DetailText = styled.li<{ isSelected: boolean }>`
+  font-size: ${theme.fontSizes.small};
+  font-weight: ${(props) =>
+    props.isSelected ? theme.fontWeights.lbold : theme.fontWeights.light};
+  color: ${(props) =>
+    props.isSelected ? theme.colors.primary : theme.colors.coolgray900};
   padding: 12px 0;
   cursor: pointer;
 `;

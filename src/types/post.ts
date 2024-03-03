@@ -98,6 +98,7 @@ export namespace Post {
 
   // 분양, 물품 관련 공통으로 쓰이는 프로퍼티 타입 정의 (rehome, trade)
   export interface BoardList extends Common {
+    postId: number|string;
     region: string;
     imagePath: string;
     liked: boolean;

@@ -14,6 +14,7 @@ export const initialState: Post.TradeState = {
   list: [
     {
       id: 0,
+      postId: 0,
       title: '',
       price: 0,
       imagePath: '',

@@ -20,7 +20,7 @@ const Root = () => {
           })}
         </Routes>
       </Wrapper>
-      <Footer />
+      {/* <Footer /> */}
       <ModalController />
     </>
   );

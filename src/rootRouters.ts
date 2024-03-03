@@ -12,6 +12,7 @@ import FindPassword from './components/user/FindPassword';
 import SignUp from './pages/user/SignUp';
 import Kakao from './components/user/Kakao';
 import GoodsTradeWrite from './pages/trade/GoodsTradeWrite';
+import DetailTemplate from './components/shared/detail/DetailTemplate';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default [
@@ -29,10 +30,16 @@ export default [
   },
   {
     path: '/rehome/detail/:postId',
-    element: ReHomingDetail,
+    // element: ReHomingDetail,
+    element: DetailTemplate,
   },
   {
-    path: '/rehoming/modify/:postId',
+    path: '/trade/detail/:postId',
+    // element: ReHomingDetail,
+    element: DetailTemplate,
+  },
+  {
+    path: '/rehome/modify/:postId',
     element: ReHomingWrite,
   },
   {

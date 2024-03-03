@@ -16,10 +16,11 @@ import { ReactComponent as ViewIcon } from '../../../asset/postIcon/viewcount.sv
 import { Post } from '../../../types/post';
 
 // ** Import api
-import { postLikedListApi } from '../../../core/redux/post/tradeSlice';
+import { postLikedListApi } from '../../../core/redux/post/commonSlice';
 
 interface ListCardProps {
   item: Post.BoardList;
+  onClick?: () => void;
 }
 
 const ListCard = (props: ListCardProps) => {
@@ -33,6 +34,7 @@ const ListCard = (props: ListCardProps) => {
     price,
     status,
     postType,
+    postId,
   } = props.item;
 
   const appDispatch = useAppDispatch();
@@ -48,7 +50,7 @@ const ListCard = (props: ListCardProps) => {
       <ImageContainer>
         <ImageSection
           src={imagePath}
-          onClick={() => console.log('상세 페이지 이동')}
+          onClick={props.onClick}
         />
         {status > 0 && (
           <StatusSection>{status == 1 ? '예약중' : '판매완료'}</StatusSection>

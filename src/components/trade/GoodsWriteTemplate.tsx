@@ -2,6 +2,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../core/store';
 
 // ** Import components
 import TitleSection from '../shared/layout/TitleSection';
@@ -9,6 +10,7 @@ import Button from '../shared/element/Button';
 import { Input, TextArea } from '../shared/element';
 import ModalContainer from '../common/modal/container/ModalContainer';
 import WriteResultView from '../common/modal/WriteResultView';
+import InputErrorMessage from '../common/InputErrorMessage';
 
 // ** Import lib
 import styled from 'styled-components';
@@ -17,11 +19,13 @@ import Select from 'react-select';
 // ** Import utils
 import theme from '../../styles/theme';
 import * as S from '../shared/board/WriteTemplate.style';
-import { useAppDispatch } from '../../core/store';
+
+// ** Import api
 import { postTradeApi } from '../../core/redux/post/tradeSlice';
 
 // ** Import svg
 import { ReactComponent as Add } from 'src/asset/icon/add.svg';
+import { ReactComponent as DeleteIcon } from 'src/asset/close.svg';
 
 const tempCategoryList = [
   { id: 0, value: 'feed', label: '강아지 사료' },
@@ -34,10 +38,10 @@ const GoodsWriteTemplate = () => {
     title: '',
     price: '',
     content: '',
-    location: '',
+    location: 'location',
     tradeCategoryDetailId: 18,
   });
-  const [imgFileList, setImgFileList] = useState<any>(null); // 서버 전달용
+  const [imgFileList, setImgFileList] = useState<any[]>([]); // 서버 전달용
   const [previewImgList, setPreviewImgList] = useState<any[]>(
     new Array(5).fill(null),
   ); // 미리보기용
@@ -46,7 +50,8 @@ const GoodsWriteTemplate = () => {
   const [categoryGroup, setCategoryGroup] = useState<any>([]);
   const [tradeCategoryGroup, setTradeCategoryGroup] = useState<any[]>([]);
   const [tradeDetailGroup, setTradeDetailGroup] = useState<any[]>([]);
-  const [isOpenSubmitModal, setIsOpenSubmitModal] = useState<boolean>(false);
+  const [onModal, setOnModal] = useState<boolean>(false);
+  const [formError, setFormError] = useState({ key: '', message: '' });
 
   const appDispatch = useAppDispatch();
   const isSuccess = useSelector((state: any) => state.trade.isSuccess);
@@ -54,9 +59,17 @@ const GoodsWriteTemplate = () => {
 
   const fileRef: any = React.useRef(null);
 
-  const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+  useEffect(() => {
+    // 미리보기 상태 변경 시 데이터가 없는 첫번째 idx 추출
+    let firstNullDataIdx = previewImgList.findIndex((item) => {
+      return item == null;
+    });
 
+    setShowAddBtnIdx(firstNullDataIdx);
+  }, [previewImgList]);
+
+  const handleChangeInput = async (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
     // 가격 입력 시
     if (name === 'price') {
       // 숫자 및 빈문자열 외 문자열을 입력하거나 첫 글자가 0일 경우 입력 방지
@@ -73,15 +86,21 @@ const GoodsWriteTemplate = () => {
 
   const handleChangeImages = (e: ChangeEvent<HTMLInputElement>) => {
     // 엽로드한 파일들 불러오기
-    let uploadFiles = e.target.files;
-
-    if (uploadFiles!.length > 5) {
-      window.alert('파일은 최대 5개까지만 업로드 가능합니다.');
-      return;
-    }
+    const uploadFiles = e.target.files;
 
     if (uploadFiles) {
-      const uploadFileArr = Array.from(uploadFiles);
+      let uploadFileArr = Array.from(uploadFiles).map((file, idx) => {
+        return {
+          id: idx,
+          file: file,
+        };
+      });
+
+      if (uploadFileArr.length > 5) {
+        window.alert('파일은 최대 5개까지만 업로드 가능합니다.');
+        uploadFileArr = uploadFileArr.slice(0, 5);
+      }
+
       setImgFileList(uploadFileArr);
       window.alert('업로드가 완료 되었습니다!');
 
@@ -92,9 +111,55 @@ const GoodsWriteTemplate = () => {
     }
   };
 
+  // 영역별 에러 메세지 반환
+  const handleErrorMessage = (key: string) => {
+    let errorType = '';
+    const requiredMessage =
+      key === 'images' ? '등록해주세요.' : '입력해주세요.';
+
+    // TODO: 카테고리 및 주소 관련 데이터 정의 결정 후 추가 반영 예정
+    switch (key) {
+      case 'title':
+        errorType = '제목을 ';
+        break;
+      case 'location':
+        errorType = '주소를 ';
+        break;
+      case 'price':
+        errorType = '가격을 ';
+        break;
+      case 'content':
+        errorType = '설명을 ';
+        break;
+      case 'images':
+        errorType = '이미지를 ';
+        break;
+    }
+
+    return errorType + requiredMessage;
+  };
+
+  // TODO: 추후 react-hook-form 적용 예
   // 등록 버튼 클릭 시 호출
   const handleSubmit = () => {
-    // TODO: 유효성 검사 필요
+    const currentFormArray = Object.entries(form);
+
+    // 유효성 검사
+    for (const [key, value] of currentFormArray) {
+      if (!value) {
+        const message = handleErrorMessage(key);
+        setFormError({ key, message });
+        return;
+      }
+    }
+
+    if (imgFileList.length == 0) {
+      const message = handleErrorMessage('images');
+      setFormError({ key: 'images', message });
+      return;
+    }
+
+    // formData로 담아주기
     const formData = new FormData();
     Object.entries(form).forEach(([key, value]) => {
       if (typeof value == 'number') {
@@ -118,30 +183,23 @@ const GoodsWriteTemplate = () => {
     });
 
     appDispatch(postTradeApi(formData)).then(() => {
-      setIsOpenSubmitModal(true);
+      setOnModal(true);
     });
-
-    // console.log('title?', formData.get('title'));
-    // console.log('content?', formData.get('content'));
-    // console.log('location?', formData.get('location'));
-    // console.log('category?', formData.get('tradeCategoryDetailId'));
-    // console.log('price?', formData.get('price'));
-    // console.log('images?', formData.get('images'));
   };
 
   let fileUrls: any[] = [...previewImgList];
 
   // 이미지 파일 데이터 읽고 임시 url 생성
-  const onReadFile = (file: any, idx: number) => {
+  const onReadFile = (data: any, idx: number) => {
     let fileReader = new FileReader();
 
-    fileReader.readAsDataURL(file);
+    fileReader.readAsDataURL(data.file);
     fileReader.onload = (data) => {
       if (typeof data.target?.result === 'string') {
         // 파일 읽는 순으로 해당 배열의 데이터 교체
         for (let i = 0; i < previewImgList.length; i++) {
           if (i === idx) {
-            fileUrls[i] = data.target.result;
+            fileUrls[i] = { id: i, url: data.target.result };
           }
         }
         setPreviewImgList(fileUrls);
@@ -149,29 +207,43 @@ const GoodsWriteTemplate = () => {
     };
   };
 
-  useEffect(() => {
-    // TODO: 만약 삭제 기능이 있다면 예외처리 변경 필요
-    const isInitArr = previewImgList.every((data) => data === null);
+  // 업로드 한 이미지 삭제
+  const handleDeleteImage = (targetId: number) => {
+    // 파일 데이터 업데이트
+    let updateImgFileList: any[] = imgFileList
+      .filter((file) => file.id != targetId)
+      .map((data, idx) => {
+        return {
+          id: idx,
+          file: data,
+        };
+      });
 
-    if (isInitArr) {
-      return;
-    }
+    // 미리보기 데이터 업데이트
+    let updatePreviewImgList: any[] = previewImgList
+      .filter((file) => file && file.id != targetId)
+      .map((data, idx) => {
+        return {
+          id: idx,
+          url: data.url,
+        };
+      });
 
-    // 미리보기 상태 변경 시 데이터가 없는 첫번째 idx 추출
-    let firstNullDataIdx = previewImgList.findIndex((item) => {
-      return item == null;
-    });
+    updatePreviewImgList = updatePreviewImgList.concat(
+      Array(5 - updatePreviewImgList.length).fill(null),
+    );
 
-    setShowAddBtnIdx(firstNullDataIdx);
-  }, [previewImgList]);
+    setImgFileList(updateImgFileList);
+    setPreviewImgList(updatePreviewImgList);
+  };
 
   return (
     <>
-      {isOpenSubmitModal && (
+      {onModal && (
         <ModalContainer
           zIndex={100000}
-          id="0"
-          onClickClose={() => setIsOpenSubmitModal(false)}
+          id="goodsSubmitModal"
+          onClickClose={() => setOnModal(false)}
         >
           <WriteResultView page={'trade'} isSuccess={isSuccess} />
         </ModalContainer>
@@ -196,6 +268,9 @@ const GoodsWriteTemplate = () => {
               value={form.title}
             />
             <S.InputSubText>{form.title.length}/20</S.InputSubText>
+            {formError.key === 'title' && (
+              <InputErrorMessage top={58} message={formError.message} />
+            )}
           </S.RowContainer>
         </S.InputSectionWrapper>
       </S.InputSectionContainer>
@@ -224,6 +299,9 @@ const GoodsWriteTemplate = () => {
               placeholder={'카테고리를 선택해주세요.'}
               options={tempCategoryList}
             />
+            {formError.key === 'category' && (
+              <InputErrorMessage top={58} message={formError.message} />
+            )}
           </S.RowContainer>
         </S.InputSectionWrapper>
       </S.InputSectionContainer>
@@ -264,7 +342,7 @@ const GoodsWriteTemplate = () => {
               </Button>
             </LocationBtnWrapper>
             <Input
-              margin="24px 0 0 0"
+              margin="10px 0 0 0"
               borderRadius="28px"
               placeholder="지역을 설정해주세요."
               onChange={handleChangeInput}
@@ -272,6 +350,9 @@ const GoodsWriteTemplate = () => {
               name="location"
               padding="0 24px"
             />
+            {formError.key === 'location' && (
+              <InputErrorMessage top={128} message={formError.message} />
+            )}
           </S.ColumnContainer>
         </S.InputSectionWrapper>
       </S.InputSectionContainer>
@@ -294,6 +375,9 @@ const GoodsWriteTemplate = () => {
               value={form.price}
             />
             <S.InputSubText>원</S.InputSubText>
+            {formError.key === 'price' && (
+              <InputErrorMessage top={58} message={formError.message} />
+            )}
           </S.RowContainer>
         </S.InputSectionWrapper>
       </S.InputSectionContainer>
@@ -317,6 +401,9 @@ const GoodsWriteTemplate = () => {
             />
             <S.InputSubText>{form.content.length}/2000</S.InputSubText>
           </ContentContainer>
+          {formError.key === 'content' && (
+            <InputErrorMessage top={210} message={formError.message} />
+          )}
         </S.InputSectionWrapper>
       </S.InputSectionContainer>
 
@@ -331,7 +418,7 @@ const GoodsWriteTemplate = () => {
         <S.InputSectionWrapper>
           <UploadImageContainer>
             <UploadImageWrapper>
-              {previewImgList.map((item: string, idx: number) => (
+              {previewImgList.map((item: any, idx: number) => (
                 <UploadImageBox
                   key={idx}
                   isShowAddBtn={idx === showAddBtnIdx}
@@ -341,11 +428,25 @@ const GoodsWriteTemplate = () => {
                   }}
                 >
                   {item != null ? (
-                    <PreviewImageBox
-                      src={item}
-                      isMainImg={idx === mainImgIdx}
-                      onClick={() => setMainImgIdx(idx)}
-                    />
+                    <>
+                      <PreviewImageBox
+                        src={item.url}
+                        isMainImg={idx === mainImgIdx}
+                        onClick={() => setMainImgIdx(idx)}
+                      />
+                      <DeleteBtn
+                        onClick={() => {
+                          handleDeleteImage(idx);
+                        }}
+                      >
+                        <DeleteIcon
+                          width="8px"
+                          height="8px"
+                          fill={`${theme.colors.coolgray500}`}
+                          stroke={`${theme.colors.coolgray500}`}
+                        />
+                      </DeleteBtn>
+                    </>
                   ) : (
                     <>
                       {idx === showAddBtnIdx && (
@@ -372,6 +473,9 @@ const GoodsWriteTemplate = () => {
               <br />- 사진은 최대 1MB까지 업로드 가능합니다.
               <br />- 문제가 발생할 경우 관리자에게 문의해주세요.
             </InfoText>
+            {formError.key === 'images' && (
+              <InputErrorMessage top={224} message={formError.message} />
+            )}
           </UploadImageContainer>
         </S.InputSectionWrapper>
       </S.InputSectionContainer>
@@ -493,6 +597,7 @@ const UploadImageCntText = styled(S.InputSubText)`
 
 const UploadImageContainer = styled(S.ColumnContainer)`
   align-items: flex-start;
+  position: relative;
 `;
 
 const UploadImageWrapper = styled(S.RowContainer)`
@@ -511,6 +616,7 @@ const UploadImageBox = styled.div<{ isShowAddBtn: boolean }>`
   align-items: center;
   border: ${({ isShowAddBtn }) =>
     isShowAddBtn && `2px dashed ${theme.colors.primary}`};
+  position: relative;
 `;
 
 const PreviewImageBox = styled.div<{ src: string; isMainImg: boolean }>`
@@ -524,6 +630,20 @@ const PreviewImageBox = styled.div<{ src: string; isMainImg: boolean }>`
   cursor: pointer;
   border: ${({ isMainImg }) =>
     isMainImg && `2px solid ${theme.colors.primary}`};
+`;
+
+const DeleteBtn = styled.div`
+  position: absolute;
+  background: ${theme.colors.white};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 100px;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
 `;
 
 const InfoText = styled.p`

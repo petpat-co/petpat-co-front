@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { Button } from '../shared/element';
 import ModalContainer from '../common/modal/container/ModalContainer';
 import TopSection from '../shared/layout/TopSection';
+import { access, refresh } from 'src/core/redux/user/userSlice';
 
 const QnaTemplate = () => {
   const appdispatch = useAppDispatch();
@@ -21,7 +22,7 @@ const QnaTemplate = () => {
   const [pageNo, setPageNo] = React.useState<number>(0);
 
   console.log(postList);
-  const goToWrite = () => {
+  const onClickWrite = () => {
     navigate('/qna/write');
   };
 
@@ -31,31 +32,32 @@ const QnaTemplate = () => {
 
   React.useEffect(() => {
     appdispatch(getQnaListApi(pageNo));
+    appdispatch(refresh(''));
+    appdispatch(access(''));
   }, []);
 
   return (
     <React.Fragment>
       <S.Container>
-        <div style={{marginTop:'-124px'}}>
-          <TopSection>
-            <S.BannerTitle>질문 게시판</S.BannerTitle>
-            <Button
-              width="auto"
-              border="2px solid #111827"
-              _onClick={() => {}}
-              _disabled={false}
-              activeBg="#fff"
-              padding="0 20px"
-              radius="120px"
-            >
-              <S.ButtonSpan onClick={goToWrite}> 질문 올리기</S.ButtonSpan>
-            </Button>
-          </TopSection>
-        </div>
+        <TopSection>
+          <S.TitleText>질문 게시판</S.TitleText>
+          <Button
+            width="auto"
+            border="2px solid #111827"
+            _onClick={() => {}}
+            _disabled={false}
+            activeBg="#fff"
+            padding="0 20px"
+            radius="120px"
+            margin="0 8px 0 0"
+          >
+            <S.ButtonSpan onClick={onClickWrite}>질문 올리기</S.ButtonSpan>
+          </Button>
+        </TopSection>
 
         <S.BannerSection>
           <div>
-            <S.TitleText>질문 게시판에 무엇이든 물어보세요</S.TitleText>
+            <S.MainText>질문 게시판에 무엇이든 물어보세요</S.MainText>
             <S.SubText>
               환영해요! 무엇이든 물어볼 수 있는 질문 게시판입니다.
             </S.SubText>

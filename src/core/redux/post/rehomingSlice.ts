@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from 'src/core/store';
-import { rehomingAPI } from 'src/network/api';
+import { postAPI, rehomingAPI } from 'src/network/api';
 import { Post } from 'src/types/post';
 
 export const initialState: Post.RehomingState = {
@@ -25,7 +25,7 @@ export const initialState: Post.RehomingState = {
     petName: 'ㄷㄹㄷㄹ',
     postType: '분양',
     rehomingId: 1,
-    rehomingImg: [
+    imageList: [
       'https://ryungbucket.s3.ap-northeast-2.amazonaws.com/7cc2e304-7261-4274-b232-f099a65ba716.png',
     ],
     status: 'REHOMING_FINDING',
@@ -57,8 +57,8 @@ export const getRehomingListApi = createAsyncThunk(
   async (pageNo: number, thunkAPI) => {
     try {
       const response = await rehomingAPI.getReHomingList(pageNo);
-      console.log('getRehomingListApi response : ', response.data);
-      const list = response.data.data;
+      console.log('getRehomingListApi response : ', response.data.data.content);
+      const list = response.data.data.content;
       thunkAPI.dispatch(rehomingSlice.actions.setRehomingList(list));
     } catch (error: any) {
       console.log('getRehoming : error response', error.response.data);
@@ -74,7 +74,7 @@ export const getOneReHomingApi = createAsyncThunk(
       thunkAPI.dispatch(
         rehomingSlice.actions.setRehomingPost(response.data.data),
       );
-      console.log(response);
+      console.log(response.data.data);
     } catch (error: any) {
       console.log('getOneRehoming : error response', error.response.data);
     }
@@ -117,7 +117,7 @@ export const modifyRehomingApi = createAsyncThunk(
       console.log(data.postId);
       const response = await axios.put(
         `http://localhost:8082/api/v1/rehoming?postId=${data.postId}`,
-        data.formdata,
+        data.formData,
         {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -125,7 +125,9 @@ export const modifyRehomingApi = createAsyncThunk(
           },
         },
       );
-      console.log(response);
+      if (response.data.result === 'SUCCESS') {
+        window.location.replace('/rehome/detail/' + data.postId);
+      }
     } catch (error: any) {
       console.log('modifyRehomingApi : error response', error.response);
     }
@@ -158,10 +160,25 @@ export const bookmarkApi = createAsyncThunk(
       const response = await rehomingAPI.bookMark(postId);
       console.log('bookmarkApi response : ', response.data);
     } catch (error: any) {
-      console.log('deleteRehomingApi : error response', error.response);
+      console.log('bookmarkApi : error response', error.response);
     }
   },
 );
+
+export const likeApi = createAsyncThunk(
+  'rehoming/like',
+  async (postId: number | string, thunkAPI) => {
+    try {
+      const response = await rehomingAPI.like(postId);
+      console.log('likeApi response : ', response.data);
+    } catch (error: any) {
+      console.log('likeApi : error response', error.response);
+    }
+  },
+);
+
+
+
 
 export const rehomingSlice = createSlice({
   name: 'rehomingReducer',
@@ -178,7 +195,6 @@ export const rehomingSlice = createSlice({
       return;
     },
     setRehomingPost: (state, action: PayloadAction<any>) => {
-      console.log('REDUCER' + action.payload);
       state.post = action.payload;
     },
   },

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { RootState } from 'src/core/store';
 import { qnaAPI } from 'src/network/api';
 import { Post } from 'src/types/post';
 
@@ -19,7 +20,9 @@ export const initialState: Post.QnaState = {
     viewCount: '',
     bookMark: '',
   },
-  isSuccess:false,
+  isSuccess: false,
+  onGetPostError: false, // 게시글 조회 실패 에러
+  onPostQnaError: false, // 게시글 삭제 상태
 };
 
 export const getQnaListApi = createAsyncThunk(
@@ -53,6 +56,8 @@ export const getQnaDetailApi = createAsyncThunk(
 export const postQnaApi = createAsyncThunk(
   'qna/detail',
   async (postdata: FormData, thunkAPI) => {
+    // 조회 시작 전 onError = false로 초기화
+    thunkAPI.dispatch(qnaSlice.actions.resetOnError);
     try {
       // const response = await qnaAPI.postQna(postdata);
       const Token = localStorage.getItem('accessToken');
@@ -66,11 +71,17 @@ export const postQnaApi = createAsyncThunk(
           },
         },
       );
+      if (response.status !== 200) {
+        throw new Error(
+          `reqeust rejected : ${response.status} - ${response.data.message}`,
+        );
+      }
       console.log('postQnaApi response : ', response.data);
       thunkAPI.dispatch(qnaSlice.actions.setIsSuccess(true));
     } catch (error: any) {
       console.log('postQnaApi : error response', error.response);
       thunkAPI.dispatch(qnaSlice.actions.setIsSuccess(false));
+      throw error;
     }
   },
 );
@@ -93,7 +104,6 @@ export const deleteQnaApi = createAsyncThunk(
     try {
       const response = await qnaAPI.deleteQna(postNo);
       console.log('deleteQnaApi response : ', response);
-      window.location.replace('/qna');
     } catch (error: any) {
       console.log('deleteQnaApi : error response', error.response.data);
     }
@@ -105,19 +115,31 @@ export const qnaSlice = createSlice({
   initialState,
   reducers: {
     setQnaList: (state, action: PayloadAction<any>) => {
-      console.log('REDUCER' + action.payload);
+      console.log('setQnaList-REDUCER' + action.payload);
       state.list = action.payload;
       return;
     },
     setQnaDetail: (state, action: PayloadAction<any>) => {
-      console.log('REDUCER' + action.payload);
+      console.log('setOneDetail-REDUCER' + action.payload);
       state.post = action.payload;
       return;
     },
     setIsSuccess: (state, action: PayloadAction<any>) => {
-      console.log('REDUCER' + action.payload);
+      console.log('setIsSuccess-REDUCER' + action.payload);
       state.isSuccess = action.payload;
       return;
     },
+    resetOnError: (state, action: PayloadAction<any>) => {
+      state.onPostQnaError = false;
+      state.onGetPostError = false;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(postQnaApi.rejected, (state, action) => {
+      console.error('[postQnaApi] rejected', action.error);
+      state.onPostQnaError = true;
+    });
   },
 });
+
+export const postQnaError = (state: RootState) => state.qna.onPostQnaError;

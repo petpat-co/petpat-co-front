@@ -1,12 +1,45 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button, Input } from '../shared/element';
-import { useAppDispatch } from 'src/core/store';
-import { modifyQnaApi, postQnaApi } from 'src/core/redux/post/qnaSlice';
-import { useLocation, useNavigate } from 'react-router-dom';
-import ModalContainer from '../common/modal/container/ModalContainer';
-import WriteSuccess from './modal/WriteSuccess';
 
+import { useAppDispatch } from 'src/core/store';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+import WriteSuccess from './modal/WriteSuccess';
+import InputErrorMessage from '../common/InputErrorMessage';
+
+import theme from 'src/styles/theme';
+import TopSection from '../shared/layout/TopSection';
+import * as S from '../shared/board/WriteTemplate.style';
+import { Button, Input, TextArea } from '../shared/element';
+import ModalContainer from '../common/modal/container/ModalContainer';
+
+import { ReactComponent as Add } from 'src/asset/icon/add.svg';
+import { ReactComponent as DeleteIcon } from 'src/asset/close.svg';
+import {
+  modifyQnaApi,
+  postQnaApi,
+  postQnaError,
+} from 'src/core/redux/post/qnaSlice';
+import { useSelector } from 'react-redux';
+import { ReactComponent as SuccessIcon } from 'src/asset/modalicon/success.svg';
+import { ReactComponent as FailIcon } from 'src/asset/modalicon/sadface.svg';
+
+const initialFormState = {
+  title: '질문 글 제목',
+  content: '질문 글 내용',
+};
+
+interface ALERT {
+  [key: string]: { title: string; content: string };
+}
+
+// TODO : 
+// - modify 루트 image 매핑
+// - modify 에러 발생 - 서버 문의 필요
+// {
+//  "message": "Content type 'multipart/form-data;boundary=----WebKitFormBoundaryRasIKcpvmGU7hG4l;charset=UTF-8' not supported",
+//  "httpStatus": "INTERNAL_SERVER_ERROR"
+// }
 const QnaWrite = (): React.ReactElement => {
   const appdispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -15,284 +48,412 @@ const QnaWrite = (): React.ReactElement => {
   const pathname = location[2];
   const postId = location[3];
 
-  const imageArr = ['', '', '', ''];
-  const [mainImage, setMainImage] = React.useState(0);
-
-  const [file, setFile] = React.useState<any>(null);
+  const ALERT: ALERT = {
+    titleEmpty: {
+      title: '제목이 입력되지 않았습니다.',
+      content: '입력 후 다시 시도해주세요.',
+    },
+    contentEmpty: {
+      title: '질문 내용이 입력되지 않았습니다.',
+      content: '입력 후 다시 시도해주세요.',
+    },
+    imageEmpty: {
+      title: '이미지가 등록되지 않았습니다.',
+      content: '등록 후 다시 시도해주세요.',
+    },
+    imageSizeOver: {
+      title: '이미지 제한을 초과하였습니다.',
+      content: '5장 이하의 이미지를 등록해주세요.',
+    },
+    imageUploadSuccess: {
+      title: '이미지 등록에 성공했습니다.',
+      content: '',
+    },
+    success: {
+      title: '게시글 등록에 성공했습니다!',
+      content: '게시글로 이동합니다.',
+    },
+    fail: {
+      title: '등록에 실패했습니다.',
+      content: '게시글 목록으로 이동합니다.',
+    },
+  };
 
   const fileRef: any = React.useRef(null);
-  const [preview, setPreview] = React.useState<any>(null);
-  const [message, setMessage] = React.useState<null | number | string>(null);
+  const [form, setForm] = React.useState(initialFormState);
 
-  const [title, setTitle] = React.useState('');
-  const [content, setContent] = React.useState('');
+  const [imgFileList, setImgFileList] = React.useState<any[]>([]);
+  const [previewImgList, setPreviewImgList] = React.useState<any[]>(
+    new Array(5).fill(null),
+  );
+  let fileUrls: any[] = [...previewImgList];
 
-  const onClickImageBox = (idx: number) => {
-    setMainImage(idx);
-  };
+  const [showAddBtnIdx, setShowAddBtnIdx] = React.useState<number>(0);
+  const [mainImgIdx, setMainImgIdx] = React.useState<number>(0);
+  const [formError, setFormError] = React.useState({ key: '', message: '' });
 
-  const titleHandler = (value: string) => {
-    return;
-  };
+  // --- modal
+  const [onModal, setOnModal] = React.useState(false);
 
-  const contentHandler = (value: string) => {
-    return;
-  };
-
-  // 업로드한 파일 가져오기
-  const onChange = (e: any) => {
-    if (e.target.files.length > 5) {
-      // 파일 갯수 5개 초과
-      window.alert('파일 5개 초과');
-      return;
-    } else if (e.target.files) {
-      // 업로드한 파일이 있는 경우
-      setFile(Array.from(e.target.files));
-      window.alert('파일 업로드 완료');
-    } else {
-      // 업로드 취소
-      setFile([]);
-      return;
-    }
-
-    // // 미리보기 세팅
-    // const fileArr = e.target.files;
-    // let fileURLs = [];
-    // let filesLength = fileArr.length > 10 ? 10 : fileArr.length;
-    // let files;
-
-    // for (let i = 0; i < filesLength; i++) {
-    //   files = fileArr[i];
-
-    //   let reader = new FileReader();
-    //   reader.onload = () => {
-    //     fileURLs[i] = reader.result;
-    //     // setPreview([fileURLs);
-    //     // setPreview([...fileURLs]);
-    //   };
-    //   reader.readAsDataURL(files);
-    // }
-  };
-
-  const [openModal, setOpenModal] = React.useState(false);
-
-  // 게시글 등록
-  const submit = () => {
-    // 데이터 유효성
-    if (!title) {
-      // 제목 작성
-      window.alert('제목');
-      return;
-    } else if (!content) {
-      // 글 내용 작성
-      window.alert('내용');
-      return;
-    } else if (!file.length) {
-      // 파일이 없을 경우
-      window.alert('파일');
-      return;
-    } else if (file.length > 5) {
-      // 파일 갯수가 5개를 초과할 경우
-      window.alert('파일!');
-      return;
-    }
-    // 폼데이터 세팅
-    const formData = new FormData();
-    const qnaImg: any = {
-      qnaImgFile: file,
-      qnaImgUrl: '',
-    };
-
-    // formData.append('title', title);
-    // formData.append('content', content);
-    // formData.append('images', file);
-    // 이건 안 되고
-
-    formData.append('title', title);
-    formData.append('content', content);
-    for (let i = 0; i < file.length; i++) {
-      formData.append('images', file[i]);
-    }
-    // 이건 된다??
-
-    setOpenModal(true);
-    if (pathname === 'modify') {
-      appdispatch(modifyQnaApi({formData:formData, postId:postId}));
-    } else {
-      appdispatch(postQnaApi(formData));
-    }
-  };
+  // useSelector
+  // -- postData
+  const qnaData = useSelector((state: any) => state?.qna?.post);
+  // --- error
+  const onPostQnaError = useSelector(postQnaError);
 
   const onClickClose = () => {
     navigate('/qna');
   };
 
+  const onChangeInput = React.useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+      setForm((s) => ({ ...s, [name]: value }));
+    },
+    [form],
+  );
+
+  const onChangeTextArea = React.useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const { name, value } = e.target;
+      setForm((s) => ({ ...s, [name]: value }));
+    },
+    [form],
+  );
+
+  // 엽로드한 파일들 불러오기
+  // 현재 QNA image idx 적용되어있지 않음
+  const handleChangeImages = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const uploadFiles = e.target.files;
+
+    if (uploadFiles) {
+      let uploadFileArr = Array.from(uploadFiles).map((file, idx) => {
+        return {
+          id: idx,
+          file: file,
+        };
+      });
+
+      if (uploadFileArr.length > 5) {
+        window.alert(ALERT.imageSizeOver.title);
+        uploadFileArr = uploadFileArr.slice(0, 5);
+      }
+
+      setImgFileList(uploadFileArr);
+      window.alert(ALERT.imageUploadSuccess.title);
+      setFormError({ key: '', message: '' });
+
+      // 파일 데이터 > 미리보기용 url 세팅
+      uploadFileArr.forEach((file, idx) => onReadFile(file, idx));
+    } else {
+      setImgFileList([]);
+    }
+  };
+
+  // 이미지 파일 데이터 읽고 임시 url 생성
+  const onReadFile = (data: any, idx: number) => {
+    let fileReader = new FileReader();
+
+    fileReader.readAsDataURL(data.file);
+    fileReader.onload = (data) => {
+      if (typeof data.target?.result === 'string') {
+        // 파일 읽는 순으로 해당 배열의 데이터 교체
+        for (let i = 0; i < previewImgList.length; i++) {
+          if (i === idx) {
+            fileUrls[i] = { id: i, url: data.target.result };
+          }
+        }
+        setPreviewImgList(fileUrls);
+      }
+    };
+  };
+
+  // 업로드 한 이미지 삭제
+  const handleDeleteImage = (targetId: number) => {
+    // 파일 데이터 업데이트
+    let updateImgFileList: any[] = imgFileList
+      .filter((file) => file.id != targetId)
+      .map((data, idx) => {
+        return {
+          id: idx,
+          file: data,
+        };
+      });
+
+    // 미리보기 데이터 업데이트
+    let updatePreviewImgList: any[] = previewImgList
+      .filter((file) => file && file.id != targetId)
+      .map((data, idx) => {
+        return {
+          id: idx,
+          url: data.url,
+        };
+      });
+
+    updatePreviewImgList = updatePreviewImgList.concat(
+      Array(5 - updatePreviewImgList.length).fill(null),
+    );
+
+    setImgFileList(updateImgFileList);
+    setPreviewImgList(updatePreviewImgList);
+  };
+
+  // 글 작성
+  const handleSubmit = () => {
+    const currentFormArray = Object.entries(form);
+
+    // 유효성 검사
+    for (const [key, value] of currentFormArray) {
+      if (!value) {
+        const alertKey = `${key}Empty`;
+        const message = ALERT[alertKey]?.title;
+        setFormError({ key, message });
+        return;
+      }
+    }
+
+    if (imgFileList.length == 0) {
+      const message = ALERT.imageEmpty.title;
+      setFormError({ key: 'images', message });
+      return;
+    }
+
+    // formData 세팅
+    const formData = new FormData();
+    Object.entries(form).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    for (let i = 0; i < imgFileList.length; i++) {
+      formData.append('images', imgFileList[i].file);
+    }
+
+    // 글 작성
+    post(formData);
+  };
+
+  // 글 작성하기
+  // => 응답 대기하여 reject인 경우 onError true? > modal 메시지 분기
+  const post = async (formData: FormData) => {
+    try {
+      // 현재 글 작성 루트에 따라 dispatch 분기
+      switch (pathname) {
+        case 'write':
+          await appdispatch(postQnaApi(formData));
+          return;
+        case 'modify':
+          await appdispatch(modifyQnaApi({postId, formData}));
+          return;
+      }
+    } catch (e) {
+      // response = reject
+      console.error('[QNA WRITE] PostQna Error : ', e);
+    } finally {
+      // modal popup
+      // onPostError의 값에 따라 메시지 분기됨
+      setOnModal(true);
+    }
+  };
+
+  React.useEffect(() => {
+    // 미리보기 상태 변경 시 데이터가 없는 첫번째 idx 추출
+    let firstNullDataIdx = previewImgList.findIndex((item) => {
+      return item == null;
+    });
+    setShowAddBtnIdx(firstNullDataIdx);
+  }, [previewImgList]);
+
   return (
-    <Container>
-      {openModal && (
-        <ModalContainer zIndex={100000} id="0" onClickClose={onClickClose}>
-          <WriteSuccess />
-        </ModalContainer>
-      )}
-      <TitleBanner>
-        {pathname === 'modify' ? '질문 게시글 수정하기' : '질문 게시판 글쓰기'}
-      </TitleBanner>
-      <FormContainer>
-        <FlexSection>
-          <p>제목</p>
-          <Input
-            borderRadius="28px"
-            placeholder="제목을 입력해 주세요"
-            onChange={(e) => {
-              setTitle(e.target.value);
-            }}
-            maxLength={200}
-            name="qnaTitle"
-            padding="0 32px"
-          />
-        </FlexSection>
-        <Line />
-        <FlexSection>
-          <p>질문 내용</p>
-          <TextArea
-            placeholder="중성화 여부 O / 1차 접종 X … "
-            onChange={(e) => setContent(e.target.value)}
-          />
-        </FlexSection>
-        <FlexSection>
-          <p>
-            이미지 <span>(0/5)</span>
-          </p>
-          <div>
-            <ImageContainer>
-              <UploadImage>
-                <div
-                  onClick={() => {
-                    fileRef.current.click();
-                  }}
-                  style={{
-                    width: '65px',
-                    height: '65px',
-                    backgroundColor: '#fff',
-                    borderRadius: '36px',
-                    border: '2px solid red',
-                    position: 'relative',
-                    margin: '90px auto',
-                  }}
-                >
-                  <p
-                    style={{
-                      fontSize: '80px',
-                      fontWeight: '100',
-                      position: 'absolute',
-                      top: '-24px',
-                      left: '7px',
-                      color: 'red',
+    <>
+      <TopSection>
+        <TitleText>
+          {pathname === 'modify'
+            ? '질문 게시글 수정하기'
+            : '질문 게시판 글쓰기'}
+        </TitleText>
+      </TopSection>
+      <Container>
+        <S.InputSectionContainer>
+          <S.InputTitleWrapper>
+            <S.InputTitleText>제목</S.InputTitleText>
+          </S.InputTitleWrapper>
+          <S.InputSectionWrapper>
+            <S.RowContainer>
+              <Input
+                borderRadius="28px"
+                placeholder="제목을 입력해주세요."
+                onChange={onChangeInput}
+                maxLength={20}
+                name="title"
+                padding="0 24px"
+                defaultValue={pathname === 'modify' ? qnaData?.title : ''}
+              />
+              <S.InputSubText>{form.title.length}/20</S.InputSubText>
+              {formError.key === 'title' && (
+                <InputErrorMessage top={58} message={formError.message} />
+              )}
+            </S.RowContainer>
+          </S.InputSectionWrapper>
+        </S.InputSectionContainer>
+
+        <S.DividerLine />
+
+        <S.InputSectionContainer>
+          <S.InputTitleWrapper>
+            <S.InputTitleText>질문 내용</S.InputTitleText>
+          </S.InputTitleWrapper>
+          <S.InputSectionWrapper>
+            <ContentContainer>
+              <TextArea
+                name="content"
+                placeholder="설명을 입력해주세요."
+                onChange={onChangeTextArea}
+                maxLength={2000}
+                height="400px"
+                borderRadius="28px"
+                padding="24px;"
+                fontSize={`${theme.fontSizes.regular}`}
+                defaultValue={pathname==='modify'?qnaData?.content:''}
+              />
+              <S.InputSubText>{form.content.length}/2000</S.InputSubText>
+            </ContentContainer>
+            {formError.key === 'content' && (
+              <InputErrorMessage top={210} message={formError.message} />
+            )}
+          </S.InputSectionWrapper>
+        </S.InputSectionContainer>
+        <S.InputSectionContainer>
+          <S.InputTitleWrapper>
+            <S.InputTitleText>이미지</S.InputTitleText>
+            <UploadImageCntText>
+              ({previewImgList.filter((image) => image != null).length}/5)
+            </UploadImageCntText>
+          </S.InputTitleWrapper>
+          <S.InputSectionWrapper>
+            <UploadImageContainer>
+              <UploadImageWrapper>
+                {previewImgList.map((item: any, idx: number) => (
+                  <UploadImageBox
+                    key={idx}
+                    isShowAddBtn={idx === showAddBtnIdx}
+                    // input file 요소 > ref를 통해 조작
+                    onClick={() => {
+                      idx === showAddBtnIdx && fileRef.current.click();
                     }}
                   >
-                    +
-                  </p>
-                  <input
-                    multiple
-                    type="file"
-                    style={{ display: 'none' }}
-                    accept="image/*"
-                    ref={fileRef}
-                    onChange={onChange}
-                  />
-                </div>
-              </UploadImage>
-              {imageArr.map((item, idx) => {
-                if (mainImage === idx) {
-                  return (
-                    <ImageBox
-                      key={idx}
-                      onClick={() => {
-                        onClickImageBox(idx);
-                      }}
-                      checked={true}
-                    />
-                  );
-                } else {
-                  return (
-                    <ImageBox
-                      key={idx}
-                      onClick={() => {
-                        onClickImageBox(idx);
-                      }}
-                      checked={false}
-                    />
-                  );
-                }
-              })}
-            </ImageContainer>
-            <WarnMessage>
-              <p>
+                    {item != null ? (
+                      <>
+                        <PreviewImageBox
+                          src={item.url}
+                          isMainImg={idx === mainImgIdx}
+                          onClick={() => setMainImgIdx(idx)}
+                        />
+                        <DeleteBtn
+                          onClick={() => {
+                            handleDeleteImage(idx);
+                          }}
+                        >
+                          <DeleteIcon
+                            width="8px"
+                            height="8px"
+                            fill={`${theme.colors.coolgray500}`}
+                            stroke={`${theme.colors.coolgray500}`}
+                          />
+                        </DeleteBtn>
+                      </>
+                    ) : (
+                      <>
+                        {idx === showAddBtnIdx && (
+                          <>
+                            <Add width={60} height={60} />
+                            <input
+                              multiple
+                              type="file"
+                              style={{ display: 'none' }}
+                              accept="image/*"
+                              ref={fileRef}
+                              onChange={handleChangeImages}
+                            />
+                          </>
+                        )}
+                      </>
+                    )}
+                  </UploadImageBox>
+                ))}
+              </UploadImageWrapper>
+              <InfoText>
                 * 부적절한 이미지를 등록할 경우 서비스 이용에 제한 및 어려움이
                 있을 수 있습니다.
-              </p>
-              <p>- 사진은 최대 1MB까지 업로드 가능합니다.</p>
-              <p>- 문제가 발생할 경우 관리자에게 문의해주세요.</p>
-            </WarnMessage>
-          </div>
+                <br />- 사진은 최대 1MB까지 업로드 가능합니다.
+                <br />- 문제가 발생할 경우 관리자에게 문의해주세요.
+              </InfoText>
+              {formError.key === 'images' && (
+                <InputErrorMessage top={224} message={formError.message} />
+              )}
+            </UploadImageContainer>
+          </S.InputSectionWrapper>
+        </S.InputSectionContainer>
 
-          
-        </FlexSection>
-      </FormContainer>
-      <Buttons>
-        <Button
-          _onClick={() => {
-            window.alert('임시저장');
-          }}
-          width="fit-content"
-          bgcolor="coolgray400"
-          colors="white"
-          padding="20px 70px 20px 70px"
-          radius="50px"
+        <Buttons>
+          <Button
+            _onClick={() => {
+              // window.alert('글작성');
+              // submit();
+              handleSubmit();
+            }}
+            width="fit-content"
+            bgcolor="primary"
+            colors="white"
+            padding="20px 70px 20px 70px"
+            radius="50px"
+          >
+            등록하기
+          </Button>
+        </Buttons>
+      </Container>
+
+      {/* ---------- 모달영역 ---------- */}
+      {onModal && (
+        <ModalContainer
+          zIndex={1000}
+          id="postDeleted"
+          onClickClose={onClickClose}
+          title={
+            !onPostQnaError
+              ? '게시글이 등록되었습니다.'
+              : '문제가 발생했습니다.'
+          }
+          image={true}
         >
-          임시저장
-        </Button>
-        <Button
-          _onClick={() => {
-            // window.alert('글작성');
-            submit();
-          }}
-          width="fit-content"
-          bgcolor="primary"
-          colors="white"
-          padding="20px 70px 20px 70px"
-          radius="50px"
-        >
-          등록하기
-        </Button>
-      </Buttons>
-    </Container>
+          {!onPostQnaError ? <SuccessIcon /> : <FailIcon />}
+          <Button
+            margin="20px 0 0 0"
+            width="200px"
+            _onClick={onClickClose}
+            modal
+          >
+            목록으로 이동하기
+          </Button>
+        </ModalContainer>
+      )}
+    </>
   );
 };
 
-const Line = styled.hr`
-  margin: 60px 0;
-  width: 100%;
-  height: 1px;
-  border: none;
-  background-color: #d9d9d9;
+const ContentContainer = styled(S.ColumnContainer)`
+  align-items: flex-end;
 `;
 
-const FlexSection = styled.div`
-  display: flex;
-  margin-bottom: 60px;
-
-  & > p {
-    width: 200px;
-  }
+export const TitleText = styled.h2`
+  font-weight: 700;
+  font-size: 32px;
+  color: #fff;
 `;
 
 const Buttons = styled.div`
-  position: absolute;
-  right: 100px;
-  bottom: 0;
+  padding: 60px;
   display: flex;
-  gap: 24px;
+  justify-content: flex-end;
   & > button {
     display: flex;
     align-items: center;
@@ -300,67 +461,72 @@ const Buttons = styled.div`
 `;
 
 const Container = styled.div`
-  padding-top: 150px;
+  max-width: 1440px;
+  margin: auto;
   margin-bottom: 120px;
   width: 100%;
 `;
 
-const TitleBanner = styled.div`
-  padding: 0 180px;
+const UploadImageCntText = styled(S.InputSubText)`
+  margin-top: 2%;
+  color: ${theme.colors.gray70};
+`;
+
+const UploadImageContainer = styled(S.ColumnContainer)`
+  align-items: flex-start;
+  position: relative;
+`;
+
+const UploadImageWrapper = styled(S.RowContainer)`
   width: 100%;
-  height: 128px;
-  background-color: ${({ theme }) => theme.colors.primary};
+  gap: 20px;
+`;
+
+const UploadImageBox = styled.div<{ isShowAddBtn: boolean }>`
+  flex: 1;
+  aspect-ratio: 1;
+  background-color: ${theme.colors.sub03};
+  border-radius: 28px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: ${({ isShowAddBtn }) =>
+    isShowAddBtn && `2px dashed ${theme.colors.primary}`};
+  position: relative;
+`;
+
+const PreviewImageBox = styled.div<{ src: string; isMainImg: boolean }>`
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 28px;
+  background-image: ${({ src }) => `url(${src})`};
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  border: ${({ isMainImg }) =>
+    isMainImg && `2px solid ${theme.colors.primary}`};
+`;
+
+const DeleteBtn = styled.div`
+  position: absolute;
+  background: ${theme.colors.white};
   display: flex;
   align-items: center;
-  font-size: 40px;
-  font-weight: 700;
-  color: #fff;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 100px;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
 `;
 
-const FormContainer = styled.div`
-  padding: 80px 100px;
-  & > input {
-    border: ${({ theme }) => `1px solid ${theme.colors.primary}`};
-  }
-`;
-
-const TextArea = styled.textarea`
-  outline: none;
-  padding: 32px;
-  border: ${({ theme }) => `1px solid ${theme.colors.primary}`};
-  border-radius: 28px;
-  width: 100%;
-  height: 320px;
-`;
-
-const ImageContainer = styled.div`
-  display: flex;
-  gap: 20px;
-  margin-left: -12px;
-`;
-
-const ImageBox = styled.div<{ checked: any }>`
-  width: 260px;
-  height: 260px;
-  background-color: ${({ theme }) => theme.colors.sub03};
-  border-radius: 28px;
-  cursor: pointer;
-  border: ${(props) => (props.checked === true ? ' 4px solid red' : 'none')};
-`;
-
-const UploadImage = styled.div`
-  width: 260px;
-  height: 260px;
-  background-color: ${({ theme }) => theme.colors.sub03};
-  border: ${({ theme }) => `4px dashed ${theme.colors.primary}`};
-  border-radius: 28px;
-  cursor: pointer;
-`;
-
-const WarnMessage = styled.div`
-  margin: 12px 0;
-  margin-left: -12px;
-  color: #858585;
+const InfoText = styled.p`
+  font-size: ${theme.fontSizes.small};
+  color: ${theme.colors.grayText};
+  line-height: 1.75;
 `;
 
 export default QnaWrite;

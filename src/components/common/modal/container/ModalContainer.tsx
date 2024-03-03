@@ -151,7 +151,7 @@ const Wrap = styled.div<WrapStyledProps>`
   padding: ${({ padding }) => (padding ? padding : '0')};
 
   width: 100%;
-  height: 100%;
+  height: 100vh;
 
   align-items: ${({ alignItems }) => (alignItems ? alignItems : 'center')};
   justify-content: ${({ justify }) => (justify ? justify : 'center')};
@@ -236,6 +236,13 @@ const Title = styled.div`
 
 const ContentSection = styled.div`
   width: 100%;
-  padding: 100px 40px;
+  padding: 100px 40px 60px;
   text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.coolgray700};
+
+  /* 동물보호법에 따라 허가받지 않은 유료 가정분양은 불법으로 규정되고 있습니다. */
+
+  line-height: 26px;
 `;

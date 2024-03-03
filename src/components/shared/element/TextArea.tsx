@@ -16,6 +16,7 @@ interface TextAreaProps extends TextAreaStyleType {
   defaultValue?: string;
   maxLength: number;
   name: string;
+  value?: string;
 }
 const TextArea = forwardRef((props: TextAreaProps, ref?: any) => {
   const {
@@ -30,6 +31,7 @@ const TextArea = forwardRef((props: TextAreaProps, ref?: any) => {
     borderRadius,
     padding,
     fontSize,
+    value,
   } = props;
 
   const styles = {
@@ -50,6 +52,7 @@ const TextArea = forwardRef((props: TextAreaProps, ref?: any) => {
       ref={ref}
       name={name}
       maxLength={maxLength}
+      value={value}
     />
   );
 });
@@ -73,8 +76,7 @@ const StyledTextArea = styled.textarea<TextAreaStyleType>`
     color: #cdcdcd;
   }
   :focus {
-    border: ${({ theme }) => `1.4px solid ${theme.colors.coolgray400}`};
-    outline: none;
+    // border: ${({ theme }) => `1.4px solid ${theme.colors.coolgray400}`};
   }
 `;
 export default TextArea;

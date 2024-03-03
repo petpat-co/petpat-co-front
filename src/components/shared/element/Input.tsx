@@ -20,7 +20,7 @@ interface InputProps extends InputStyleType {
   maxLength: number;
   name: string;
   autoComplete?: boolean;
-  checked?:string;
+  checked?:boolean;
   value?:string;
 }
 
@@ -42,6 +42,7 @@ const Input = forwardRef((props: InputProps, ref?: any) => {
     padding,
     check,
     value,
+    checked
   } = props;
 
   const styles = {
@@ -67,6 +68,7 @@ const Input = forwardRef((props: InputProps, ref?: any) => {
       autoComplete={autoComplete ? 'on' : 'off'}
       check={check}
       value={value}
+      checked={type=='checkbox'||type=='radio'? checked : false}
     />
   );
 });
@@ -94,7 +96,7 @@ const StyledInput = styled.input<InputStyleType>`
     outline: none;
   }
 
-  ${({ type, theme }) =>
+  ${({ type, theme, width }) =>
     type === 'checkbox'
       ? `appearance: none;
     width: 1.5rem;

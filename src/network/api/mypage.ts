@@ -1,3 +1,4 @@
+import { config } from '../config';
 import instance from '../instance';
 import { AddPrefix, ApiHandler } from '../type/api';
 // import { config } from '../config';
@@ -21,6 +22,9 @@ export const modifyProfile: ApiHandler = (options) =>
 // 2024.01 유저 정보 조회
 export const getProfile: ApiHandler = (options) =>
   instance({
+    headers: {
+      Authorization: `Bearer ${Token}`,
+    },
     method: 'GET',
     url: addPrefix(''),
     ...options,
@@ -84,10 +88,10 @@ export const getBookmarkList: ApiHandler = (options) =>
     ...options,
   });
 
-  // 작성 댓글 조회
+// 작성 댓글 조회
 export const getCommentList: ApiHandler = (options) =>
-instance({
-  method: 'GET',
-  // url: `/profile`,
-  ...options,
-});
+  instance({
+    method: 'GET',
+    // url: `/profile`,
+    ...options,
+  });

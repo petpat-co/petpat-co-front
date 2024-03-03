@@ -16,10 +16,12 @@ interface PropsType {
    *  value를 초기값을 -1로 설정하세요.
    */
   placeholder?: string;
+  height?: number;
+  borderColor?: string;
 }
 
 export default function Select(props: PropsType) {
-  const { data, value, setValue, placeholder } = props;
+  const { data, value, setValue, placeholder, height, borderColor } = props;
   const $dropDownList = React.useRef<HTMLUListElement>(null);
   const [dropDown, setDropDown] = React.useState<boolean>(false);
 
@@ -29,7 +31,6 @@ export default function Select(props: PropsType) {
   }, [data]);
 
   const handleSelect = (idx: number) => {
-    console.log(idx);
     setValue(idx);
     setDropDown((prev) => !prev);
   };
@@ -49,7 +50,7 @@ export default function Select(props: PropsType) {
 
   return (
     <S.SelectContainer>
-      <S.SelectZone width={selectComponentWidth}>
+      <S.SelectZone width={selectComponentWidth} height={height} borderColor={borderColor}>
         {placeholder && value === -1 ? placeholder : data[value]}
         <S.StyledArrow
           open={dropDown}
@@ -60,6 +61,8 @@ export default function Select(props: PropsType) {
         <S.DropDownList
           select={placeholder && value === -1 ? 0 : value + 1}
           ref={$dropDownList}
+          height={height}
+          borderColor={borderColor}
         >
           {data.map((option, idx) => (
             <S.DropDownItem key={idx} onClick={() => handleSelect(idx)}>

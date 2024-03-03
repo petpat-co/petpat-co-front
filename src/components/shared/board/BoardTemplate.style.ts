@@ -8,6 +8,9 @@ export const ComponentContainer = styled.div`
   width: 100%;
   height: 100%;
   padding-top: 150px;
+
+  // 24.03.02
+  background-color: ${({ theme }) => theme.colors.coolgray200};
 `;
 
 export const BestListSection = styled.div`
@@ -26,7 +29,11 @@ export const SectionWrapper = styled.div`
 export const TextWrapper = styled.div`
   flex: 1;
   flex-shrink: 0;
-  max-width: 240px;
+
+  // 24.03 max-width - 문구 짤리는 현상
+  //       margin-top 수정
+  max-width: 280px;
+  margin-top: 24px; // Accordion Menu랑 시작점 맞춤
 `;
 
 export const TitleText = styled.p`
@@ -46,7 +53,7 @@ export const ListWrapper = styled.div<{ rowNum: number }>`
   flex: 3;
   display: grid;
   row-gap: 30px;
-  column-gap: 12px;
+  column-gap: 20px;
   grid-template-columns: ${({ rowNum }) => `repeat(${rowNum}, 1fr)`};
   position: relative; // MenuList Indicator의 상대 위치 설정
   margin-top: 24px; // Accordion Menu랑 시작점 맞춤

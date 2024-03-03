@@ -1,51 +1,27 @@
 import React, { ReactElement, useState } from 'react';
-import { useInfiniteQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-import { rehomingAPI } from 'src/network/api';
-import Button from '../shared/element/Button';
-import TopSection from '../shared/layout/TopSection';
 import * as S from './ReHomingTemplate.style';
-import TopRehoming from './TopRehoming';
-import AlbumList from '../shared/list/AlbumList';
-import Category from './Category';
 import { useAppDispatch } from 'src/core/store';
 import {
   getRehomingCategoryApi,
   getRehomingListApi,
 } from 'src/core/redux/post/rehomingSlice';
 import { useSelector } from 'react-redux';
-import Accordion from '../shared/list/Accordion';
+import BoardTemplate from '../shared/board/BoardTemplate';
+import styled from 'styled-components';
 
 const RehomingTemplate = (): ReactElement => {
   const navigate = useNavigate();
   const appdispatch = useAppDispatch();
 
-  const [allValue, setAllValue] = useState<number>(0);
-  const [dogCategory, setDogCategory] = useState<number>(0);
-  const [category, setCategory] = useState<number>(0);
   const [pageno, setPageNo] = useState<number>(1);
 
   const categories = useSelector((state: any) => state?.rehoming?.category);
   const postList = useSelector((state: any) => state?.rehoming?.list);
-  // const { data, status } = useInfiniteQuery(
-  //   ['rehomeList'],
-  //   ({ pageParam = 1 }) =>
-  //     rehomingAPI.getReHomingList({ params: { page: pageParam } }),
-  //   {
-  //     getNextPageParam: (lastPage) => {
-  //       return lastPage.data.pageno + 1; // 다음 페이지를 호출할 때 사용 될 pageParam
-  //     },
-  //   },
-  // );
 
-  // const { data, status } = useQuery('rehomeList', () =>
-  //   rehomingAPI.getReHomingList({ params }),
-  // );
   const onClickWrite = () => {
     navigate('/rehome/write');
   };
-
-  // const postList = useSelector((state: any) => state?.rehoming?.list).content;
 
   React.useEffect(() => {
     appdispatch(getRehomingListApi(pageno));
@@ -53,144 +29,37 @@ const RehomingTemplate = (): ReactElement => {
   }, []);
 
   return (
-    <S.Container>
-      {/* ----------헤더영역----------*/}
-      <TopSection>
-        <S.TitleText>분양글 게시판</S.TitleText>
-        <Button
-          width="auto"
-          border="2px solid #111827"
-          _onClick={() => {}}
-          _disabled={false}
-          activeBg="#fff"
-          padding="0 20px"
-          radius="120px"
-        >
-          <S.ButtonSpan onClick={onClickWrite}> 분양 글쓰러가기</S.ButtonSpan>
-        </Button>
-      </TopSection>
-      {/*----------상단 배너(인기글)----------*/}
-      <S.WidthWrapper>
-        <TopRehoming>
-          <div className="top_rehoming_text">
-            <p className="top_rehoming_text__title">
-              최근에 관심을
-              <br />
-              많이 받은 분양글
-            </p>
-            <p className="top_rehoming_text__content">
-              귀여운 아이들이
-              <br />
-              ㅇㅇ님의 관심을 기다리고 있어요!
-            </p>
-          </div>
-          <div className="top_rehoming_list">
-            {topPost.map((item, idx) => {
-              return <AlbumList key={idx + item.title} item={item} />;
-            })}
-          </div>
-        </TopRehoming>
-      </S.WidthWrapper>
-
-      {/* ----------선택된 카테고리----------
-      <S.SelectSection>
-        <S.LeftBox>
-          <S.FirstBox>
-            <S.HomeBox>
-              <span> 홈 </span>
-              <Arrow stroke="#333" strokeWidth="1" width="30" height="30" />
-            </S.HomeBox>
-            {firstData.map((el, idx) => {
-              return (
-                <S.SelectWrap key={idx}>
-                  <Select
-                    data={el.list}
-                    value={idx ? category : dogCategory}
-                    setValue={idx ? setCategory : setDogCategory}
-                  />
-                  {idx ? null : (
-                    <Arrow
-                      stroke="#333"
-                      strokeWidth="1"
-                      width="30"
-                      height="30"
-                    />
-                  )}
-                </S.SelectWrap>
-              );
-            })}
-          </S.FirstBox>
-          <S.SecondBox>
-            {secendData.map((el, idx) => {
-              return (
-                <S.CategoryBox key={idx}>
-                  <span>{el.text}</span>
-                  <Arrow stroke="#333" strokeWidth="1" width="30" height="30" />
-                </S.CategoryBox>
-              );
-            })}
-          </S.SecondBox>
-        </S.LeftBox>
-        <S.RightBox>
-          <Select data={mock1} value={allValue} setValue={setAllValue} />
-        </S.RightBox>
-      </S.SelectSection> */}
-
-      {/* ----------분양글리스트---------- */}
-
-      {/* ---카테고리--- */}
-      <S.ListWrapper>
-        <S.ListInner>
-          {/* <Category /> */}
-          <S.AccordianWrapper>
-            <Accordion.Root>
-              <Accordion.Item value="강아지">
-                <Accordion.Title isMain={true}>강아지</Accordion.Title>
-                <Accordion.Content>
-                  {categories.map((category: any) => (
-                    <Accordion.Item
-                      key={category.petCategoryId}
-                      value={String(category.petCategoryId)}
-                    >
-                      <Accordion.Title>
-                        {category.petCategoryName}
-                      </Accordion.Title>
-                      <Accordion.Content>
-                        {category.petCategoryName}
-                      </Accordion.Content>
-                      <Accordion.Detail>
-                        {category.petCategoryCnt}
-                      </Accordion.Detail>
-                    </Accordion.Item>
-                  ))}
-                </Accordion.Content>
-              </Accordion.Item>
-            </Accordion.Root>
-          </S.AccordianWrapper>
-
-          {/* ---글목록--- */}
-          <S.ListGrid>
-            {postList.length > 0 ? (
-              <>
-                {postList.map((item: any, idx: number) => {
-                  return <AlbumList key={item.postId} item={item} />;
-                })}
-              </>
-            ) : (
-                <div>
-                  <p>등록된 게시글이 없습니다.</p>
-                </div>
-            )}
-          </S.ListGrid>
-        </S.ListInner>
-      </S.ListWrapper>
-    </S.Container>
+    <BoardTemplate
+      title={'분양 게시판'}
+      buttonText={'분양 글쓰러가기'}
+      onClick={() => navigate('/rehome/write')}
+      bannerTitle={
+        <>
+          최근에 관심을
+          <br />
+          많이 받은 분양글
+        </>
+      }
+      bannerContent={
+        <>
+          귀여운 아이들이
+          <br />
+          ㅇㅇ님의 관심을 기다리고 있어요!
+        </>
+      }
+      bannerData={topRehomingList}
+      postListData={postList}
+    />
   );
 };
 
 export default RehomingTemplate;
 
-const topPost = [
+const Container = styled.div`
+  max-width: 1440px;
+`
+
+const topRehomingList = [
   {
     imagePath: 'https://img.hankyung.com/photo/202308/B20230809112130640.jpg',
     status: '모집중',

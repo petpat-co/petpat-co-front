@@ -32,8 +32,7 @@ const TitleSection = ({
             _onClick={onClick}
             activeBg={theme.colors.white}
             padding={'0 20px'}
-            radius={'120px'}
-          >
+            radius={'120px'}>
             <ButtonSpan>{buttonText}</ButtonSpan>
           </Button>
         ) : null}

@@ -52,7 +52,8 @@ export const getRehomingCategory: ApiHandler = (options) =>
   instance({
     method: 'GET',
     // url: `/api/v1/categoryGroup/${options}`,
-    url: `/api/v1/rehoming/category/1`,
+    // url: `/api/v1/rehoming/category/1`,
+    url: '/api/v1/rehoming/categoryList',
     ...options,
   });
 

@@ -29,14 +29,24 @@ instance.interceptors.request.use(
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
 
+    config.headers = {
+      ...config.headers,
+      Accept: 'application/json', // 이 부분은 모든 요청에 공통적으로 적용됩니다.
+    };
+
+    // token 있는 경우 request, else console.error
+    // formdata의 인스턴스인경우 멀티파트, 그 외 json
+    if (config.data instanceof FormData) {
+      config.headers['Content-Type'] = 'multipart/form-data';
+    } else {
+      config.headers['Content-Type'] = 'application/json; charset=UTF-8';
+    }
+    // token setting
     // if(accessToken && refreshToken) {
-    if(accessToken) {
-      config.headers = {
-        'Content-Type': 'application/json; charset=UTF-8',
-        accept: 'application/json',
-        Authorization: `Bearer ${accessToken}`,
-        // RefreshToken: `${refreshToken}`,
-      };
+    if (accessToken) {
+      config.headers['Authorization'] = `Bearer ${accessToken}`;
+    } else {
+      console.error('[REQUEST INTERCEPTOR] - TOKEN 확인되지 않음');
     }
     return config;
   },

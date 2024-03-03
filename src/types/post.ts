@@ -8,6 +8,7 @@ export namespace Post {
     trade: Trade;
     qna: Qna;
     onGetPostError: boolean;
+    onAddPostError: boolean;
     onDeleteError: boolean;
     error: string; // error 메시지
   }
@@ -31,6 +32,8 @@ export namespace Post {
     list: Array<string>;
     post: Qna;
     isSuccess: boolean;
+    onGetPostError: boolean, // 게시글 조회 실패 에러
+    onPostQnaError: boolean, // 게시글 삭제 상태
   }
 
   export interface Rehoming {
@@ -59,8 +62,8 @@ export namespace Post {
     bookmarkCnt?: number | string; // 북마크 수
     viewCnt?: number | string; // 조회수
 
-    // image - 추후 사용되지 않는 변수 삭제 필요
-    rehomingImg?: Array<string>;
+    // image
+    imageList?: Array<string>;
 
     // address
     cityName?: string; // 도,시

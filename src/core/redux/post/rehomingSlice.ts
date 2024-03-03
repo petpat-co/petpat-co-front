@@ -25,7 +25,7 @@ export const initialState: Post.RehomingState = {
     petName: 'ㄷㄹㄷㄹ',
     postType: '분양',
     rehomingId: 1,
-    rehomingImg: [
+    imageList: [
       'https://ryungbucket.s3.ap-northeast-2.amazonaws.com/7cc2e304-7261-4274-b232-f099a65ba716.png',
     ],
     status: 'REHOMING_FINDING',
@@ -57,8 +57,8 @@ export const getRehomingListApi = createAsyncThunk(
   async (pageNo: number, thunkAPI) => {
     try {
       const response = await rehomingAPI.getReHomingList(pageNo);
-      console.log('getRehomingListApi response : ', response.data);
-      const list = response.data.data;
+      console.log('getRehomingListApi response : ', response.data.data.content);
+      const list = response.data.data.content;
       thunkAPI.dispatch(rehomingSlice.actions.setRehomingList(list));
     } catch (error: any) {
       console.log('getRehoming : error response', error.response.data);

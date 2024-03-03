@@ -81,6 +81,22 @@ const QnaDetail = (): React.ReactElement => {
     appdispatch(deleteQnaApi(postId));
   };
 
+  const handleClickDelete = async () => {
+    try {
+      if (postId) {
+        await appdispatch(deleteQnaApi(postId));
+      } else {
+        // postId가 falsy값인 경우
+        // MODAL 추가 필요
+      }
+    } catch (e) {
+      console.error('[QNA DETAIL TEMPLATE] handleClickDelete Error : ', e);
+    } finally {
+      // MODAL 추가 필요
+      window.alert('됐나')
+    }
+  };
+
   React.useEffect(() => {
     appdispatch(getQnaDetailApi(postId));
   }, []);
@@ -134,13 +150,7 @@ const QnaDetail = (): React.ReactElement => {
               >
                 수정하기
               </Button>
-              <Button
-                _onClick={() => {
-                  postDelete();
-                }}
-              >
-                삭제하기
-              </Button>
+              <Button _onClick={handleClickDelete}>삭제하기</Button>
             </S.MngButtons>
           </S.Info>
         </S.MainInfoSection>

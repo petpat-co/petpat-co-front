@@ -12,28 +12,29 @@ export const SelectContainer = styled.div`
   user-select: none;
 `;
 
-export const SelectZone = styled.div<{ width: number }>`
+export const SelectZone = styled.div<{ width?: number, height?: number, borderColor?: string }>`
   display: flex;
   // width: ${({ width }) => (width ? `${width}px` : '118px')};
   width: 118px;
-  height:42px;
+  height:${({height}) => height? `${height}px`:'42px'};
   border-radius: 30px;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid #000;
+  border: ${({borderColor}) => borderColor? `1px solid ${borderColor}`:'1px solid #000'};
   padding: 0 20px;
 `;
 
-export const DropDownList = styled.ul<{ select: number }>`
+export const DropDownList = styled.ul<{ select: number, height?: number, borderColor?: string }>`
   position: absolute;
-  top: 48px;
+  // top: 48px;
+  top: ${({height}) => height? `${height+6}px`: '48px'};
   left: 0;
   right: 0;
   display: flex;
   flex-direction: column;
   gap: 16px;
   padding: 16px;
-  border: 1px solid #000;
+   border: ${({borderColor}) => borderColor? `1px solid ${borderColor}`:'1px solid #000'};
   border-radius: 16px;
   background-color: white;
   z-index: 100;

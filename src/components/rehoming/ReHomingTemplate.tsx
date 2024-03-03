@@ -9,17 +9,24 @@ import TopRehoming from './TopRehoming';
 import AlbumList from '../shared/list/AlbumList';
 import Category from './Category';
 import { useAppDispatch } from 'src/core/store';
-import { getRehomingListApi } from 'src/core/redux/post/rehomingSlice';
+import {
+  getRehomingCategoryApi,
+  getRehomingListApi,
+} from 'src/core/redux/post/rehomingSlice';
 import { useSelector } from 'react-redux';
+import Accordion from '../shared/list/Accordion';
 
 const RehomingTemplate = (): ReactElement => {
   const navigate = useNavigate();
   const appdispatch = useAppDispatch();
+
   const [allValue, setAllValue] = useState<number>(0);
   const [dogCategory, setDogCategory] = useState<number>(0);
   const [category, setCategory] = useState<number>(0);
   const [pageno, setPageNo] = useState<number>(1);
 
+  const categories = useSelector((state: any) => state?.rehoming?.category);
+  const postList = useSelector((state: any) => state?.rehoming?.list);
   // const { data, status } = useInfiniteQuery(
   //   ['rehomeList'],
   //   ({ pageParam = 1 }) =>
@@ -39,9 +46,10 @@ const RehomingTemplate = (): ReactElement => {
   };
 
   // const postList = useSelector((state: any) => state?.rehoming?.list).content;
-  
+
   React.useEffect(() => {
     appdispatch(getRehomingListApi(pageno));
+    appdispatch(getRehomingCategoryApi('분양'));
   }, []);
 
   return (
@@ -129,13 +137,50 @@ const RehomingTemplate = (): ReactElement => {
       </S.SelectSection> */}
 
       {/* ----------분양글리스트---------- */}
+
+      {/* ---카테고리--- */}
       <S.ListWrapper>
         <S.ListInner>
-          <Category />
+          {/* <Category /> */}
+          <S.AccordianWrapper>
+            <Accordion.Root>
+              <Accordion.Item value="강아지">
+                <Accordion.Title isMain={true}>강아지</Accordion.Title>
+                <Accordion.Content>
+                  {categories.map((category: any) => (
+                    <Accordion.Item
+                      key={category.petCategoryId}
+                      value={String(category.petCategoryId)}
+                    >
+                      <Accordion.Title>
+                        {category.petCategoryName}
+                      </Accordion.Title>
+                      <Accordion.Content>
+                        {category.petCategoryName}
+                      </Accordion.Content>
+                      <Accordion.Detail>
+                        {category.petCategoryCnt}
+                      </Accordion.Detail>
+                    </Accordion.Item>
+                  ))}
+                </Accordion.Content>
+              </Accordion.Item>
+            </Accordion.Root>
+          </S.AccordianWrapper>
+
+          {/* ---글목록--- */}
           <S.ListGrid>
-            {postList?.map((item: any, idx: number) => {
-              return <AlbumList key={idx + item.title} item={item} />;
-            })}
+            {postList.length > 0 ? (
+              <>
+                {postList.map((item: any, idx: number) => {
+                  return <AlbumList key={item.postId} item={item} />;
+                })}
+              </>
+            ) : (
+                <div>
+                  <p>등록된 게시글이 없습니다.</p>
+                </div>
+            )}
           </S.ListGrid>
         </S.ListInner>
       </S.ListWrapper>
@@ -145,26 +190,9 @@ const RehomingTemplate = (): ReactElement => {
 
 export default RehomingTemplate;
 
-const mock1 = ['전체보기', '최신순', '인기순'];
-const firstData = [
-  {
-    list: ['강아지', '고양이', '기타'],
-  },
-  {
-    list: ['강아지 간식 사료', '고양이 간식 츄르', '기타'],
-  },
-];
-const secendData = [
-  { text: '전체' },
-  { text: '강아지 리빙' },
-  { text: '강아지 리빙' },
-  { text: '강아지 리빙' },
-  { text: '강아지 리빙' },
-];
-
 const topPost = [
   {
-    rehomingImg: 'https://img.hankyung.com/photo/202308/B20230809112130640.jpg',
+    imagePath: 'https://img.hankyung.com/photo/202308/B20230809112130640.jpg',
     status: '모집중',
     title: '우리집 댕댕이가 새끼를 낳았다요요요요요용',
     nickname: '댕댕이집사',
@@ -190,7 +218,7 @@ const topPost = [
     liked: false,
   },
   {
-    rehomingImg:
+    imagePath:
       'https://product.cdn.cevaws.com/var/storage/images/media/adaptil-2017/images/www-ww/shutterstock_395310793-3-2/3547034-1-www-WW/shutterstock_395310793-3-2.jpg',
     status: '모집중',
     title: '우리집 댕댕이가 새끼를 낳았다요요요요요용',
@@ -217,281 +245,8 @@ const topPost = [
     liked: false,
   },
   {
-    rehomingImg:
+    imagePath:
       'https://www.fitpetmall.com/wp-content/uploads/2023/10/b37132cb-8757-4678-b8f6-9f9e25cb04ca-1.png',
-    status: '모집중',
-    title: '우리집 댕댕이가 새끼를 낳았다요요요요요용',
-    nickname: '댕댕이집사',
-    view: '100',
-    comment: '100',
-    postType: 'REHOMING',
-    rehomingId: 2,
-    userId: 1,
-    description: '멍멍이 분양해요',
-    petName: '왕왕',
-    petAge: '2022년 10월 1일',
-    category: '강아지',
-    type: '푸들',
-    gender: '여',
-    location: '서울시 노원구',
-    price: 20000,
-    createdAt: '2023-01-17T16:43:07.603656',
-    updatedAt: '2023-01-17T16:43:07.603656',
-    viewCnt: 1,
-    likeCnt: 0,
-    bookmarkCnt: 1,
-    bookmarked: true,
-    liked: false,
-  },
-];
-
-const postList = [
-  {
-    rehomingImg:
-      'https://product.cdn.cevaws.com/var/storage/images/media/adaptil-2017/images/www-ww/shutterstock_395310793-3-2/3547034-1-www-WW/shutterstock_395310793-3-2.jpg',
-    status: '모집중',
-    title: '우리집 댕댕이가 새끼를 낳았다요요요요요용',
-    nickname: '댕댕이집사',
-    view: '100',
-    comment: '100',
-    postType: 'REHOMING',
-    rehomingId: 1,
-    userId: 1,
-    description: '멍멍이 분양해요',
-    petName: '왕왕',
-    petAge: '2022년 10월 1일',
-    category: '강아지',
-    type: '푸들',
-    gender: '여',
-    location: '서울시 노원구',
-    price: 20000,
-    createdAt: '2023-01-17T16:43:07.603656',
-    updatedAt: '2023-01-17T16:43:07.603656',
-    viewCnt: 1,
-    likeCnt: 0,
-    bookmarkCnt: 1,
-    bookmarked: true,
-    liked: false,
-  },
-  {
-    rehomingImg:
-      'https://bareunnutri.com/files/attach/images/2022/08/25/27e4b09804f027e9d6f915f8c8d76152.jpg',
-    status: '모집중',
-    title: '우리집 댕댕이가 새끼를 낳았다요요요요요용',
-    nickname: '댕댕이집사',
-    view: '100',
-    comment: '100',
-    postType: 'REHOMING',
-    rehomingId: 2,
-    userId: 1,
-    description: '멍멍이 분양해요',
-    petName: '왕왕',
-    petAge: '2022년 10월 1일',
-    category: '강아지',
-    type: '푸들',
-    gender: '여',
-    location: '서울시 노원구',
-    price: 20000,
-    createdAt: '2023-01-17T16:43:07.603656',
-    updatedAt: '2023-01-17T16:43:07.603656',
-    viewCnt: 1,
-    likeCnt: 0,
-    bookmarkCnt: 1,
-    bookmarked: true,
-    liked: false,
-  },
-  {
-    rehomingImg: 'https://img.hankyung.com/photo/202308/B20230809112130640.jpg',
-    status: '모집중',
-    title: '우리집 댕댕이가 새끼를 낳았다요요요요요용',
-    nickname: '댕댕이집사',
-    view: '100',
-    comment: '100',
-    postType: 'REHOMING',
-    rehomingId: 2,
-    userId: 1,
-    description: '멍멍이 분양해요',
-    petName: '왕왕',
-    petAge: '2022년 10월 1일',
-    category: '강아지',
-    type: '푸들',
-    gender: '여',
-    location: '서울시 노원구',
-    price: 20000,
-    createdAt: '2023-01-17T16:43:07.603656',
-    updatedAt: '2023-01-17T16:43:07.603656',
-    viewCnt: 1,
-    likeCnt: 0,
-    bookmarkCnt: 1,
-    bookmarked: true,
-    liked: false,
-  },
-  {
-    rehomingImg:
-      'https://product.cdn.cevaws.com/var/storage/images/media/adaptil-2017/images/www-ww/shutterstock_395310793-3-2/3547034-1-www-WW/shutterstock_395310793-3-2.jpg',
-    status: '모집중',
-    title: '우리집 댕댕이가 새끼를 낳았다요요요요요용',
-    nickname: '댕댕이집사',
-    view: '100',
-    comment: '100',
-    postType: 'REHOMING',
-    rehomingId: 2,
-    userId: 1,
-    description: '멍멍이 분양해요',
-    petName: '왕왕',
-    petAge: '2022년 10월 1일',
-    category: '강아지',
-    type: '푸들',
-    gender: '여',
-    location: '서울시 노원구',
-    price: 20000,
-    createdAt: '2023-01-17T16:43:07.603656',
-    updatedAt: '2023-01-17T16:43:07.603656',
-    viewCnt: 1,
-    likeCnt: 0,
-    bookmarkCnt: 1,
-    bookmarked: true,
-    liked: false,
-  },
-  {
-    rehomingImg:
-      'https://www.fitpetmall.com/wp-content/uploads/2023/10/b37132cb-8757-4678-b8f6-9f9e25cb04ca-1.png',
-    status: '모집중',
-    title: '우리집 댕댕이가 새끼를 낳았다요요요요요용',
-    nickname: '댕댕이집사',
-    view: '100',
-    comment: '100',
-    postType: 'REHOMING',
-    rehomingId: 2,
-    userId: 1,
-    description: '멍멍이 분양해요',
-    petName: '왕왕',
-    petAge: '2022년 10월 1일',
-    category: '강아지',
-    type: '푸들',
-    gender: '여',
-    location: '서울시 노원구',
-    price: 20000,
-    createdAt: '2023-01-17T16:43:07.603656',
-    updatedAt: '2023-01-17T16:43:07.603656',
-    viewCnt: 1,
-    likeCnt: 0,
-    bookmarkCnt: 1,
-    bookmarked: true,
-    liked: false,
-  },
-  {
-    rehomingImg:
-      'https://bareunnutri.com/files/attach/images/2022/08/25/27e4b09804f027e9d6f915f8c8d76152.jpg',
-    status: '모집중',
-    title: '우리집 댕댕이가 새끼를 낳았다요요요요요용',
-    nickname: '댕댕이집사',
-    view: '100',
-    comment: '100',
-    postType: 'REHOMING',
-    rehomingId: 2,
-    userId: 1,
-    description: '멍멍이 분양해요',
-    petName: '왕왕',
-    petAge: '2022년 10월 1일',
-    category: '강아지',
-    type: '푸들',
-    gender: '여',
-    location: '서울시 노원구',
-    price: 20000,
-    createdAt: '2023-01-17T16:43:07.603656',
-    updatedAt: '2023-01-17T16:43:07.603656',
-    viewCnt: 1,
-    likeCnt: 0,
-    bookmarkCnt: 1,
-    bookmarked: true,
-    liked: false,
-  },
-  {
-    rehomingImg:
-      'https://bareunnutri.com/files/attach/images/2022/08/25/27e4b09804f027e9d6f915f8c8d76152.jpg',
-    status: '모집중',
-    title: '우리집 댕댕이가 새끼를 낳았다요요요요요용',
-    nickname: '댕댕이집사',
-    view: '100',
-    comment: '100',
-    postType: 'REHOMING',
-    rehomingId: 2,
-    userId: 1,
-    description: '멍멍이 분양해요',
-    petName: '왕왕',
-    petAge: '2022년 10월 1일',
-    category: '강아지',
-    type: '푸들',
-    gender: '여',
-    location: '서울시 노원구',
-    price: 20000,
-    createdAt: '2023-01-17T16:43:07.603656',
-    updatedAt: '2023-01-17T16:43:07.603656',
-    viewCnt: 1,
-    likeCnt: 0,
-    bookmarkCnt: 1,
-    bookmarked: true,
-    liked: false,
-  },
-
-  {
-    rehomingImg:
-      'https://www.fitpetmall.com/wp-content/uploads/2023/10/b37132cb-8757-4678-b8f6-9f9e25cb04ca-1.png',
-    status: '모집중',
-    title: '우리집 댕댕이가 새끼를 낳았다요요요요요용',
-    nickname: '댕댕이집사',
-    view: '100',
-    comment: '100',
-    postType: 'REHOMING',
-    rehomingId: 2,
-    userId: 1,
-    description: '멍멍이 분양해요',
-    petName: '왕왕',
-    petAge: '2022년 10월 1일',
-    category: '강아지',
-    type: '푸들',
-    gender: '여',
-    location: '서울시 노원구',
-    price: 20000,
-    createdAt: '2023-01-17T16:43:07.603656',
-    updatedAt: '2023-01-17T16:43:07.603656',
-    viewCnt: 1,
-    likeCnt: 0,
-    bookmarkCnt: 1,
-    bookmarked: true,
-    liked: false,
-  },
-  {
-    rehomingImg:
-      'https://bareunnutri.com/files/attach/images/2022/08/25/27e4b09804f027e9d6f915f8c8d76152.jpg',
-    status: '모집중',
-    title: '우리집 댕댕이가 새끼를 낳았다요요요요요용',
-    nickname: '댕댕이집사',
-    view: '100',
-    comment: '100',
-    postType: 'REHOMING',
-    rehomingId: 2,
-    userId: 1,
-    description: '멍멍이 분양해요',
-    petName: '왕왕',
-    petAge: '2022년 10월 1일',
-    category: '강아지',
-    type: '푸들',
-    gender: '여',
-    location: '서울시 노원구',
-    price: 20000,
-    createdAt: '2023-01-17T16:43:07.603656',
-    updatedAt: '2023-01-17T16:43:07.603656',
-    viewCnt: 1,
-    likeCnt: 0,
-    bookmarkCnt: 1,
-    bookmarked: true,
-    liked: false,
-  },
-  {
-    rehomingImg:
-      'https://product.cdn.cevaws.com/var/storage/images/media/adaptil-2017/images/www-ww/shutterstock_395310793-3-2/3547034-1-www-WW/shutterstock_395310793-3-2.jpg',
     status: '모집중',
     title: '우리집 댕댕이가 새끼를 낳았다요요요요요용',
     nickname: '댕댕이집사',

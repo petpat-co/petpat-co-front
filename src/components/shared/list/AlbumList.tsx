@@ -6,28 +6,30 @@ import { useNavigate } from 'react-router-dom';
 
 interface POST {
   item: {
-    rehomingId: number | string;
-    rehomingImg: string | null;
-    userId: number | string;
-    nickname: string;
-    title: string;
-    description: string;
-    petName: string;
-    petAge: string;
-    category: string;
-    type: string;
-    gender: string;
-    location: string;
-    price: number | string;
-    status: string;
-    postType: string;
-    createdAt: string;
-    updatedAt: string;
-    viewCnt: number | string;
-    likeCnt: number | string;
-    bookmarkCnt: number | string;
-    bookmarked: boolean;
-    liked: boolean;
+    postId?: number | string;
+    imagePath?: string;
+    region?: string;
+    createdAt?: string;
+    likeCnt?: number | string;
+    liked?: boolean;
+    bookmarkCnt?: number | string;
+    bookmarked?: boolean;
+    postType?: string;
+    status?: string;
+    title?: string;
+    updatedAt?: string;
+    viewCnt?: number | string;
+
+    userId?: number | string;
+    nickname?: string;
+    description?: string;
+    petName?: string;
+    petAge?: string;
+    category?: string;
+    type?: string;
+    gender?: string;
+    location?: string;
+    price?: number | string;
   };
 }
 
@@ -36,27 +38,27 @@ const AlbumList = (props: POST) => {
   const { item } = props;
 
   const goToDetail = () => {
-    navigate(`/rehome/detail/${item.rehomingId}`);
-  }
+    navigate(`/rehome/detail/${item.postId}`);
+  };
 
   return (
-    <Container >
-      <Image src={item.rehomingImg} onClick={goToDetail}/>
+    <Container>
+      <Image src={item.imagePath} onClick={goToDetail} />
       <AdressAndCnt>
-        <Adress>{item.location}</Adress>
+        <Adress>{item.region}</Adress>
         <Count>
           <Heart>
             <HeartIcon fill="#d9d9d9" width="18px" height="18px" />
             {item.likeCnt}
           </Heart>
           <View>
-            <ViewIcon stroke="#d9d9d9" width="27px" height="27px"/>
+            <ViewIcon stroke="#d9d9d9" width="27px" height="27px" />
             {item.viewCnt}
           </View>
         </Count>
       </AdressAndCnt>
       <Title onClick={goToDetail}>
-        {item.title.length > 18
+        {item.title && item.title.length > 18
           ? item.title.substring(0, 17) + '...'
           : item.title}
       </Title>
@@ -69,7 +71,7 @@ const Container = styled.div`
   font-weight: 500;
 `;
 
-const Image = styled.div<{ src: string | null }>`
+const Image = styled.div<{ src: string | undefined }>`
   width: 100%;
   padding-bottom: 100%;
   border: ${({ theme }) => `1px solid ${theme.colors.coolgray900}`};

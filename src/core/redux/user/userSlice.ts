@@ -4,7 +4,7 @@ import { User } from 'src/types/user';
 
 export const initialState: User.UserType = {
   user: {
-    userId: 0,
+    // userId: 0,
     userEmail: '',
     nickname: '',
     // userpassword를 저장해놓는게 맞나...?
@@ -87,19 +87,51 @@ export const logInApi = createAsyncThunk(
       const response = await userAPI.logIn({ data });
       console.log('logInApi : response', response);
       const accessToken = response.headers.authorization?.split('Bearer ')[1];
-      const refreshToken = response.headers.refrshToken;
+      //const refreshToken = response.headers.Refreshtoken;
+      //if (accessToken && refreshToken) {
       if (accessToken) {
-        // if (accessToken && refreshToken) {
         if (user.checked) {
         }
-        // localStorage.setItem('refreshToken', refreshToken);
         localStorage.setItem('accessToken', accessToken);
+        //localStorage.setItem('refreshToken', refreshToken);
         thunkAPI.dispatch(userSlice.actions.setUser(response));
-        // window.location.replace('/');
+        window.location.replace('/');
         return true;
       }
     } catch (error: any) {
       console.log('logInApi : error response', error.response.data);
+      return false;
+    }
+  },
+);
+
+export const refresh = createAsyncThunk(
+  'user/login',
+  async (user: '', thunkAPI) => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      const response = await userAPI.refresh(`Bearer ${token}`);
+      console.log('리퓨ㅜ레시', response);
+      const accessToken = response.headers.authorization?.split('Bearer ')[1];
+      return true;
+    } catch (error: any) {
+      console.log('ㄿㄽ : error response', error.response.data);
+      return false;
+    }
+  },
+);
+
+export const access = createAsyncThunk(
+  'user/login',
+  async (user: '', thunkAPI) => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      const response = await userAPI.access(`Bearer ${token}`);
+      console.log('액세스', response);
+      const accessToken = response.headers.authorization?.split('Bearer ')[1];
+      return true;
+    } catch (error: any) {
+      console.log('ㅇㅅㅅ : error response', error.response.data);
       return false;
     }
   },

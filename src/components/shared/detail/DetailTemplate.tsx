@@ -53,6 +53,14 @@ const DetailTemplate = (props: PropsType) => {
   // -- 서버에서 받아온 상세조회 데이터
   const rehomePostData = useSelector((state: any) => state?.post?.rehome);
   const tradePostData = useSelector((state: any) => state?.post?.trade);
+  const qnaPostData = useSelector((state: any) => state?.post?.qna);
+  // -- 데이터 postData로 관리
+  const postData =
+    locationNow === 'rehome'
+      ? rehomePostData
+      : locationNow === 'trade'
+      ? tradePostData
+      : qnaPostData;
 
   // 예비용 (추후 스크립트 변경 후 삭제)
   const defaultImages = [
@@ -170,55 +178,60 @@ const DetailTemplate = (props: PropsType) => {
     <S.Container>
       {/*---------- 캐러셀 및 판매/분양 글 정보 ----------*/}
       <S.TopWrapper>
-        <Carousel
-          imageList={
-            locationNow === 'rehome'
-              ? rehomePostData?.rehomingImg
-              : tradePostData?.imageList
-          }
-        ></Carousel>
+        <Carousel imageList={postData?.imageList}></Carousel>
 
         {/* ---------- 글 정보 영역 ---------- */}
         <InfoSection
-          info={locationNow === 'rehome' ? rehomePostData : tradePostData}
+          info={postData}
           propsPostType={postType}
           onClickAsk={onClickAsk}
+          handleClickUpdate={handleClickUpdate}
+          setOnDeleteCheckModal={setOnDeleteCheckModal}
         />
       </S.TopWrapper>
 
       {/*---------- 글 관리 버튼 영역 ----------*/}
-      <S.Admin>
-        <Button
-          width="80px"
-          height="42px"
-          fontSize="16px"
-          colors="coolgray400"
-          _onClick={() => {
-            handleClickUpdate();
-          }}
-        >
-          수정하기
-        </Button>
-        <Button
-          width="80px"
-          height="42px"
-          fontSize="16px"
-          colors="coolgray400"
-          _onClick={() => {
-            setOnDeleteCheckModal(true);
-          }}
-        >
-          삭제하기
-        </Button>
-      </S.Admin>
-      <S.Hr />
 
       {/* ---------- 상세 설명 영역 ---------- */}
-      <S.Description>
+      {/* <S.Hr /> */}
+      {/* <S.Description>
         {locationNow === 'rehoming'
           ? rehomePostData?.description
           : tradePostData?.content}
-      </S.Description>
+        계절이 지나가는 하늘에는 가을로 가득 차 있습니다.
+        <br />
+        나는 아무 걱정도없이 가을 속의 별들을 다 헤일 듯합니다.
+        <br />
+        가슴속에 하나둘 새겨지는 별을 이제 다 못 헤는 것은 쉬이 아침이 오는
+        까닭이요, 내일 밤이 남은 까닭이요,
+        <br />
+        <br />
+        아직 나의 청춘이 다하지 않은 까닭입니다. <br />별 하나에 추억과 별
+        하나에 사랑과 별 하나에 쓸쓸함과 별 하나에 동경과 별 하나에 시와 별
+        하나에 어머니, 어머니, 어머님, <br />
+        <br />
+        나는 별 하나에 아름다운 말 한마디씩 불러 봅니다. <br />
+        소학교 때 책상을 같이 했던 아이들의 이름과,
+        <br /> 패, 경, 옥, 이런 이국 소녀들의 이름과, 벌써 아기 어머니 된
+        계집애들의 이름과, <br />
+        가난한 이웃 사람들의 이름과, 비둘기, 강아지, 토끼, 노새, 노루, '프랑시스
+        잠[1]', <br />
+        <br />
+        '라이너 마리아 릴케[2]' <br />
+        이런 시인의 이름을 불러 봅니다. <br />
+        이네들은 너무나 멀리 있습니다. <br />
+        <br />
+        별이 아스라이 멀듯이. 어머님, <br />
+        <br />
+        그리고 당신은 멀리 북간도에 계십니다.
+        <br /> <br />
+        나는 무엇인지 그리워 이 많은 별빛이 내린 언덕 위에 내 이름자를 써 보고
+        흙으로 덮어 버리었습니다. <br />
+        딴은[3] 밤을 새워 우는 벌레는 부끄러운 이름을 슬퍼하는 까닭입니다.{' '}
+        <br />
+        그러나 겨울이 지나고 나의 별에도 봄이 오면 무덤 위에 파란 잔디가
+        피어나듯이 내 이름자 묻힌 언덕 위에도 자랑처럼 풀이 무성할 거외다.
+      </S.Description> */}
 
       {/* ---------- 코멘트 영역 ----------*/}
 
@@ -317,6 +330,33 @@ const DetailTemplate = (props: PropsType) => {
           </Button>
         </ModalContainer>
       )}
+
+      {/* 수정-삭제 버튼 infoSection으로 이동  */}
+      {/* 다음 commit시 삭제 예정 */}
+      {/* <S.Admin>
+        <Button
+          width="80px"
+          height="42px"
+          fontSize="16px"
+          colors="coolgray400"
+          _onClick={() => {
+            handleClickUpdate();
+          }}
+        >
+          수정하기
+        </Button>
+        <Button
+          width="80px"
+          height="42px"
+          fontSize="16px"
+          colors="coolgray400"
+          _onClick={() => {
+            setOnDeleteCheckModal(true);
+          }}
+        >
+          삭제하기
+        </Button>
+      </S.Admin> */}
     </S.Container>
   );
 };

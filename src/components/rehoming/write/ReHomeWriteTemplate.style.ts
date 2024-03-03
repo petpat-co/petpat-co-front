@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+
 export const Wrap = styled.section`
   width: 1440px;
   margin: 0 auto;
@@ -33,7 +34,8 @@ export const H2 = styled.h2`
 `;
 
 export const InfoTitle = styled.p`
-  margin: 40px 0;
+//  margin: 40px 0;
+  padding: 4%;
   font-weight: 700;
   font-size: 32px;
   color: ${({ theme }) => theme.colors.primary};
@@ -204,3 +206,18 @@ export const NoticeBox = styled.p`
   line-height: 26px;
   color: #858585;
 `;
+
+
+
+export const HR = styled.hr`
+border: none;
+height: 1px;
+background-color: ${({theme}) => theme.colors.coolgray100};
+`
+
+export const Grid = styled.div`
+  width: 100%;
+  display: grid;
+  gap: 32px 0;
+  grid-template-columns: repeat(3, 1fr);
+`

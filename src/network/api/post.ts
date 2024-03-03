@@ -21,6 +21,16 @@ export const getOnePost: ApiHandler = (
     ...options,
   });
 
+export const addPost: ApiHandler = (
+  options,
+) => 
+  instance({
+    method: 'POST',
+    url: addPrefix(`/${options.postType}`),
+    data: options.formData,
+  })
+
+
 // 수정
 export const updatePost: ApiHandler = (
   options, // postId, postType, postData

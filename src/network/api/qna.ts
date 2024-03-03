@@ -21,7 +21,7 @@ export const getQnaDetail: ApiHandler = (
 ) =>
   instance({
     method: 'GET',
-    url: addPrefix(`/detail/${options}`),
+    url: addPrefix(`/detail?postId=${options}`),
     ...options,
   });
 
@@ -39,8 +39,8 @@ export const modifyQna: ApiHandler = (
 ) =>
   instance({
     method: 'PUT',
+    data: options.formData,
     url: addPrefix(`/${options.postId}`),
-    ...options.formData,
   });
 
 export const deleteQna: ApiHandler = (

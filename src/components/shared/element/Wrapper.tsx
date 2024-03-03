@@ -14,10 +14,11 @@ export default Wrapper;
 const Wrap = styled.div`
   // width: 1920px;
   width: 100%;
-  height: auto;
+  // height: auto;
+  height: 100vh;
   margin: 0 auto;
   position: relative;
   @media ${({ theme }) => theme.device.web} {
     width: 100%;
   }
-`;
+  `;

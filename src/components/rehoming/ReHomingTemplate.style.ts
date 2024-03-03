@@ -33,6 +33,11 @@ export const ListInner = styled.div`
   align-items: flex-start;
 `;
 
+export const AccordianWrapper = styled.div`
+  flex: 1;
+  flex-shrink: 0;
+`;
+
 export const ListGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);

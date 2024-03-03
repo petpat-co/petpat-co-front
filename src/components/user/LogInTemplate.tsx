@@ -26,8 +26,8 @@ const LogInTemplate = (): ReactElement => {
   const navigate = useNavigate();
 
   //user data
-  const [userEmail, setUserEmail] = React.useState('');
-  const [userPassword, setUserPassword] = React.useState('');
+  const [userEmail, setUserEmail] = React.useState('rr@rr.com');
+  const [userPassword, setUserPassword] = React.useState('qqq!1234');
 
   // remember email
   const [rememberChecked, setRememberChecked] = React.useState(false);
@@ -114,6 +114,7 @@ const LogInTemplate = (): ReactElement => {
           아이디
         </Text>
         <Input
+          defaultValue={userEmail}
           name="email"
           placeholder=""
           maxLength={50}
@@ -133,6 +134,7 @@ const LogInTemplate = (): ReactElement => {
           비밀번호
         </Text>
         <Input
+          defaultValue={userPassword}
           name="password"
           type="password"
           placeholder=""

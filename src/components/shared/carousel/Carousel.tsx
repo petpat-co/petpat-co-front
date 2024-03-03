@@ -17,7 +17,7 @@ const Carousel = (props: PropsType) => {
   const setSliders = () => {
     const addedData = [];
 
-    for (let i = 0; i < imageList.length + 1; i++) {
+    for (let i = 0; i < imageList?.length + 1; i++) {
       addedData.push(imageList[i % imageList.length]);
     }
 

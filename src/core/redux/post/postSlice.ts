@@ -98,13 +98,12 @@ export const initialState: Post.PostState = {
     bookmarkCnt: 0, // 북마크 수
     viewCnt: 0, // 조회수
 
-    // image - 추후 사용되지 않는 변수 삭제 필요
-    rehomingImg: [
+    // image
+    imageList: [
       'https://cdn-icons-png.flaticon.com/512/235/235405.png',
       'https://cdn-icons-png.flaticon.com/512/2528/2528787.png',
       'https://cdn-icons-png.flaticon.com/256/4823/4823463.png',
     ],
-
     // address
     cityName: '--도 --시', // 도,시
     townShipName: '--동', // 동
@@ -120,6 +119,7 @@ export const initialState: Post.PostState = {
     gender: 'GIRL', // 동물 성별
   },
   onGetPostError: false, // 게시글 조회 실패 에러
+  onAddPostError: false, // 게시글 등록 실패 에러
   onDeleteError: false, // 게시글 삭제 상태
   error: '',
 };
@@ -151,10 +151,34 @@ export const getOnePostApi = createAsyncThunk(
   },
 );
 
+export const addPostApi = createAsyncThunk(
+  'post/add',
+  async (data: any | string, thunkAPI) => {
+    // postType(trade, rehoming, qna), data : formData
+    // 등록 시작 전 onError = false로 초기화
+    thunkAPI.dispatch(postSlice.actions.resetOnError);
+    try {
+      const response = await postAPI.addPost(data);
+      console.log('addPostApi response : ', response.data);
+
+      if (response.status !== 200) {
+        throw new Error(
+          `reqeust rejected : ${response.status} - ${response.data.message}`,
+        );
+      }
+    } catch (error: any) {
+      console.error('addPostApi error response : ', error.response);
+      throw error;
+    }
+  },
+);
+
 export const modifyPostApi = createAsyncThunk(
   'post/modify',
   async (data: any | string, thunkAPI) => {
     // data : postId, postType(trade, rehoming, qna), formdata
+    // 수정 시작 전 onError = false로 초기화
+    thunkAPI.dispatch(postSlice.actions.resetOnError);
     try {
       const response = await postAPI.updatePost(data);
       console.log('modifyPostApi response : ', response.data);
@@ -229,11 +253,16 @@ export const postSlice = createSlice({
       }
     },
     resetOnError: (state, action: PayloadAction<any>) => {
-      state.onDeleteError = false;
       state.onGetPostError = false;
+      state.onAddPostError = true;
+      state.onDeleteError = false;
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(addPostApi.rejected, (state, action) => {
+      console.error('[postQnaApi] rejected', action.error);
+      state.onAddPostError = true;
+    });
     builder.addCase(deletePostApi.rejected, (state, action) => {
       console.error('[deletePostApi] rejected', action.error);
       state.onGetPostError = true;
@@ -247,5 +276,7 @@ export const postSlice = createSlice({
 
 export const selectOnGetPostError = (state: RootState) =>
   state.post.onGetPostError;
+export const selectOnAddPostError = (state: RootState) =>
+  state.post.onAddPostError;
 export const selectOnDeleteError = (state: RootState) =>
   state.post.onDeleteError;

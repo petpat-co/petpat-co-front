@@ -47,8 +47,14 @@ export const BannerSection = styled.div`
     bottom: 12px;
   }
 `;
+export const TitleText = styled.h2`
+  margin: 0 0 0 8px;
+  font-weight: 700;
+  font-size: 32px;
+  color: #fff;
+`;
 
-export const TitleText = styled.p`
+export const MainText = styled.p`
   font-weight: 800;
   font-size: ${({ theme }) => theme.fontSizes.xxlarge};
   color: ${({ theme }) => theme.colors.primary};
@@ -76,9 +82,10 @@ export const ContentsSection = styled.section`
   flex-direction: column;
   display: flex;
   width: 100%;
+  height: 100%;
   max-width: 1440px;
   margin: 32px auto 0 auto;
-  padding: 80px 100px;
+  padding: 80px 100px 240px 100px;
   border-radius: 50px 50px 0 0;
   background-color: #fff;
 `;

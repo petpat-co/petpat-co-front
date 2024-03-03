@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   margin: 0 auto;
-  padding: 274px 0 50px 0;
+  padding-top: 274px;
   width: 100%;
   min-width: 800px;
   max-width: 1440px;
@@ -13,7 +13,7 @@ export const TopWrapper = styled.div`
   position: relative;
   display: flex;
   gap: 80px;
-  height: auto;
+  height: 100%;
 `;
 
 export const Hr = styled.hr`
@@ -24,7 +24,7 @@ export const Hr = styled.hr`
 `;
 
 export const Admin = styled.div`
-  margin-top: 68px;
+  position: static;
   display: flex;
   justify-content: flex-end;
 `;
@@ -32,6 +32,7 @@ export const Admin = styled.div`
 export const Description = styled.div`
   font-size: 16px;
   margin-bottom: 240px;
+  height: fit-content;
 `;
 
 export const ModalButtonWrapper = styled.div`

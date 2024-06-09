@@ -36,7 +36,6 @@ import {
 const RehomingDetail = (): React.ReactElement => {
   const navigate = useNavigate();
   const appdispatch = useAppDispatch();
-
   const postId = useLocation().pathname.split('/')[3];
   const content = useSelector((state: any) => state.rehoming.post);
   const like = useSelector((state: any) => state.rehoming.post.liked);
@@ -89,6 +88,7 @@ const RehomingDetail = (): React.ReactElement => {
     setOnModal(false);
   };
 
+
   // 삭제하시겠습니까? > 확인 > deleteRehomingApi
   // => reject인 경우 onError true > modal 메시지 분기
   const postDelete = async () => {
@@ -103,7 +103,6 @@ const RehomingDetail = (): React.ReactElement => {
   };
   // 2024.01 [유나] ---------------- MODAL END --------------
 
-  // 글 상세정보 조회
   React.useEffect(() => {
     appdispatch(getOneReHomingApi(postId));
   }, [bookmarked, liked]);

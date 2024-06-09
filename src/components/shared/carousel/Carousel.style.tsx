@@ -79,4 +79,5 @@ export const CircleBtn = styled.div<{
     background-color: #fff;
     // opacity: ${({ disabled }) => (disabled ? '20%' : '80%')};
   }
+
 `;

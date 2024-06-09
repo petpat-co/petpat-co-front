@@ -42,3 +42,4 @@ export const ModalButtonWrapper = styled.div`
   gap: 16px;
   justify-content: center;
 `;
+

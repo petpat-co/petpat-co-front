@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import * as S from './Carousel.style';
 import { ReactComponent as Arrow } from '../../../asset/arrow/carouselArrow.svg';
 
+
 interface PropsType {
   imageList: Array<string>;
 }
@@ -137,6 +138,7 @@ const Carousel = (props: PropsType) => {
           <Arrow />
         </S.CircleBtn>
       </S.Container>
+
     </React.Fragment>
   );
 };

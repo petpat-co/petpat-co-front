@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { Button } from '../shared/element';
 import ModalContainer from '../common/modal/container/ModalContainer';
 import TopSection from '../shared/layout/TopSection';
-import { access, refresh } from 'src/core/redux/user/userSlice';
+import { refresh } from 'src/core/redux/user/userSlice';
 
 const QnaTemplate = () => {
   const appdispatch = useAppDispatch();
@@ -21,7 +21,6 @@ const QnaTemplate = () => {
   const [value, setValue] = React.useState<number>(0);
   const [pageNo, setPageNo] = React.useState<number>(0);
 
-  console.log(postList);
   const onClickWrite = () => {
     navigate('/qna/write');
   };
@@ -32,8 +31,6 @@ const QnaTemplate = () => {
 
   React.useEffect(() => {
     appdispatch(getQnaListApi(pageNo));
-    appdispatch(refresh(''));
-    appdispatch(access(''));
   }, []);
 
   return (
@@ -78,8 +75,7 @@ const QnaTemplate = () => {
               </S.CheckBoxes>
             </S.QnaTool>
           </S.QnAToolWrapper>
-          {postList &&
-            postList.length > 0 &&
+          {postList && postList.length > 0 ?
             postList.map((item: any, idx: number) => (
               <QnaItem
                 key={idx}
@@ -91,7 +87,10 @@ const QnaTemplate = () => {
                 nickname={item.nickname}
                 viewCnt={item.viewCnt}
               />
-            ))}
+            ))
+          :<>
+            <p> 조회된 게시글이 없습니다. </p>
+          </>}
         </S.ContentsSection>
       </S.Container>
     </React.Fragment>

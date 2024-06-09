@@ -205,7 +205,17 @@ export namespace Post {
     petName?: string; // 지어준 동물 이름
     petAge?: string; // 동물 생년월일 (ex_2024-01-01)
     gender?: string; // 동물 성별
-
+    neutralized?: boolean; // 중성화 여부
+    // 감염병    
+    kennelCough?: boolean; // 켄넬코프
+    rabies?: boolean;
+    covidEnteritis?: boolean;
+    fpv?: boolean;
+    dhppl?: boolean;
+    felv?: boolean;
+    comprehensiveVaccine?: boolean;
+    influenza?: boolean;
+    
     // trade
     price?: number | string; // 가격
     tradeCategoryDetailName?: string; // 거래 물품 이름

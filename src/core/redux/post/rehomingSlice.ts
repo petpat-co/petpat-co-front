@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from 'src/core/store';
 import { postAPI, rehomingAPI } from 'src/network/api';
+import { Category } from 'src/types/category';
 import { Post } from 'src/types/post';
 
 export const initialState: Post.RehomingState = {
@@ -38,20 +39,68 @@ export const initialState: Post.RehomingState = {
   },
   onError: false,
 };
+
 export const getRehomingCategoryApi = createAsyncThunk(
   'rehoming/category',
   async (postType: string, thunkAPI) => {
     try {
       const response = await rehomingAPI.getRehomingCategory(postType);
-      console.log(response);
+      const categories = response.data.data;
+      
+      /**
+       * @카테고리세분화 
+       * */
+      const getInitial = (categoryName: string) => {
+        // 겹자음 기본 자음에 포함
+        const initialChars = ['ㄱ', 'ㄱ', 'ㄴ', 'ㄷ', 'ㄷ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅂ', 'ㅅ', 'ㅅ', 'ㅇ', 'ㅈ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
+        // 첫 글자의 UNICODE를 통해 첫 초성 추정
+        // 한글 UNICODE 범위 :  44032 ~ 55203
+        // 44032 : '가' / 55203 : '힣' 
+        const charCode  = categoryName.charCodeAt(0) - 44032;
+        if(charCode  < 0 || charCode  > 11171 ) {
+          // 44032 ~ 55203 내의 문자가 아닌 경우
+          return null;
+        }
+        // 한 초성의 이 가질 수 있는 조합의 경우의 수 : 588
+        //  => 588로 나누었을 때의 몫 = 초성의 index 
+        return initialChars[Math.floor(charCode/588)];
+      }
+
+      const sortCategory = (category: any) => {
+        return category.reduce((acc: any, item: any, idx: number) => {
+          let initial = getInitial(item.secondCategoryName); 
+          if(!initial) {
+            // 초성 찾지 못한 경우 etc로 분류
+            initial = 'etc'; 
+          }
+          if(!acc[idx]) {
+            acc[idx] = [];
+          }
+          acc[idx].push(item);
+          return acc; 
+        }, {})
+      }
+
+      
+      const newCategory = categories.map((firstCategory: Category.FirstCategory) => {
+        return {
+          ...firstCategory,
+          secondCategoryList: sortCategory(firstCategory.secondCategoryList),
+        };
+      });
+
+
       thunkAPI.dispatch(
-        rehomingSlice.actions.setCategories(response.data.data),
+        rehomingSlice.actions.setCategories(newCategory),
       );
     } catch (error: any) {
       console.log('getRehoming : error response', error.response.data);
     }
   },
 );
+
+
+
 export const getRehomingListApi = createAsyncThunk(
   'rehoming/list',
   async (pageNo: number, thunkAPI) => {

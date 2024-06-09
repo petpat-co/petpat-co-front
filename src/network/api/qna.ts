@@ -12,7 +12,7 @@ export const getQnaList: ApiHandler = (
   instance({
     method: 'GET',
     // url: addPrefix(`/${options}`),
-    url: addPrefix('?page=0'),
+    url: addPrefix('/public?page=0'),
     ...options,
   });
 
@@ -21,7 +21,7 @@ export const getQnaDetail: ApiHandler = (
 ) =>
   instance({
     method: 'GET',
-    url: addPrefix(`/detail?postId=${options}`),
+    url: addPrefix(`/public/detail/${options}`),
     ...options,
   });
 

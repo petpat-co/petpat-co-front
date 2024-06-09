@@ -43,6 +43,17 @@ const initialFormState = {
   townShipName: '역곡동',
   detailAdName: '유나네집',
   fullAdName: '106동 1003호',
+  // 강아지
+  dhppl: false,
+  covidEnteritis: false,
+  kennelCough: false,
+  influenza: false,
+  // 고양이
+  comprehensiveVaccine: false,
+  fpv: false,
+  felv: false,
+  // 공통 
+  rabies: false,
 };
 
 const RehomeWriteTemplate = () => {
@@ -151,21 +162,21 @@ const RehomeWriteTemplate = () => {
 
   const onChangeCheckbox = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      // const { name, value, checked } = e.target;
-      // setForm((s) => ({ ...s, [name]: checked ? value : '' }));
+      const { name, checked } = e.target;
+      setForm((s) => ({ ...s, [name]: checked }));
     },
     [form],
   );
-  
+
   const onChangeRadio = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target;
       setForm((s) => ({ ...s, [name]: value }));
-      console.log('radio')
     },
     [form],
     );
     
+
   const onChangeNoName = (checked: any) => {
     if (checked) {
       setNoName(true);
@@ -173,7 +184,6 @@ const RehomeWriteTemplate = () => {
       setNoName(false);
     }
   };
-
 
   const onClickSearchAdress = () => {};
 
@@ -259,19 +269,20 @@ const RehomeWriteTemplate = () => {
   const handleSubmit = () => {
     form.category = selectedCategory+1+'';
     const currentFormArray = Object.entries(form);
-    console.log(form)
-    console.log(currentFormArray)
     // 유효성 검사
+    console.log('dddd')
+    console.log(currentFormArray);
     for (const [key, value] of currentFormArray) {
-      if (!value) {
-        console.log(key)
-        const alertKey = `${key}Empty`;
-        const message = ALERT[alertKey]?.title;
-        setFormError({ key, message });
-        return;
-      }
+      // if (!value) {
+      //   console.log(key)
+      //   const alertKey = `${key}Empty`;
+      //   const message = ALERT[alertKey]?.title;
+      //   setFormError({ key, message });
+      //   return;
+      // }
     }
     if (imgFileList.length == 0) {
+      console.log('dddasasdfasdf')
       const message = ALERT.imageEmpty.title;
       setFormError({ key: 'images', message });
       return;
@@ -305,6 +316,7 @@ const RehomeWriteTemplate = () => {
     // TODO : 반려동물 종
 
     // 글 작성 진행
+    console.log('ddd')
     post(formData);
   };
 
@@ -315,6 +327,7 @@ const RehomeWriteTemplate = () => {
       // 현재 글 작성 루트에 따라 dispatch 분기
       switch (pathname) {
         case 'write':
+          console.log(formData)
           await appdispatch(addPostApi({ postType: 'rehoming', formData }));
           return;
         case 'modify':
@@ -489,8 +502,8 @@ const RehomeWriteTemplate = () => {
                   placeholder=""
                   type="checkbox"
                   maxLength={20}
-                  name="wndtjdghk"
-                  value="중성화"
+                  name="isNeutralized"
+                  value="isNeutralized"
                   onChange={onChangeCheckbox}
                 />
                 <p>중성화</p>
@@ -499,6 +512,130 @@ const RehomeWriteTemplate = () => {
           </WT.InputSectionWrapper>
         </WT.InputSectionContainer>
  
+
+
+        {/* 예방접종 여부 */}
+        {selectedCategory == 0 || selectedCategory == 1 ? (
+          <WT.InputSectionContainer>
+            <WT.InputTitleWrapper>
+              <WT.InputTitleText>예방접종</WT.InputTitleText>
+            </WT.InputTitleWrapper>
+            <WT.InputSectionWrapper>
+              {selectedCategory == 0 && (
+                <S.Grid>
+                  <S.CheckboxWrapper width="fit-content">
+                    <Input
+                      placeholder=""
+                      type="checkbox"
+                      maxLength={20}
+                      name="dhppl"
+                      value="DHPPL(종합 백신)"
+                      onChange={onChangeCheckbox}
+                    />
+                    <p>DHPPL(종합 백신)</p>
+                  </S.CheckboxWrapper>{' '}
+                  <S.CheckboxWrapper width="fit-content">
+                    <Input
+                      placeholder=""
+                      type="checkbox"
+                      maxLength={20}
+                      name="covidEnteritis"
+                      value="코로나 장염"
+                      onChange={onChangeCheckbox}
+                    />
+                    <p>코로나 장염</p>
+                  </S.CheckboxWrapper>
+                  <S.CheckboxWrapper width="fit-content">
+                    <Input
+                      placeholder=""
+                      type="checkbox"
+                      maxLength={20}
+                      name="kennelCough"
+                      value="컨넬코프"
+                      onChange={onChangeCheckbox}
+                    />
+                    <p>켄넬 코프(기관지염)</p>
+                  </S.CheckboxWrapper>
+                  {/* 비필수 */}
+                  <S.CheckboxWrapper width="fit-content">
+                    <Input
+                      placeholder=""
+                      type="checkbox"
+                      maxLength={20}
+                      name="influenza"
+                      value="인플루엔자"
+                      onChange={onChangeCheckbox}
+                      />
+                    <p>인플루엔자</p>
+                  </S.CheckboxWrapper>
+                  <S.CheckboxWrapper width="fit-content">
+                    <Input
+                      placeholder=""
+                      type="checkbox"
+                      maxLength={20}
+                      name="rabies"
+                      value="광견병"
+                      onChange={onChangeCheckbox}
+                      />
+                    <p>광견병</p>
+                  </S.CheckboxWrapper>
+                </S.Grid>
+              )}
+              {selectedCategory == 1 && (
+                <S.Grid>
+                  <S.CheckboxWrapper width="fit-content">
+                    <Input
+                      placeholder=""
+                      type="checkbox"
+                      maxLength={20}
+                      name="comprehensiveVaccine"
+                      value="종합접종"
+                      onChange={onChangeCheckbox}
+                      />
+                    <p>종합 접종</p>
+                  </S.CheckboxWrapper>
+                  <S.CheckboxWrapper width="fit-content">
+                    <Input
+                      placeholder=""
+                      type="checkbox"
+                      maxLength={20}
+                      name="rabies"
+                      value="광견병"
+                      onChange={onChangeCheckbox}
+                      />
+                    <p>광견병</p>
+                  </S.CheckboxWrapper>
+                  <S.CheckboxWrapper width="fit-content">
+                    <Input
+                      placeholder=""
+                      type="checkbox"
+                      maxLength={20}
+                      name="fpv"
+                      value="FPV"
+                      onChange={onChangeCheckbox}
+                      />
+                    <p>FPV(범백혈구 감소증)</p>
+                  </S.CheckboxWrapper>
+                  <S.CheckboxWrapper width="fit-content">
+                    <Input
+                      placeholder=""
+                      type="checkbox"
+                      maxLength={20}
+                      name="felv"
+                      value="FeLV"
+                      onChange={onChangeCheckbox}
+                      />
+                    <p>FeLV(고양이 백혈병)</p>
+                  </S.CheckboxWrapper>
+                </S.Grid>
+              )}
+            </WT.InputSectionWrapper>
+          </WT.InputSectionContainer>
+          ) : null}
+         
+
+
+
         {/* 분양지역 */}
         {/* TODO
         : SELECTBOX로 변경

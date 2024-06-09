@@ -49,26 +49,11 @@ export const logout: ApiHandler = (options) =>
     url: addPrefix(``),
   });
 
-export const access: ApiHandler = (options:any) =>
-{
-  console.log("토큰이없으면대체뭐가잇는데1");
-  console.log(options);
-  return instance({
-    method: 'POST',
-    data: options,
-    url: 'api/v1/accessToken',
-    ...options,
-  });
-}
-
 export const refresh: ApiHandler = (options) =>
 {
-  console.log("토큰이없으면대체뭐가잇는데2");
-  console.log(options);
   return instance({
     method: 'POST',
-    data: options,
-    url: 'api/v1/refreshToken',
+    url: 'api/v1/accessToken',
     ...options,
   });
 }

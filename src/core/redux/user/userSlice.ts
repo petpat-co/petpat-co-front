@@ -4,16 +4,12 @@ import { User } from 'src/types/user';
 
 export const initialState: User.UserType = {
   user: {
-    // userId: 0,
     userEmail: '',
     nickname: '',
-    // userpassword를 저장해놓는게 맞나...?
-    // userPassword: 'password!123',
-    // userPasswordCheck: 'password!123',
     profileImgUrl:
       'https://pbs.twimg.com/profile_images/1116573617645424640/u5h2q3jv_400x400.png',
   },
-  emailCheck: false,
+  emailCheck: null,
   is_login: false,
 };
 
@@ -63,16 +59,12 @@ export const emailCheckApi = createAsyncThunk(
     try {
       const response = await userAPI.emailCheck(email);
       thunkAPI.dispatch(userSlice.actions.emailDpCheck(true));
-      // if (response.status === 80200) {
-      // thunkAPI.dispatch(userSlice.actions.emailDpCheck(true));
-      // } else if (response.status === 80400) {
-      // window.alert('이미 사용중인 이메일 입니다.');
-      // }
-      console.log('emailCheckApi : response', response);
-    } catch (error: any) {
-      console.log('emailCheckApi : error response', error.response);
+      return true;
+    } catch (error) {
+      thunkAPI.dispatch(userSlice.actions.emailDpCheck(false));
+      return false;
     }
-  },
+  }
 );
 
 // 로그인
@@ -87,15 +79,15 @@ export const logInApi = createAsyncThunk(
       const response = await userAPI.logIn({ data });
       console.log('logInApi : response', response);
       const accessToken = response.headers.authorization?.split('Bearer ')[1];
-      //const refreshToken = response.headers.Refreshtoken;
-      //if (accessToken && refreshToken) {
-      if (accessToken) {
+      const refreshToken = response.headers.refreshtoken;
+      if (accessToken && refreshToken) {
+      // if (accessToken) { 
         if (user.checked) {
         }
         localStorage.setItem('accessToken', accessToken);
-        //localStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('refreshToken', refreshToken);
         thunkAPI.dispatch(userSlice.actions.setUser(response));
-        window.location.replace('/');
+        console.log(response.headers);
         return true;
       }
     } catch (error: any) {
@@ -106,32 +98,16 @@ export const logInApi = createAsyncThunk(
 );
 
 export const refresh = createAsyncThunk(
-  'user/login',
+  'user/refresh',
   async (user: '', thunkAPI) => {
     try {
-      const token = localStorage.getItem('accessToken');
-      const response = await userAPI.refresh(`Bearer ${token}`);
-      console.log('리퓨ㅜ레시', response);
+      const access = 'Bearer '+localStorage.getItem('accessToken');
+      const refresh = localStorage.getItem('refreshToken');
+      const response = await userAPI.refresh({access, refresh});
       const accessToken = response.headers.authorization?.split('Bearer ')[1];
       return true;
     } catch (error: any) {
-      console.log('ㄿㄽ : error response', error.response.data);
-      return false;
-    }
-  },
-);
-
-export const access = createAsyncThunk(
-  'user/login',
-  async (user: '', thunkAPI) => {
-    try {
-      const token = localStorage.getItem('accessToken');
-      const response = await userAPI.access(`Bearer ${token}`);
-      console.log('액세스', response);
-      const accessToken = response.headers.authorization?.split('Bearer ')[1];
-      return true;
-    } catch (error: any) {
-      console.log('ㅇㅅㅅ : error response', error.response.data);
+      console.error('token refresh failed', error.response.data);
       return false;
     }
   },
@@ -193,13 +169,10 @@ export const userSlice = createSlice({
         window.alert('로그인중인데 뭔가 문제가 있다... 아마도 페이로드가 없음');
       }
     },
-    emailDpCheck: (state, action: PayloadAction<any>) => {
-      console.log(action.payload);
+    emailDpCheck: (state, action: PayloadAction<boolean | null>) => {
       state.emailCheck = action.payload;
-      return;
     },
     getProfile: (state, action: PayloadAction<any>) => {
-      console.log('REDUCER GETPROFILE' + action.payload);
       state.user = action.payload;
     },
     logout: (state, action: PayloadAction<any>) => {
@@ -209,7 +182,7 @@ export const userSlice = createSlice({
           userNickname: '',
           userImg: '',
         },
-        emailCheck: false,
+        emailCheck: null,
         is_login: false,
       };
       return;

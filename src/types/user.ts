@@ -23,7 +23,7 @@ export namespace User {
     export interface UserType {
         user: UserInfo;
         is_login: boolean;
-        emailCheck?: boolean;
+        emailCheck?: boolean | null;
         mypage?: any;
     };
 

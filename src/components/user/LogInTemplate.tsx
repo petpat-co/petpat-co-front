@@ -6,10 +6,12 @@ import { LogInTemplateStyle as S } from './LogInTemplate.style';
 //api
 import { getProfileApi, logInApi } from 'src/core/redux/user/userSlice';
 
-//utills
+//utils
 import { KAKAO_AUTH_URL } from 'src/core/OAuth';
 import { emailCheck, passwordCheck } from '../shared/RegEx';
 
+// component
+import ModalContainer from '../common/modal/container/ModalContainer';
 // elements
 import { Text } from '../shared/element/Text';
 import { Button, Input } from '../shared/element';
@@ -20,10 +22,33 @@ import { ReactComponent as Naver } from 'src/asset/loginIcon/naver.svg';
 import { ReactComponent as Google } from 'src/asset/loginIcon/google.svg';
 import { ReactComponent as Github } from 'src/asset/loginIcon/github.svg';
 import { ReactComponent as Facebook } from 'src/asset/loginIcon/facebook.svg';
+import { ReactComponent as FailIcon } from 'src/asset/modalicon/sadface.svg';
 
 const LogInTemplate = (): ReactElement => {
   const appdispatch = useAppDispatch();
   const navigate = useNavigate();
+
+
+
+  const ALERT = {
+    loginFail: {
+      title: '로그인에 실패했습니다.',
+      content: '이메일 또는 비밀번호가 잘못되었습니다. 다시 시도해주세요.',
+    },
+    fieldEmpty: {
+      title: '아이디 또는 비밀번호가 입력되지 않았습니다',
+      content: '입력 후 다시 시도해주세요.',
+    },
+  };
+
+  // modal
+  const [onModal, setOnModal] = React.useState({
+    status: false,
+    message: { title: '', content: '' },
+  });
+  const onClickClose = async () => {
+    setOnModal({ status: false, message: { title: '', content: '' } });
+  };
 
   //user data
   const [userEmail, setUserEmail] = React.useState('rr@rr.com');
@@ -43,18 +68,11 @@ const LogInTemplate = (): ReactElement => {
 
   //login
   const logIn = () => {
-    console.log(rememberChecked);
     //data validation
     if (!userEmail || !userPassword) {
-      console.log('빈 칸을 모두 채워주세요.');
+      setOnModal({ status: true, message: ALERT.fieldEmpty });
       return;
-    } else if (!emailCheck(userEmail)) {
-      console.log('이메일 주소를 확인해주세요.');
-      return;
-    } else if (!passwordCheck(userPassword)) {
-      console.log('비밀번호를 확인해주세요.');
-      return;
-    }
+    } 
     //fetching data
     const userdata = {
       userEmail: userEmail,
@@ -69,7 +87,7 @@ const LogInTemplate = (): ReactElement => {
         appdispatch(getProfileApi(''));
         window.location.replace('/');
       } else {
-        // TODO: 로그인 실패 시 처리
+        setOnModal({ status: true, message: ALERT.loginFail });
       }
     });
   };
@@ -83,6 +101,24 @@ const LogInTemplate = (): ReactElement => {
 
   return (
     <S.Wrap>
+      {onModal.status && (
+        <ModalContainer
+          zIndex={1000}
+          id="fail"
+          onClickClose={onClickClose}
+          title={onModal.message.title}
+          image={true}
+        >
+          <FailIcon/>
+          <p>{onModal.message.content}</p>
+          <Button modal width="80px" margin="32px 0 0 0" _onClick={() => {onClickClose()}}>
+            확인
+          </Button>
+        </ModalContainer>
+      )}
+
+
+
       {/* 로그인 헤더 */}
       <S.GreetingWrap>
         <Text
@@ -116,7 +152,7 @@ const LogInTemplate = (): ReactElement => {
         <Input
           defaultValue={userEmail}
           name="email"
-          placeholder=""
+          placeholder="Email"
           maxLength={50}
           borderRadius="5px"
           onChange={(e) => {
@@ -137,7 +173,7 @@ const LogInTemplate = (): ReactElement => {
           defaultValue={userPassword}
           name="password"
           type="password"
-          placeholder=""
+          placeholder="Password"
           maxLength={50}
           borderRadius="5px"
           onChange={(e) => {

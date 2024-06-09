@@ -30,7 +30,6 @@ export const getQnaListApi = createAsyncThunk(
   async (pageNo: number, thunkAPI) => {
     try {
       const response = await qnaAPI.getQnaList({ pageNo });
-      console.log('getQnaListApi response : ', response.data);
       const list = response.data.data;
       thunkAPI.dispatch(qnaSlice.actions.setQnaList(list));
     } catch (error: any) {
@@ -44,7 +43,6 @@ export const getQnaDetailApi = createAsyncThunk(
   async (postNo: string, thunkAPI) => {
     try {
       const response = await qnaAPI.getQnaDetail(postNo);
-      console.log('getQnaDetailApi response : ', response.data);
       const detail = response.data;
       thunkAPI.dispatch(qnaSlice.actions.setQnaList(detail));
     } catch (error: any) {
@@ -115,7 +113,6 @@ export const qnaSlice = createSlice({
   initialState,
   reducers: {
     setQnaList: (state, action: PayloadAction<any>) => {
-      console.log('setQnaList-REDUCER' + action.payload);
       state.list = action.payload;
       return;
     },

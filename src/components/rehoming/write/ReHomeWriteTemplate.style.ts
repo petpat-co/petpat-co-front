@@ -217,7 +217,9 @@ background-color: ${({theme}) => theme.colors.coolgray100};
 
 export const Grid = styled.div`
   width: 100%;
-  display: grid;
-  gap: 32px 0;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  gap: 24px;
+  // display: grid;
+  // gap: 8px 0;
+  // grid-template-columns: repeat(5, 1fr);
 `

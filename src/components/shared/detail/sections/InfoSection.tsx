@@ -60,6 +60,17 @@ const InfoSection = (props: PropsType) => {
     petName,
     petAge,
     gender,
+    neutralized,
+    // -- 접종여부
+    kennelCough,
+    rabies,
+    covidEnteritis,
+    fpv,
+    dhppl,
+    felv,
+    comprehensiveVaccine,
+    influenza,
+    // --
     price,
     tradeCategoryDetailName,
   } = props.info;
@@ -69,8 +80,22 @@ const InfoSection = (props: PropsType) => {
     handleClickUpdate,
     setOnDeleteCheckModal,
   } = props;
+  const vaccinationStatus = [
+    { name: '켄넬코프', value: kennelCough },
+    { name: '광견병', value: rabies },
+    { name: '코로나 장염', value: covidEnteritis },
+    { name: 'FPV', value: fpv },
+    { name: 'DHPPL', value: dhppl },
+    { name: 'FELV', value: felv },
+    { name: '종합 백신', value: comprehensiveVaccine },
+    { name: '인플루엔자', value: influenza },
+  ];
 
   const appdispatch = useAppDispatch();
+
+  const nowYear = new Date().getFullYear();
+  const petBirthYear = petAge?.split('-')[0];
+
 
   // status
   const [isLiked, setIsLiked] = React.useState(liked);
@@ -171,19 +196,21 @@ const InfoSection = (props: PropsType) => {
             <p>{petName}</p>
             <p>종</p>
             <p>
-              {/* {category}, {type} */}
-              강아지, 아이리시 소프트코티드 휘튼 테리어
+              {category}, {type}
             </p>
             <p>성별</p>
             <p>
               {gender === 'BOY' ? '남' : gender === 'GIRL' ? '여' : '알수없음'}
             </p>
             <p>생일</p>
-            <p>{petAge}, 2살</p>
+            <p>{petAge}, {nowYear-Number(petBirthYear)}살</p>
             <p>중성화</p>
-            <p>완료</p>
+            <p>{neutralized?'완료':'미완료'}</p>
             <p>접종</p>
-            <p>광견병, 파보, </p>
+            <p>{vaccinationStatus && vaccinationStatus.map((item,idx) => {
+                const trueVaccinations = vaccinationStatus.filter(item => item.value);
+                return item.value && <>{item.name}{idx < trueVaccinations.length - 1 && ', '} </>
+            })}</p>
           </Pet>
         ) : null}
 

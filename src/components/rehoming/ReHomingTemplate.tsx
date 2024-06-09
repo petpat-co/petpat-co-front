@@ -29,27 +29,43 @@ const RehomingTemplate = (): ReactElement => {
   }, []);
 
   return (
-    <BoardTemplate
-      title={'분양 게시판'}
-      buttonText={'분양 글쓰러가기'}
-      onClick={() => navigate('/rehome/write')}
-      bannerTitle={
-        <>
-          최근에 관심을
-          <br />
-          많이 받은 분양글
-        </>
-      }
-      bannerContent={
-        <>
-          귀여운 아이들이
-          <br />
-          ㅇㅇ님의 관심을 기다리고 있어요!
-        </>
-      }
-      bannerData={topRehomingList}
-      postListData={postList}
-    />
+    <>
+    
+      <BoardTemplate
+        title={'분양 게시판'}
+        buttonText={'분양 글쓰러가기'}
+        onClick={() => navigate('/rehome/write')}
+        bannerTitle={
+          <>
+            최근에 관심을
+            <br />
+            많이 받은 분양글
+          </>
+        }
+        bannerContent={
+          <>
+            귀여운 아이들이
+            <br />
+            ㅇㅇ님의 관심을 기다리고 있어요!
+          </>
+        }
+        bannerData={topRehomingList}
+        postListData={postList}
+      />
+      {categories && categories.map((item: any) => {
+        console.log(item.secondCategoryList[0])
+        return(
+          <>
+            <p>{item.firstCategoryName}</p>
+            {/* {item.secondCategoryList ? item.secondCategoryList.map((item: any) => {
+              <>
+                <p>{item.secondCategoryName}</p>
+              </>
+            }):<></>} */}
+          </>
+        )
+      })}
+    </>
   );
 };
 
@@ -57,7 +73,7 @@ export default RehomingTemplate;
 
 const Container = styled.div`
   max-width: 1440px;
-`
+`;
 
 const topRehomingList = [
   {

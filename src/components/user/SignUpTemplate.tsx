@@ -64,9 +64,17 @@ const SignUpTemplate = (): ReactElement => {
       title: '비밀번호가 일치하지 않습니다',
       content: '확인 후 다시 시도해주세요.',
     },
-    emailDpCheckFail: {
+    emailDpCheckEmpty: {
       title: '이메일 중복확인이 되지 않았습니다',
       content: '중복확인 후 다시 시도해주세요.',
+    },
+    emailDpCheckSuccess: {
+      title: '이메일 중복확인이 완료되었습니다',
+      content: '사용 가능한 이메일 입니다.',
+    },
+    emailDpCheckFail: {
+      title: '이미 사용중인 이메일 입니다',
+      content: '다른 이메일을 사용해 주세요',
     },
   };
 
@@ -80,12 +88,12 @@ const SignUpTemplate = (): ReactElement => {
     status: false,
     message: { title: '', content: '' },
   });
-  const onClickClose = () => {
+  const onClickClose = async () => {
     setOnModal({ status: false, message: { title: '', content: '' } });
   };
 
   // 이메일 중복 체크
-  const emailDpCheck = () => {
+  const emailDpCheck = async () => {
     if (!userEmail) {
       setOnModal({ status: true, message: ALERT.emailEmpty });
       return;
@@ -93,7 +101,13 @@ const SignUpTemplate = (): ReactElement => {
       setOnModal({ status: true, message: ALERT.emailValidFail });
       return;
     }
-    appdispatch(emailCheckApi(userEmail));
+
+    const result = await appdispatch(emailCheckApi(userEmail));
+    if (result.payload) {
+      setOnModal({ status: true, message: ALERT.emailDpCheckSuccess });
+    } else {
+      setOnModal({ status: true, message: ALERT.emailDpCheckFail });
+    }
   };
 
   const SignUp = () => {
@@ -128,9 +142,8 @@ const SignUpTemplate = (): ReactElement => {
     }
 
     if (!emailCheckStatus) {
-      setOnModal({ status: true, message: ALERT.emailDpCheckFail });
-      return;
-    }
+      setOnModal({ status: true, message: ALERT.emailDpCheckEmpty });
+    } 
 
     const userdata = {
       userEmail: userEmail,
@@ -195,6 +208,7 @@ const SignUpTemplate = (): ReactElement => {
     }
   };
 
+
   return (
     <S.Container>
       {onModal.status && (
@@ -207,7 +221,7 @@ const SignUpTemplate = (): ReactElement => {
         >
           <SuccessIcon />
           <p>{onModal.message.content}</p>
-          <Button modal width="80px" margin="32px 0 0 0" _onClick={() => {}}>
+          <Button modal width="80px" margin="32px 0 0 0" _onClick={() => {onClickClose()}}>
             확인
           </Button>
         </ModalContainer>

@@ -34,7 +34,6 @@ const ListCard = (props: ListCardProps) => {
     price,
     status,
     postType,
-    postId,
   } = props.item;
 
   const appDispatch = useAppDispatch();

@@ -2,8 +2,8 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from 'src/core/store';
 import { postAPI, rehomingAPI } from 'src/network/api';
-import { Category } from 'src/types/category';
 import { Post } from 'src/types/post';
+import { Category } from 'src/types/category';
 
 export const initialState: Post.RehomingState = {
   category: [],
@@ -46,13 +46,11 @@ export const getRehomingCategoryApi = createAsyncThunk(
     try {
       const response = await rehomingAPI.getRehomingCategory(postType);
       const categories = response.data.data;
-      
-      /**
-       * @카테고리세분화 
-       * */
+
+      /** @초성추출 */
+      const initialChars = ['ㄱ', 'ㄱ', 'ㄴ', 'ㄷ', 'ㄷ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅂ', 'ㅅ', 'ㅅ', 'ㅇ', 'ㅈ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
       const getInitial = (categoryName: string) => {
         // 겹자음 기본 자음에 포함
-        const initialChars = ['ㄱ', 'ㄱ', 'ㄴ', 'ㄷ', 'ㄷ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅂ', 'ㅅ', 'ㅅ', 'ㅇ', 'ㅈ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
         // 첫 글자의 UNICODE를 통해 첫 초성 추정
         // 한글 UNICODE 범위 :  44032 ~ 55203
         // 44032 : '가' / 55203 : '힣' 
@@ -66,32 +64,50 @@ export const getRehomingCategoryApi = createAsyncThunk(
         return initialChars[Math.floor(charCode/588)];
       }
 
-      const sortCategory = (category: any) => {
-        return category.reduce((acc: any, item: any, idx: number) => {
-          let initial = getInitial(item.secondCategoryName); 
-          if(!initial) {
-            // 초성 찾지 못한 경우 etc로 분류
-            initial = 'etc'; 
+      const sortCategory = (firstCategory: Category.FirstCategory[]) => {
+        return firstCategory.map((category: any) => {
+          // 자음별 분류 [key: 초성]
+          const grouped: {[key:string]: Category.SecondCategory} = {};
+
+          // 데이터가 없는 경우에도 빈 카테고리 생성
+          initialChars.forEach((initial, index) => {
+            grouped[initial] = {
+              secondCategoryName: initial,
+              secondCategoryId: index + 1,
+              thirdCategoryList: []
+            };
+          });
+
+          // 초성별 분류 시작
+          category.secondCategoryList.map((secondCategory: any) => {
+            let initial = getInitial(secondCategory.secondCategoryName);
+            if(!initial) {
+              initial = 'etc';
+            }
+
+            if(!grouped[initial]) {
+              grouped[initial] = {
+                secondCategoryName: initial,
+                secondCategoryId: Object.keys(grouped).length + 1,
+                thirdCategoryList: []
+              }
+            }
+            grouped[initial].thirdCategoryList.push({
+              thirdCategoryId: secondCategory.secondCategoryId,
+              thirdCategoryName: secondCategory.secondCategoryName
+            })
+          })
+
+          return {
+            firstCategoryId: category.firstCategoryId,
+            firstCategoryName: category.firstCategoryName,
+            secondCategoryList: Object.values(grouped),
           }
-          if(!acc[idx]) {
-            acc[idx] = [];
-          }
-          acc[idx].push(item);
-          return acc; 
-        }, {})
+        })
       }
 
-      
-      const newCategory = categories.map((firstCategory: Category.FirstCategory) => {
-        return {
-          ...firstCategory,
-          secondCategoryList: sortCategory(firstCategory.secondCategoryList),
-        };
-      });
-
-
       thunkAPI.dispatch(
-        rehomingSlice.actions.setCategories(newCategory),
+        rehomingSlice.actions.setCategories(sortCategory(categories)),
       );
     } catch (error: any) {
       console.log('getRehoming : error response', error.response.data);
@@ -106,7 +122,6 @@ export const getRehomingListApi = createAsyncThunk(
   async (pageNo: number, thunkAPI) => {
     try {
       const response = await rehomingAPI.getReHomingList(pageNo);
-      console.log('getRehomingListApi response : ', response.data.data.content);
       const list = response.data.data.content;
       thunkAPI.dispatch(rehomingSlice.actions.setRehomingList(list));
     } catch (error: any) {
@@ -148,7 +163,7 @@ export const postRehomingApi = createAsyncThunk(
       );
       console.log('postQnaApi response : ', response.data);
       if (response.data.result === 'SUCCESS') {
-        window.location.replace('/rehome');
+        window.location.replace('/rehoming');
       }
       // thunkAPI.dispatch(rehomingSlice.actions.setIsSuccess(true));
     } catch (error: any) {
@@ -175,7 +190,7 @@ export const modifyRehomingApi = createAsyncThunk(
         },
       );
       if (response.data.result === 'SUCCESS') {
-        window.location.replace('/rehome/detail/' + data.postId);
+        window.location.replace('/rehoming/detail/' + data.postId);
       }
     } catch (error: any) {
       console.log('modifyRehomingApi : error response', error.response);
@@ -188,10 +203,9 @@ export const deleteReHomingApi = createAsyncThunk(
   async (postId: number | string, thunkAPI) => {
     try {
       const response = await rehomingAPI.deleteReHoming(postId);
-      console.log('deleteRehomingApi response : ', response.data);
       if (response.data.result === 'SUCCESS') {
         window.alert('삭제완료');
-        window.location.replace('/rehome');
+        window.location.replace('/rehoming');
       } else {
         window.alert('삭제 실패');
       }
@@ -234,12 +248,10 @@ export const rehomingSlice = createSlice({
   initialState,
   reducers: {
     setCategories: (state, action: PayloadAction<any>) => {
-      // console.log("REDUCER "+action.payload);
       state.category = action.payload;
       return;
     },
     setRehomingList: (state, action: PayloadAction<any>) => {
-      console.log('REDUCER' + action.payload);
       state.list = action.payload;
       return;
     },

@@ -8,6 +8,20 @@ const addPrefix: AddPrefix = (path) => {
   return config.server.host + '/api/v1' + path;
 };
 
+// 목록조회
+export const getPostList: ApiHandler = (
+  options, // pageNo, postType
+) =>
+  instance({
+    // TODO: 토큰 공통으로 처리 필요
+    headers: {
+      Authorization: `Bearer ${Token}`,
+    },
+    method: 'GET',
+    url: addPrefix(`/${options.postType}?page=${options.pageNo}`),
+    ...options,
+  });
+
 // 상세조회
 export const getOnePost: ApiHandler = (
   options, //postType, postId
@@ -59,7 +73,7 @@ export const deletePost: ApiHandler = (
 
 // 좋아요
 export const likePost: ApiHandler = (
-  options, // postId
+  options, // postType, postId
 ) =>
   instance({
     method: 'POST',
@@ -77,15 +91,29 @@ export const bookmarkPost: ApiHandler = (
     ...options,
   });
 
-// 좋아요 등록
-export const postLikedStatus: ApiHandler = (
-  options, // postType, id
+// 인기있는 게시물 조회
+export const getBannerList: ApiHandler = (
+  options, // postType
 ) =>
   instance({
     headers: {
       Authorization: `Bearer ${Token}`,
     },
-    method: 'POST',
-    url: `${config.server.host}/api/v1/likes/${options.postType}/${options.id}`,
+    method: 'GET',
+    url: addPrefix(`/${options.postType}/trending`),
+    ...options,
+  });
+
+// 카테고리 조회
+export const getCategoryList: ApiHandler = (
+  options, // postType
+) =>
+  instance({
+    headers: {
+      Authorization: `Bearer ${Token}`,
+    },
+    method: 'GET',
+    url: addPrefix(`/${options.postType}/categoryList`),
+    // url: addPrefix(`/trade/category/${options.categoryId}`),
     ...options,
   });

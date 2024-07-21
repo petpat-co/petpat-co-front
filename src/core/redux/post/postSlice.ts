@@ -144,6 +144,7 @@ export const getOnePostApi = createAsyncThunk(
         postType: data.postType,
       };
       thunkAPI.dispatch(postSlice.actions.setPost(postData));
+      return postData;
     } catch (error: any) {
       console.log('getOnePostApi error response : ', error.response);
       throw error;
@@ -205,9 +206,8 @@ export const deletePostApi = createAsyncThunk(
   },
 );
 
-// 추후에 common으로 옮기겠습니다 >.< !!
 export const bookmarkApi = createAsyncThunk(
-  'rehoming/bookmark',
+  'post/bookmark',
   async (data: any | string, thunkAPI) => {
     try {
       const response = await postAPI.bookmarkPost(data);
@@ -218,11 +218,27 @@ export const bookmarkApi = createAsyncThunk(
   },
 );
 
+// export const likeApi = createAsyncThunk(
+//   'rehoming/like',
+//   async (data: any | string, thunkAPI) => {
+//     try {
+//       const response = await postAPI.likePost(data);
+//       console.log('likeApi response : ', response.data);
+//     } catch (error: any) {
+//       console.log('likeApi : error response', error.response);
+//     }
+//   },
+// );
+
 export const likeApi = createAsyncThunk(
-  'rehoming/like',
+  'post/like',
   async (data: any | string, thunkAPI) => {
     try {
-      const response = await postAPI.likePost(data);
+      const changePostType = data.postType.toUpperCase();
+      const response = await postAPI.likePost({
+        postType: changePostType,
+        postId: data.postId,
+      });
       console.log('likeApi response : ', response.data);
     } catch (error: any) {
       console.log('likeApi : error response', error.response);

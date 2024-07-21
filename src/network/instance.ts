@@ -24,7 +24,7 @@ const instance = axios.create({
 //2. 요청 인터셉터
 instance.interceptors.request.use(
   //요청직전 호출
-  (config) => {
+  (config: any) => {
     // const Token = localStorage.getItem('token');
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
@@ -45,7 +45,7 @@ instance.interceptors.request.use(
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
       config.headers['refreshToken'] = refreshToken;
-    } 
+    }
     return config;
   },
   //에러 전 호출
@@ -59,27 +59,29 @@ instance.interceptors.response.use(
     return response;
   },
   function (error) {
-
     if (error.response && error.response.status === 401) {
       const refreshToken = localStorage.getItem('refreshToken');
       if (refreshToken) {
-        return axios.create()({
-          method: 'POST',
-          url: `${config.server.host}/api/v1/accessToken`,
-          headers: {
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Accept': 'application/json',
-            'refreshToken': refreshToken,
-          }
-        }).then(response => {
-          const { accessToken } = response.data;
-          localStorage.setItem('accessToken', accessToken);
-          error.config.headers['Authorization'] = `Bearer ${accessToken}`;
-          return instance(error.config); 
-        }).catch(error => {
-          console.error('token refresh failed:', error);
-          return Promise.reject(error);
-        });
+        return axios
+          .create()({
+            method: 'POST',
+            url: `${config.server.host}/api/v1/accessToken`,
+            headers: {
+              'Content-Type': 'application/json; charset=UTF-8',
+              Accept: 'application/json',
+              refreshToken: refreshToken,
+            },
+          })
+          .then((response) => {
+            const { accessToken } = response.data;
+            localStorage.setItem('accessToken', accessToken);
+            error.config.headers['Authorization'] = `Bearer ${accessToken}`;
+            return instance(error.config);
+          })
+          .catch((error) => {
+            console.error('token refresh failed:', error);
+            return Promise.reject(error);
+          });
       }
     }
     return Promise.reject(error);

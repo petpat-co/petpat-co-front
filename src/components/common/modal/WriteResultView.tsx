@@ -18,16 +18,25 @@ import theme from '../../../styles/theme';
 type WriteResultViewProps = {
   page: string;
   isSuccess: boolean;
+  setOnModal: (value: boolean) => void;
 };
 
-const WriteResultView = ({ page, isSuccess }: WriteResultViewProps) => {
+const WriteResultView = ({
+  page,
+  isSuccess,
+  setOnModal,
+}: WriteResultViewProps) => {
   const navigate = useNavigate();
   const nickname = JSON.parse(localStorage.getItem('userInfo')!).nickname;
 
   const goToList = () => {
+    // 게시글 등록 실패 시 모달창 닫기
     if (!isSuccess) {
+      setOnModal(false);
       return;
     }
+
+    // 게시글 등록 성공 시 목록 화면으로 이동
     navigate(`/${page}`, { replace: true });
   };
 

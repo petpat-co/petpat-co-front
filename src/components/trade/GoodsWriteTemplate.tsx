@@ -1,8 +1,14 @@
 // ** Import React
-import React, { ChangeEvent, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import React, {
+  ChangeEvent,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import { useAppDispatch } from '../../core/store';
+import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
 // ** Import components
 import TitleSection from '../shared/layout/TitleSection';
@@ -22,42 +28,143 @@ import * as S from '../shared/board/WriteTemplate.style';
 
 // ** Import api
 import { postTradeApi } from '../../core/redux/post/tradeSlice';
+import { getOnePostApi } from '../../core/redux/post/postSlice';
 
 // ** Import svg
 import { ReactComponent as Add } from 'src/asset/icon/add.svg';
 import { ReactComponent as DeleteIcon } from 'src/asset/close.svg';
 
-const tempCategoryList = [
-  { id: 0, value: 'feed', label: '강아지 사료' },
-  { id: 1, value: 'snack', label: '강아지 간식' },
-  { id: 2, value: 'vitamin', label: '강아지 영양제' },
-];
-
 const GoodsWriteTemplate = () => {
   const [form, setForm] = useState({
     title: '',
+    tradeCategoryDetailId: '',
+    location: 'location',
     price: '',
     content: '',
-    location: 'location',
-    tradeCategoryDetailId: 18,
   });
   const [imgFileList, setImgFileList] = useState<any[]>([]); // 서버 전달용
   const [previewImgList, setPreviewImgList] = useState<any[]>(
     new Array(5).fill(null),
   ); // 미리보기용
   const [showAddBtnIdx, setShowAddBtnIdx] = useState<number>(0);
-  const [mainImgIdx, setMainImgIdx] = useState<number>(0);
-  const [categoryGroup, setCategoryGroup] = useState<any>([]);
-  const [tradeCategoryGroup, setTradeCategoryGroup] = useState<any[]>([]);
-  const [tradeDetailGroup, setTradeDetailGroup] = useState<any[]>([]);
   const [onModal, setOnModal] = useState<boolean>(false);
   const [formError, setFormError] = useState({ key: '', message: '' });
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [firstCategoryList, setFirstCategoryList] = useState<any[]>([]);
+  const [secondCategoryList, setSecondCategoryList] = useState<any>([]);
+  const [thirdCategoryList, setThirdCategoryList] = useState<any>([]);
+  const [selectedCategory, setSelectedCategory] = useState<any>({
+    firstCategory: null,
+    secondCategory: null,
+    thirdCategory: null,
+  });
+  const [isFirstSelectOpen, setIsFirstSelectOpen] = useState(false);
+  const [isSecondSelectOpen, setIsSecondSelectOpen] = useState(false);
+  const [isThirdSelectOpen, setIsThirdSelectOpen] = useState(false);
+  const [isCitySelectOpen, setIsCitySelectOpen] = useState(false);
+  const [isCountrySelectOpen, setIsCountrySelectOpen] = useState(false);
+  const [isDistrictSelectOpen, setIsDistrictSelectOpen] = useState(false);
+  const [isTownShipSelectOpen, setIsTownShipSelectOpen] = useState(false);
+  const [post, setPost] = useState<any>({}); // 서버에서 받은 게시글 데이터
+
+  // path
+  const location = useLocation().pathname.split('/');
+  const postType = location[1];
+  const writeType = location[2];
+  const postId = location[3];
 
   const appDispatch = useAppDispatch();
-  const isSuccess = useSelector((state: any) => state.trade.isSuccess);
-  const navigate = useNavigate();
+  const categoryListData = useSelector((state: any) => state.common.category); // 카테고리 목록 정보
+  // const postData = useSelector((state: any) => state.post.trade);
 
   const fileRef: any = React.useRef(null);
+  const formRef = useRef<HTMLDivElement>(null);
+
+  const isEmpty = (target: any) => {
+    return Object.values(target).length === 0;
+  };
+
+  useLayoutEffect(() => {
+    // 수정 시 데이터 조회 후 상태 업데이트
+    if (writeType === 'modify') {
+      appDispatch(getOnePostApi({ postType, postId })).then((res: any) => {
+        setPost(res.payload.post);
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (categoryListData.length === 0) return;
+
+    // first 카테고리 옵션 데이터 설정
+    let updateFirstCategoryList = categoryListData.map((category: any) => {
+      return {
+        id: category.firstCategoryId,
+        label: category.firstCategoryName,
+        value: category.firstCategoryName,
+      };
+    });
+
+    setFirstCategoryList(updateFirstCategoryList);
+
+    // 수정 페이지에서만 동작
+    if (writeType === 'modify') {
+      if (isEmpty(post)) return;
+
+      // 서버에서 받은 tradeCategoryName으로 카테고리 데이터 페칭
+      const oldCategoryData = findCategoryInfo();
+
+      // 서버에서 받은 일부 데이터 페칭
+      const oldFormData = {
+        title: post.title,
+        tradeCategoryDetailId: (oldCategoryData?.thirdCategory.id).toString(),
+        location: '',
+        price: post.price,
+        content: post.content,
+      };
+
+      // 서버에서 받은 이미지 데이터 페칭
+      let oldImageDataList = post.imageList.map((item: any) => {
+        return {
+          id: item.imageId === 0 ? item.imageId : item.imageId - 1,
+          url: item.imagePath,
+        };
+      });
+
+      // 이미지 데이터 최대 갯수 맞추기 (등록된 이미지 갯수 외 나머지는 null로 정의)
+      oldImageDataList = oldImageDataList.concat(
+        Array(5 - oldImageDataList.length).fill(null),
+      );
+
+      setForm(oldFormData);
+      setPreviewImgList(oldImageDataList);
+      setSelectedCategory(oldCategoryData);
+
+      // second 카테고리 옵션 데이터 설정
+      let updateSecondCategoryList = handleFilteredCategoryList(
+        categoryListData,
+        oldCategoryData?.firstCategory.id,
+        1,
+      );
+
+      let targetSecondCategoryList = categoryListData
+        .filter(
+          (firstCategory: any) =>
+            firstCategory.firstCategoryId === oldCategoryData?.firstCategory.id,
+        )
+        .pop().secondCategoryList;
+
+      // third 카테고리 옵션 데이터 설정
+      let updateThirdCategoryList = handleFilteredCategoryList(
+        targetSecondCategoryList,
+        oldCategoryData?.secondCategory.id,
+        2,
+      );
+
+      setSecondCategoryList(updateSecondCategoryList);
+      setThirdCategoryList(updateThirdCategoryList);
+    }
+  }, [post, categoryListData]);
 
   useEffect(() => {
     // 미리보기 상태 변경 시 데이터가 없는 첫번째 idx 추출
@@ -67,6 +174,124 @@ const GoodsWriteTemplate = () => {
 
     setShowAddBtnIdx(firstNullDataIdx);
   }, [previewImgList]);
+
+  // 하위 카테고리명으로 상위 카테고리 정보 조회
+  const findCategoryInfo = () => {
+    for (let i = 0; i < categoryListData.length; i++) {
+      let firstCategory = categoryListData[i];
+
+      for (let j = 0; j < firstCategory.secondCategoryList.length; j++) {
+        let secondCategory = firstCategory.secondCategoryList[j];
+
+        for (let k = 0; k < secondCategory.thirdCategoryList.length; k++) {
+          let thirdCategory = secondCategory.thirdCategoryList[k];
+
+          if (
+            thirdCategory.thirdCategoryName === post.tradeCategoryDetailName
+          ) {
+            return {
+              firstCategory: {
+                id: firstCategory.firstCategoryId,
+                value: firstCategory.firstCategoryName,
+                label: firstCategory.firstCategoryName,
+              },
+              secondCategory: {
+                id: secondCategory.secondCategoryId,
+                value: secondCategory.secondCategoryName,
+                label: secondCategory.secondCategoryName,
+              },
+              thirdCategory: {
+                id: thirdCategory.thirdCategoryId,
+                value: thirdCategory.thirdCategoryName,
+                label: thirdCategory.thirdCategoryName,
+              },
+            };
+          }
+        }
+      }
+    }
+    return null;
+  };
+
+  const handleChangeSelect = (e: any, type: number) => {
+    let resultCategoryList: any[] = [];
+
+    // 첫번째 카테고리 선택 시 하위 카테고리 목록 / 선택된 카데고리 정보 상태 업데이트
+    if (type === 1) {
+      resultCategoryList = handleFilteredCategoryList(
+        categoryListData,
+        e.id,
+        type,
+      );
+      setSecondCategoryList(resultCategoryList);
+      setSelectedCategory({ firstCategory: e });
+    }
+
+    // 두번째 카테고리 선택 시 하위 카테고리 목록 / 선택된 카데고리 정보 상태 업데이트
+    else if (type === 2) {
+      const filteredCategoryList = categoryListData
+        .filter(
+          (category: any) =>
+            category.firstCategoryId === selectedCategory.firstCategory.id,
+        )
+        .pop().secondCategoryList;
+
+      resultCategoryList = handleFilteredCategoryList(
+        filteredCategoryList,
+        e.id,
+        type,
+      );
+
+      setThirdCategoryList(resultCategoryList);
+      setSelectedCategory({
+        ...selectedCategory,
+        secondCategory: e,
+        thirdCategory: null,
+      });
+    }
+    // 세번째 카테고리 선택 시 선택된 카데고리 정보 상태 업데이트
+    else if (type === 3) {
+      setSelectedCategory({ ...selectedCategory, thirdCategory: e });
+      setForm({ ...form, tradeCategoryDetailId: e.id });
+    }
+  };
+
+  // 하위 목록 카테고리 정보 가져오는 함수
+  const handleFilteredCategoryList = (
+    targetList: any,
+    targetId: number,
+    type: number,
+  ) => {
+    let propertyName = type == 1 ? 'firstCategoryId' : 'secondCategoryId';
+
+    // 선택한 카테고리에 대한 데이터만 추출
+    let filteredCategoryList = targetList
+      .filter((target: any) => target[propertyName] === targetId)
+      .pop();
+
+    // 추출된 데이터에서 배열인 프로퍼티를 찾아 해당 값으로 업데이트
+    if (filteredCategoryList.length != 0) {
+      for (const key in filteredCategoryList) {
+        // 해당 속성의 값이 배열인 경우
+        if (Array.isArray(filteredCategoryList[key])) {
+          filteredCategoryList = filteredCategoryList[key];
+        }
+      }
+    }
+
+    // 하위 카테고리 형식에 맞게 가공 후 반환
+    let updateCategoryList = filteredCategoryList.map((category: any) => {
+      let propertyName = type == 1 ? 'secondCategory' : 'thirdCategory';
+
+      return {
+        id: category[propertyName + 'Id'],
+        label: category[propertyName + 'Name'],
+        value: category[propertyName + 'Name'],
+      };
+    });
+
+    return updateCategoryList;
+  };
 
   const handleChangeInput = async (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -89,12 +314,22 @@ const GoodsWriteTemplate = () => {
     const uploadFiles = e.target.files;
 
     if (uploadFiles) {
-      let uploadFileArr = Array.from(uploadFiles).map((file, idx) => {
+      let uploadFileArr = []; // 업로드 된 파일 정보가 담긴 배열
+      let hasUploadFiles = imgFileList.length > 0; // 기존에 업로드된 파일이 있는지 여부
+
+      // 업로드 한 파일 필요한
+      uploadFileArr = Array.from(uploadFiles).map((file, idx) => {
         return {
-          id: idx,
+          // 기존 파일이 있다면 배열 갯수 + idx부터 시작
+          id: hasUploadFiles ? imgFileList.length + idx : idx,
           file: file,
         };
       });
+
+      // 기존 파일이 있다면 추가 파일 데이터 병합
+      if (hasUploadFiles) {
+        uploadFileArr = imgFileList.concat(uploadFileArr);
+      }
 
       if (uploadFileArr.length > 5) {
         window.alert('파일은 최대 5개까지만 업로드 가능합니다.');
@@ -122,6 +357,9 @@ const GoodsWriteTemplate = () => {
       case 'title':
         errorType = '제목을 ';
         break;
+      case 'tradeCategoryDetailId':
+        errorType = '카테고리를 ';
+        break;
       case 'location':
         errorType = '주소를 ';
         break;
@@ -139,16 +377,22 @@ const GoodsWriteTemplate = () => {
     return errorType + requiredMessage;
   };
 
-  // TODO: 추후 react-hook-form 적용 예
+  // TODO: 추후 react-hook-form 적용 예정
   // 등록 버튼 클릭 시 호출
   const handleSubmit = () => {
     const currentFormArray = Object.entries(form);
 
+    // console.log('최종 입력 값 --> ', form);
+
     // 유효성 검사
     for (const [key, value] of currentFormArray) {
+      // console.log('key --> ', key, value);
       if (!value) {
         const message = handleErrorMessage(key);
         setFormError({ key, message });
+
+        // 화면 스크롤 이동 처리
+        formRef.current?.scrollIntoView({ behavior: 'smooth' });
         return;
       }
     }
@@ -162,27 +406,25 @@ const GoodsWriteTemplate = () => {
     // formData로 담아주기
     const formData = new FormData();
     Object.entries(form).forEach(([key, value]) => {
-      if (typeof value == 'number') {
-        value = value.toString();
-      }
       formData.append(key, value);
     });
 
     // TODO: 주소 관련 전송 데이터 항목 확인 필요
-    formData.append('cityName', '서울특별시');
-    formData.append('cityCountryName', '영등포구');
-    formData.append(
-      'fullAdName',
-      '서울특별시 노원구 하계동 어쩌구 저쩌구 00동 00호',
-    );
+    formData.append('province', '서울특별시');
+    formData.append('city', '');
+    formData.append('district', '종로구');
+    formData.append('town', '청운동');
     formData.append('detailAdName', '어쩌구 저쩌구 00동 00호');
-    formData.append('townShipName', '하계동');
 
-    imgFileList.forEach((file: File) => {
-      formData.append('images', file);
+    imgFileList.forEach((image: any) => {
+      formData.append('images', image.file);
     });
 
-    appDispatch(postTradeApi(formData)).then(() => {
+    appDispatch(postTradeApi(formData)).then((result) => {
+      if (result.payload) {
+        setIsSuccess(true);
+      }
+
       setOnModal(true);
     });
   };
@@ -215,7 +457,7 @@ const GoodsWriteTemplate = () => {
       .map((data, idx) => {
         return {
           id: idx,
-          file: data,
+          file: data.file,
         };
       });
 
@@ -237,15 +479,99 @@ const GoodsWriteTemplate = () => {
     setPreviewImgList(updatePreviewImgList);
   };
 
+  // react-select 스타일 재정의
+  const customSelectStyles = (isSelectOpen: boolean) => ({
+    control: (provided: any) => ({
+      ...provided,
+      display: 'flex',
+      gap: '10px',
+      cursor: 'pointer',
+      minWidth: '12rem',
+      height: '50px',
+      borderRadius: isSelectOpen ? '28px 28px 0 0' : '28px', // 메뉴가 열렸을 때 스타일 변경
+      borderColor: `${theme.colors.primary}`,
+      padding: '0 14px 0 24px',
+
+      '&:hover': {
+        borderColor: `${theme.colors.primary}`,
+      },
+    }),
+    valueContainer: (provided: any) => ({
+      ...provided,
+      padding: '2px 0',
+    }),
+    indicatorSeparator: (provided: any) => ({
+      ...provided,
+      display: 'none',
+    }),
+    placeholder: (provided: any) => ({
+      ...provided,
+      margin: '0',
+      textOverflow: 'ellipsis',
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      fontSize: `${theme.fontSizes.regular}`,
+      color: `${theme.colors.coolgray300}`,
+    }),
+    input: (provided: any) => ({
+      ...provided,
+      display: 'none',
+    }),
+    dropdownIndicator: (provided: any) => ({
+      ...provided,
+      color: `${theme.colors.primary}`,
+
+      '&:hover': {
+        color: `${theme.colors.primary}`,
+      },
+    }),
+    menu: (provided: any) => ({
+      ...provided,
+      borderRadius: '0 0 28px 28px',
+      border: `1px solid ${theme.colors.primary}`,
+      boxShadow: 'none',
+      marginTop: '0',
+      overflow: 'hidden',
+    }),
+    menuList: (provided: any) => ({
+      ...provided,
+      padding: '10px 0',
+    }),
+    option: (provided: any) => ({
+      ...provided,
+      backgroundColor: `${theme.colors.white}`,
+      color: `${theme.colors.black}`,
+      marginBottom: '8px',
+      padding: '8px 16px',
+
+      '&:active': {
+        backgroundColor: `${theme.colors.sub01}`,
+      },
+
+      '&:hover': {
+        backgroundColor: `${theme.colors.sub02}`,
+      },
+    }),
+    noOptionsMessage: (provided: any) => ({
+      fontSize: '14px',
+      padding: '6px 16px',
+      color: `${theme.colors.coolgray400}`,
+    }),
+  });
+
   return (
-    <>
+    <div ref={formRef}>
       {onModal && (
         <ModalContainer
           zIndex={100000}
           id="goodsSubmitModal"
           onClickClose={() => setOnModal(false)}
         >
-          <WriteResultView page={'trade'} isSuccess={isSuccess} />
+          <WriteResultView
+            page={'trade'}
+            isSuccess={isSuccess}
+            setOnModal={setOnModal}
+          />
         </ModalContainer>
       )}
 
@@ -284,22 +610,40 @@ const GoodsWriteTemplate = () => {
         </S.InputTitleWrapper>
         <S.InputSectionWrapper>
           <S.RowContainer>
-            {/* category group name */}
-            <CustomSelect
-              placeholder={'카테고리를 선택해주세요.'}
-              options={tempCategoryList}
+            {/* first category name */}
+            <Select
+              // value는 객체 형태로 저장해야 동기화 됨 {id, value, label}
+              value={selectedCategory.firstCategory}
+              placeholder={'대분류 카테고리'}
+              options={firstCategoryList}
+              onChange={(e) => handleChangeSelect(e, 1)}
+              onMenuOpen={() => setIsFirstSelectOpen(true)}
+              onMenuClose={() => setIsFirstSelectOpen(false)}
+              styles={customSelectStyles(isFirstSelectOpen)}
             />
-            {/* trade category name */}
-            <CustomSelect
-              placeholder={'카테고리를 선택해주세요.'}
-              options={tempCategoryList}
+            {/* second category name */}
+            <Select
+              value={selectedCategory.secondCategory}
+              placeholder={'중분류 카테고리'}
+              options={secondCategoryList}
+              onChange={(e) => handleChangeSelect(e, 2)}
+              noOptionsMessage={() => '대분류 카테고리를 먼저 선택해주세요.'}
+              onMenuOpen={() => setIsSecondSelectOpen(true)}
+              onMenuClose={() => setIsSecondSelectOpen(false)}
+              styles={customSelectStyles(isSecondSelectOpen)}
             />
-            {/* trade category detail */}
-            <CustomSelect
-              placeholder={'카테고리를 선택해주세요.'}
-              options={tempCategoryList}
+            {/* third category name */}
+            <Select
+              value={selectedCategory.thirdCategory}
+              placeholder={'소분류 카테고리'}
+              options={thirdCategoryList}
+              onChange={(e) => handleChangeSelect(e, 3)}
+              noOptionsMessage={() => '중분류 카테고리를 먼저 선택해주세요.'}
+              onMenuOpen={() => setIsThirdSelectOpen(true)}
+              onMenuClose={() => setIsThirdSelectOpen(false)}
+              styles={customSelectStyles(isThirdSelectOpen)}
             />
-            {formError.key === 'category' && (
+            {formError.key === 'tradeCategoryDetailId' && (
               <InputErrorMessage top={58} message={formError.message} />
             )}
           </S.RowContainer>
@@ -313,46 +657,44 @@ const GoodsWriteTemplate = () => {
         </S.InputTitleWrapper>
         <S.InputSectionWrapper>
           <S.ColumnContainer>
-            <LocationBtnWrapper>
-              <Button
-                width="auto"
-                isArrowIcon={false}
-                height="46px"
-                _onClick={() => console.log('주소 검색 클릭 이벤트')}
-                _disabled={false}
-                activeBg={`${theme.colors.primary}`}
-                padding="0 24px"
-                activeColor={`${theme.colors.white}`}
-                radius="10px"
-              >
-                주소검색
-              </Button>
-              <Button
-                width="auto"
-                isArrowIcon={false}
-                height="46px"
-                _onClick={() => console.log('기본 주소지 클릭 이벤트')}
-                _disabled={false}
-                activeBg={`${theme.colors.primary}`}
-                padding="0 24px"
-                activeColor={`${theme.colors.white}`}
-                radius="10px"
-              >
-                기본주소지
-              </Button>
-            </LocationBtnWrapper>
-            <Input
-              margin="10px 0 0 0"
-              borderRadius="28px"
-              placeholder="지역을 설정해주세요."
-              onChange={handleChangeInput}
-              maxLength={200}
-              name="location"
-              padding="0 24px"
-            />
-            {formError.key === 'location' && (
-              <InputErrorMessage top={128} message={formError.message} />
-            )}
+            <S.RowContainer>
+              <Select
+                placeholder={'지역(필수)'}
+                options={[]}
+                onChange={(e) => handleChangeSelect(e, 1)}
+                onMenuOpen={() => setIsCitySelectOpen(true)}
+                onMenuClose={() => setIsCitySelectOpen(false)}
+                styles={customSelectStyles(isCitySelectOpen)}
+              />
+              <Select
+                placeholder={'시/군(선택)'}
+                options={[]}
+                onChange={(e) => handleChangeSelect(e, 2)}
+                onMenuOpen={() => setIsCountrySelectOpen(true)}
+                onMenuClose={() => setIsCountrySelectOpen(false)}
+                styles={customSelectStyles(isCountrySelectOpen)}
+              />
+              <Select
+                placeholder={'구(선택)'}
+                options={[]}
+                onChange={(e) => handleChangeSelect(e, 3)}
+                onMenuOpen={() => setIsDistrictSelectOpen(true)}
+                onMenuClose={() => setIsDistrictSelectOpen(false)}
+                styles={customSelectStyles(isDistrictSelectOpen)}
+              />
+              <Select
+                placeholder={'동/면/리(필수)'}
+                options={[]}
+                onChange={(e) => handleChangeSelect(e, 4)}
+                noOptionsMessage={() => '해당 값은 필수입니다.'}
+                onMenuOpen={() => setIsTownShipSelectOpen(true)}
+                onMenuClose={() => setIsTownShipSelectOpen(false)}
+                styles={customSelectStyles(isTownShipSelectOpen)}
+              />
+              {formError.key === 'location' && (
+                <InputErrorMessage top={58} message={formError.message} />
+              )}
+            </S.RowContainer>
           </S.ColumnContainer>
         </S.InputSectionWrapper>
       </S.InputSectionContainer>
@@ -398,6 +740,7 @@ const GoodsWriteTemplate = () => {
               borderRadius="28px"
               padding="24px;"
               fontSize={`${theme.fontSizes.regular}`}
+              value={form.content}
             />
             <S.InputSubText>{form.content.length}/2000</S.InputSubText>
           </ContentContainer>
@@ -429,11 +772,8 @@ const GoodsWriteTemplate = () => {
                 >
                   {item != null ? (
                     <>
-                      <PreviewImageBox
-                        src={item.url}
-                        isMainImg={idx === mainImgIdx}
-                        onClick={() => setMainImgIdx(idx)}
-                      />
+                      <PreviewImageBox src={item.url} />
+                      {item.id === 0 && <MainImgBadge>대표</MainImgBadge>}
                       <DeleteBtn
                         onClick={() => {
                           handleDeleteImage(idx);
@@ -474,7 +814,7 @@ const GoodsWriteTemplate = () => {
               <br />- 문제가 발생할 경우 관리자에게 문의해주세요.
             </InfoText>
             {formError.key === 'images' && (
-              <InputErrorMessage top={224} message={formError.message} />
+              <InputErrorMessage top={234} message={formError.message} />
             )}
           </UploadImageContainer>
         </S.InputSectionWrapper>
@@ -509,82 +849,9 @@ const GoodsWriteTemplate = () => {
           <span>등록하기</span>
         </Button>
       </BtnSection>
-    </>
+    </div>
   );
 };
-
-// react-select lib custom style 적용을 위한 스타일 재정의
-const CustomSelect = styled(Select)`
-  // select box 전체 영역
-  & .css-13cymwt-control,
-  .css-t3ipsp-control {
-    height: 50px;
-    border-radius: 28px;
-    border-color: ${theme.colors.primary};
-    padding: 0 14px 0 24px;
-    display: flex;
-    gap: 10px;
-    cursor: pointer;
-  }
-
-  // default > hover
-  & .css-13cymwt-control:hover {
-    border-color: ${theme.colors.primary};
-  }
-
-  // click > hover
-  & .css-t3ipsp-control:hover {
-    border-color: ${theme.colors.primary};
-  }
-
-  // input 전체 영역
-  & .css-1fdsijx-ValueContainer {
-    padding: 2px 0;
-  }
-
-  & .css-1u9des2-indicatorSeparator {
-    display: none;
-  }
-
-  & .css-1jqq78o-placeholder {
-    margin: 0;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
-  & .css-qbdosj-Input {
-    display: none;
-  }
-
-  & .css-1jqq78o-placeholder {
-    font-size: ${theme.fontSizes.regular};
-    color: ${theme.colors.coolgray300};
-  }
-
-  // icon
-  & .css-tj5bde-Svg {
-    color: ${theme.colors.primary};
-  }
-
-  // list > selected 상태
-  & .css-tr4s17-option {
-    background-color: ${theme.colors.primary};
-  }
-
-  // list > hover 상태
-  & .css-d7l1ni-option {
-    background-color: ${theme.colors.sub02};
-  }
-`;
-
-const LocationBtnWrapper = styled(S.RowContainer)`
-  gap: 20px;
-
-  & button {
-    font-size: ${theme.fontSizes.xlg};
-  }
-`;
 
 const ContentContainer = styled(S.ColumnContainer)`
   align-items: flex-end;
@@ -619,7 +886,7 @@ const UploadImageBox = styled.div<{ isShowAddBtn: boolean }>`
   position: relative;
 `;
 
-const PreviewImageBox = styled.div<{ src: string; isMainImg: boolean }>`
+const PreviewImageBox = styled.div<{ src: string }>`
   width: 100%;
   aspect-ratio: 1;
   border-radius: 28px;
@@ -628,8 +895,6 @@ const PreviewImageBox = styled.div<{ src: string; isMainImg: boolean }>`
   background-position: center;
   background-repeat: no-repeat;
   cursor: pointer;
-  border: ${({ isMainImg }) =>
-    isMainImg && `2px solid ${theme.colors.primary}`};
 `;
 
 const DeleteBtn = styled.div`
@@ -644,6 +909,18 @@ const DeleteBtn = styled.div`
   top: 10px;
   right: 10px;
   z-index: 1;
+`;
+
+const MainImgBadge = styled.div`
+  position: absolute;
+  background: ${theme.colors.main};
+  padding: 4px 8px;
+  font-size: ${theme.fontSizes.xsmall};
+  font-weight: ${theme.fontWeights.regular};
+  color: ${theme.colors.white};
+  top: 10px;
+  left: 10px;
+  border-radius: 100px;
 `;
 
 const InfoText = styled.p`

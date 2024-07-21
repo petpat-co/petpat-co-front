@@ -36,21 +36,8 @@ interface AccordionContextType {
 
 const AccordionContext = createContext<AccordionContextType | null>(null);
 
-interface AccordionRootProps extends PropsWithChildren {
-  initData: {
-    lastInfo: AccordionPropsType;
-    parentInfo: AccordionPropsType;
-    childInfo?: AccordionPropsType | null;
-  }; // 열려있는 아이템 초기 정보
-}
-
-const AccordionRoot = ({ initData, children }: AccordionRootProps) => {
-  const initItems = [
-    initData.parentInfo.value,
-    initData.childInfo?.value,
-  ].filter((value): value is string => value !== undefined);
-
-  const [item, setItem] = useState<Set<string>>(new Set(initItems)); // 열려있는 아이템 정보 상태관리
+const AccordionRoot = ({ children }: PropsWithChildren) => {
+  const [item, setItem] = useState<Set<string>>(new Set()); // 열려있는 아이템 정보 상태관리
 
   // 아이템 상태를 변경해 줄 함수
   const setter = useCallback(

@@ -47,16 +47,25 @@ export const BodyText = styled.p`
   font-size: ${theme.fontSizes.regular};
   font-weight: ${theme.fontWeights.regular};
   text-align: right;
+  line-height: 24px;
+  color: ${theme.colors.coolgray500};
 `;
 
-export const ListWrapper = styled.div<{ rowNum: number }>`
+export const ListContainer = styled.div`
   flex: 3;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const ListWrapper = styled.div<{ rowNum: number; minHeight?: number }>`
+  // flex: 3;
   display: grid;
   row-gap: 30px;
   column-gap: 20px;
   grid-template-columns: ${({ rowNum }) => `repeat(${rowNum}, 1fr)`};
   position: relative; // MenuList Indicator의 상대 위치 설정
   margin-top: 24px; // Accordion Menu랑 시작점 맞춤
+  min-height: ${(props) => (props.minHeight ? props.minHeight : 0)}px;
 `;
 
 export const PostListSection = styled(BestListSection)`
@@ -69,4 +78,15 @@ export const CategoryCntText = styled.span`
   font-weight: ${theme.fontWeights.light};
   color: ${theme.colors.coolgray400};
   margin-left: 4px;
+`;
+
+export const SearchWrapper = styled.div`
+  position: relative;
+  display: flex;
+`;
+
+export const SearchButton = styled.button`
+  position: absolute;
+  right: 10px;
+  bottom: 12px;
 `;

@@ -13,6 +13,7 @@ import SignUp from './pages/user/SignUp';
 import Kakao from './components/user/Kakao';
 import GoodsTradeWrite from './pages/trade/GoodsTradeWrite';
 import DetailTemplate from './components/shared/detail/DetailTemplate';
+import ListTemplate from './components/shared/board/ListTemplate';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default [
@@ -22,7 +23,8 @@ export default [
   },
   {
     path: '/rehome',
-    element: ReHoming,
+    element: ListTemplate,
+    // element: ReHoming,
   },
   {
     path: '/rehome/write',
@@ -34,20 +36,24 @@ export default [
     element: DetailTemplate,
   },
   {
-    path: '/trade/detail/:postId',
-    // element: ReHomingDetail,
-    element: DetailTemplate,
-  },
-  {
     path: '/rehome/modify/:postId',
     element: ReHomingWrite,
   },
   {
     path: '/trade',
-    element: GoodsTrade,
+    element: ListTemplate,
+    // element: GoodsTrade,
   },
   {
     path: '/trade/write',
+    element: GoodsTradeWrite,
+  },
+  {
+    path: '/trade/detail/:postId',
+    element: DetailTemplate,
+  },
+  {
+    path: '/trade/modify/:tradeId',
     element: GoodsTradeWrite,
   },
   {

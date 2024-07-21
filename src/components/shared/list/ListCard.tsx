@@ -1,6 +1,7 @@
 // ** Import React
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAppDispatch } from '../../../core/store';
+import { useNavigate } from 'react-router-dom';
 
 // ** Import lib
 import styled from 'styled-components';
@@ -9,50 +10,53 @@ import styled from 'styled-components';
 import theme from '../../../styles/theme';
 
 // ** Import svg
-import { ReactComponent as HeartIcon } from '../../../asset/heart.svg';
 import { ReactComponent as ViewIcon } from '../../../asset/postIcon/viewcount.svg';
+import Heart from '../../../asset/postIcon/Heart';
 
 // ** Import types
 import { Post } from '../../../types/post';
 
 // ** Import api
-import { postLikedListApi } from '../../../core/redux/post/commonSlice';
+import { likeApi } from 'src/core/redux/post/postSlice';
 
 interface ListCardProps {
-  item: Post.BoardList;
-  onClick?: () => void;
+  item: Post.InfoState;
+  postType: string;
 }
 
-const ListCard = (props: ListCardProps) => {
-  const {
-    id,
-    imagePath,
-    region,
-    liked,
-    viewCnt,
-    title,
-    price,
-    status,
-    postType,
-  } = props.item;
+const ListCard = ({ item, postType }: ListCardProps) => {
+  const { postId, imagePath, region, liked, viewCnt, title, price, status } =
+    item;
 
   const appDispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [isLiked, setIsLiked] = useState<boolean>(liked);
+
+  // props 데이터 변경 감지 > 상태 업데이트
+  useEffect(() => {
+    if (isLiked === liked) return;
+
+    setIsLiked(liked);
+  }, [liked]);
 
   const addComma = (price: number) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   };
 
+  const handleMovePage = (postId: number) => {
+    // navigate(`/rehome/detail/${postId}`);
+    navigate(`/${postType}/detail/${postId}`);
+  };
+
   return (
     <ComponentContainer>
       <ImageContainer>
-        <ImageSection
-          src={imagePath}
-          onClick={props.onClick}
-        />
-        {status > 0 && (
-          <StatusSection>{status == 1 ? '예약중' : '판매완료'}</StatusSection>
+        <ImageSection src={imagePath} onClick={() => handleMovePage(postId)} />
+        {!status.includes('FINDING') && (
+          <StatusSection>
+            {status.includes('RESERVING') ? '예약중' : '판매완료'}
+          </StatusSection>
         )}
       </ImageContainer>
       <InformationSection>
@@ -61,19 +65,14 @@ const ListCard = (props: ListCardProps) => {
           <HeartIconWrapper
             onClick={() => {
               setIsLiked(!isLiked);
-              appDispatch(postLikedListApi({ postType, id }));
+              appDispatch(likeApi({ postType, postId }));
             }}
           >
-            {/* TODO: 좋아요 버튼 활성화 시 표시될 아이콘 요청 */}
-            <HeartIcon
-              fill={
-                isLiked
-                  ? `${theme.colors.primary}`
-                  : `${theme.colors.coolgray400}`
-              }
-              width="18px"
-              height="18px"
-            />
+            {isLiked ? (
+              <Heart width="18px" height="18px" fill="#F35F4C" />
+            ) : (
+              <Heart width="18px" height="18px" />
+            )}
           </HeartIconWrapper>
           <ViewIconWrapper>
             <ViewIcon
@@ -85,9 +84,7 @@ const ListCard = (props: ListCardProps) => {
           </ViewIconWrapper>
         </IconContainer>
       </InformationSection>
-      <TitleText onClick={() => console.log('상세 페이지 이동')}>
-        {title}
-      </TitleText>
+      <TitleText onClick={() => handleMovePage(postId)}>{title}</TitleText>
       {price && <PriceText>{addComma(price)}원</PriceText>}
     </ComponentContainer>
   );

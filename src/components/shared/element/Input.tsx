@@ -1,5 +1,6 @@
 import { forwardRef } from 'react';
 import styled from 'styled-components';
+import theme from '../../../styles/theme';
 
 type InputStyleType = {
   margin?: string; //기본 none
@@ -9,7 +10,7 @@ type InputStyleType = {
   borderRadius?: string; //기본 0px
   isBorderBottom?: boolean;
   padding?: string;
-  check?:boolean;
+  check?: boolean;
 };
 
 interface InputProps extends InputStyleType {
@@ -83,13 +84,13 @@ const StyledInput = styled.input<InputStyleType>`
   padding: ${({ padding }) => (padding ? padding : '10px')};
   font-size: ${({ theme }) => theme.fontSizes.regular};
   ::placeholder {
-    color: #cdcdcd;
+    color: ${theme.colors.coolgray300};
   }
   ::-webkit-input-placeholder {
-    color: #cdcdcd;
+    color: ${theme.colors.coolgray300};
   }
   :-ms-input-placeholder {
-    color: #cdcdcd;
+    color: ${theme.colors.coolgray300};
   }
   :focus {
     // border: ${({ theme }) => `1.4px solid ${theme.colors.coolgray400}`};
@@ -138,7 +139,8 @@ const StyledInput = styled.input<InputStyleType>`
     border-bottom:1.4px solid #aaaaaa;
     :focus {
     border:none;
-    border-bottom: 1.4px solid #fbbc05;
+    border-bottom: 1.4px solid ${theme.colors.primary};
+    // border-bottom: 1.4px solid #fbbc05;
     outline: none;
   }
   `}

@@ -15,11 +15,13 @@ import { ReactComponent as ModalIcon } from '../../../asset/modalicon/neutralfac
 import { Post } from 'src/types/post';
 //api
 import {
-  deletePostApi,
-  getOnePostApi,
   selectOnGetPostError,
   selectOnDeleteError,
 } from 'src/core/redux/post/postSlice';
+import {
+  getOnePostApi,
+  deletePostApi,
+} from '../../../core/redux/post/PostDetailSlice';
 
 // qna comment용
 interface PropsType {
@@ -54,6 +56,8 @@ const DetailTemplate = (props: PropsType) => {
   const rehomePostData = useSelector((state: any) => state?.post?.rehome);
   const tradePostData = useSelector((state: any) => state?.post?.trade);
   const qnaPostData = useSelector((state: any) => state?.post?.qna);
+  // TODO: post 타입 정리된 버전으로 소스 메모 :)
+  // const postData = useSelector((state: any) => state?.postDetail.post);
   // -- 데이터 postData로 관리
   const postData =
     locationNow === 'rehome'

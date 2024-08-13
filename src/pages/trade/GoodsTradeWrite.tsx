@@ -1,7 +1,7 @@
 import GoodsWriteTemplate from '../../components/trade/GoodsWriteTemplate';
 import { useAppDispatch } from '../../core/store';
 import { useEffect } from 'react';
-import { getCategoryListApi } from '../../core/redux/post/commonSlice';
+import { getCategoryListApi } from '../../core/redux/post/PostListSlice';
 
 const GoodsTradeWrite = () => {
   const appDispatch = useAppDispatch();

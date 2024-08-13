@@ -17,7 +17,7 @@ import Heart from '../../../asset/postIcon/Heart';
 import { Post } from '../../../types/post';
 
 // ** Import api
-import { likeApi } from 'src/core/redux/post/postSlice';
+import { likeApi } from '../../../core/redux/post/PostDetailSlice';
 
 interface ListCardProps {
   item: Post.InfoState;

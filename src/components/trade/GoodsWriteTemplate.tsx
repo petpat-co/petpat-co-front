@@ -27,8 +27,11 @@ import theme from '../../styles/theme';
 import * as S from '../shared/board/WriteTemplate.style';
 
 // ** Import api
-import { postTradeApi } from '../../core/redux/post/tradeSlice';
-import { getOnePostApi } from '../../core/redux/post/postSlice';
+import {
+  addPostApi,
+  getOnePostApi,
+  modifyPostApi,
+} from '../../core/redux/post/PostDetailSlice';
 
 // ** Import svg
 import { ReactComponent as Add } from 'src/asset/icon/add.svg';
@@ -74,7 +77,7 @@ const GoodsWriteTemplate = () => {
   const postId = location[3];
 
   const appDispatch = useAppDispatch();
-  const categoryListData = useSelector((state: any) => state.common.category); // 카테고리 목록 정보
+  const categoryListData = useSelector((state: any) => state.postList.category); // 카테고리 목록 정보
   // const postData = useSelector((state: any) => state.post.trade);
 
   const fileRef: any = React.useRef(null);
@@ -420,13 +423,22 @@ const GoodsWriteTemplate = () => {
       formData.append('images', image.file);
     });
 
-    appDispatch(postTradeApi(formData)).then((result) => {
-      if (result.payload) {
-        setIsSuccess(true);
-      }
+    // 글 작성 진행
+    handlePost(formData);
+  };
 
+  // 글 작성하기
+  const handlePost = async (formData: FormData) => {
+    try {
+      const apiCall = writeType === 'write' ? addPostApi : modifyPostApi;
+
+      await appDispatch(apiCall({ postType, formData }));
+      setIsSuccess(true);
+    } catch (e) {
+      console.error('[TRADE WRITE] PostTrade Error : ', e);
+    } finally {
       setOnModal(true);
-    });
+    }
   };
 
   let fileUrls: any[] = [...previewImgList];

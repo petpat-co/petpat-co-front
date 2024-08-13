@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch } from 'src/core/store';
 
@@ -13,7 +13,10 @@ import { ReactComponent as ViewCount } from '../../../../asset/postIcon/viewcoun
 import { ReactComponent as LocationIcon } from '../../../../asset/postIcon/location.svg';
 import { Button } from '../../element';
 // api
-import { bookmarkApi, likeApi } from 'src/core/redux/post/postSlice';
+import {
+  bookmarkApi,
+  likeApi,
+} from '../../../../core/redux/post/PostDetailSlice';
 
 interface PropsType {
   onClickAsk: () => void; // 문의하기 버튼용 함수 (모달 팝업)
@@ -96,10 +99,18 @@ const InfoSection = (props: PropsType) => {
   const nowYear = new Date().getFullYear();
   const petBirthYear = petAge?.split('-')[0];
 
-
   // status
   const [isLiked, setIsLiked] = React.useState(liked);
   const [isBookmarked, setIsBookmarked] = React.useState(bookmarked);
+
+  // props 데이터 변경 감지 > 상태 업데이트
+  useEffect(() => {
+    if (isLiked === liked) return;
+    setIsLiked(liked);
+
+    if (isBookmarked === bookmarked) return;
+    setIsBookmarked(bookmarked);
+  }, [liked, bookmarked]);
 
   // 상세설명 위치 테스트
   const DESCRIPTIONTEST = true;
@@ -111,32 +122,12 @@ const InfoSection = (props: PropsType) => {
   // like
   const handleClickLike = () => {
     setIsLiked((prev) => !prev);
-    switch (propsPostType) {
-      case 'rehome':
-        appdispatch(likeApi({ postType: 'REHOMING', postId: rehomingId }));
-        break;
-      case 'trade':
-        appdispatch(likeApi({ postType: 'TRADE', postId: tradeId }));
-        break;
-      case 'qna':
-        appdispatch(likeApi({ postType: 'QNA', postId: qnaId }));
-        break;
-    }
+    appdispatch(likeApi({ postType, postId }));
   };
   // bookmark
   const handleClickBookmark = () => {
     setIsBookmarked((prev) => !prev);
-    switch (propsPostType) {
-      case 'rehome':
-        appdispatch(bookmarkApi({ postType: 'REHOMING', postId: rehomingId }));
-        break;
-      case 'trade':
-        appdispatch(bookmarkApi({ postType: 'TRADE', postId: tradeId }));
-        break;
-      case 'qna':
-        appdispatch(bookmarkApi({ postType: 'QNA', postId: qnaId }));
-        break;
-    }
+    appdispatch(bookmarkApi({ postType, postId }));
   };
 
   return (
@@ -160,7 +151,7 @@ const InfoSection = (props: PropsType) => {
             )}
           </IconWrapper>
           <IconWrapper onClick={handleClickLike}>
-            {!isLiked ? (
+            {isLiked ? (
               <Heart width="22px" height="22px" fill="#F35F4C" />
             ) : (
               <Heart width="22px" height="22px" />
@@ -203,14 +194,28 @@ const InfoSection = (props: PropsType) => {
               {gender === 'BOY' ? '남' : gender === 'GIRL' ? '여' : '알수없음'}
             </p>
             <p>생일</p>
-            <p>{petAge}, {nowYear-Number(petBirthYear)}살</p>
+            <p>
+              {petAge}, {nowYear - Number(petBirthYear)}살
+            </p>
             <p>중성화</p>
-            <p>{neutralized?'완료':'미완료'}</p>
+            <p>{neutralized ? '완료' : '미완료'}</p>
             <p>접종</p>
-            <p>{vaccinationStatus && vaccinationStatus.map((item,idx) => {
-                const trueVaccinations = vaccinationStatus.filter(item => item.value);
-                return item.value && <>{item.name}{idx < trueVaccinations.length - 1 && ', '} </>
-            })}</p>
+            <p>
+              {vaccinationStatus &&
+                vaccinationStatus.map((item, idx) => {
+                  const trueVaccinations = vaccinationStatus.filter(
+                    (item) => item.value,
+                  );
+                  return (
+                    item.value && (
+                      <>
+                        {item.name}
+                        {idx < trueVaccinations.length - 1 && ', '}{' '}
+                      </>
+                    )
+                  );
+                })}
+            </p>
           </Pet>
         ) : null}
 

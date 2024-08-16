@@ -6,8 +6,10 @@ import { userSlice } from '../redux/user/userSlice';
 import { myPage } from '../redux/user/myPage';
 import { qnaSlice } from '../redux/post/qnaSlice';
 import { rehomingSlice } from '../redux/post/rehomingSlice';
-import { tradeSlice } from '../redux/post/tradeSlice';
 import { postSlice } from '../redux/post/postSlice';
+import { commonSlice } from '../redux/post/commonSlice';
+import { postDetailSlice } from '../redux/post/PostDetailSlice';
+import { postListSlice } from '../redux/post/PostListSlice';
 
 const rootReducer = combineReducers({
   modal: modalSlice.reducer,
@@ -15,8 +17,10 @@ const rootReducer = combineReducers({
   mypage: myPage.reducer,
   qna: qnaSlice.reducer,
   rehoming: rehomingSlice.reducer,
-  trade: tradeSlice.reducer,
   post: postSlice.reducer,
+  common: commonSlice.reducer,
+  postDetail: postDetailSlice.reducer, // 단일 게시글 관련 리듀서
+  postList: postListSlice.reducer, // 다중 게시글 관련 리듀서
 });
 
 export const store = configureStore({

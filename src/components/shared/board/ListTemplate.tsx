@@ -12,7 +12,7 @@ import {
   getBannerListApi,
   getCategoryListApi,
   getPostListApi,
-} from '../../../core/redux/post/commonSlice';
+} from '../../../core/redux/post/PostListSlice';
 
 // ** Import components
 import TitleSection from '../layout/TitleSection';
@@ -32,12 +32,12 @@ const ListTemplate = () => {
 
   // redux
   const appDispatch = useAppDispatch();
-  const categoryData = useSelector((state: any) => state?.common.category);
+  const categoryData = useSelector((state: any) => state?.postList.category);
   // bannerData
-  const bannerListData = useSelector((state: any) => state?.common.banner);
+  const bannerListData = useSelector((state: any) => state?.postList.banner);
   // postData
-  const postListData = useSelector((state: any) => state?.common.list);
-  const pageInfoData = useSelector((state: any) => state?.common.pageInfo);
+  const postListData = useSelector((state: any) => state?.postList.list);
+  const pageInfoData = useSelector((state: any) => state?.postList.pageInfo);
 
   // state
   const [postType, setPostType] = useState<string>('');
@@ -76,7 +76,7 @@ const ListTemplate = () => {
     );
 
     // 인기있는 게시물 목록 데이터 페칭
-    // appDispatch(getBannerListApi(getPostType(locationNow, true)));
+    appDispatch(getBannerListApi(getPostType(locationNow, true)));
   }, [locationNow]);
 
   // url path 변경 시 > 관련 정보로 상태 변경 처리
@@ -318,7 +318,7 @@ const ListTemplate = () => {
             />
           </S.TextWrapper>
           <S.ListContainer ref={listRef}>
-            <S.ListWrapper rowNum={4} minHeight={750}>
+            <S.ListWrapper rowNum={4}>
               <MenuIndicator menuList={selectedCategoryInfo} />
               {postListData.map((item: any, idx: number) => {
                 return (
